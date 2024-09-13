@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Aprendizaje Estadístico: un enfoque práctico con R - 6&nbsp; Lab6 Selección de Variables (modelos lineales)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Lab7-NoLineal.html" rel="next">
+<link href="./Lab5-Remuestreo.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lab6 Selección de Variables (modelos lineales)</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Aprendizaje Estadístico: un enfoque práctico con R</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Prefacio</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab1-intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab2-AE.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Aprendizaje Estadístico</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab3-RegLin.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lab3 Regresión lineal</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab4-Clasif.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lab4 Clasificación</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab5-Remuestreo.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lab5 Remuestreo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab6-Seleccion-Var.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lab6 Selección de Variables (modelos lineales)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab7-NoLineal.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lab7 Modelización no lineal</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab8-Arboles.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lab8 Árboles de decisión</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab9-SVM.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lab9 Support Vector Machines</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ZA_Herram.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Herramientas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#métodos-de-selección" id="toc-métodos-de-selección" class="nav-link active" data-scroll-target="#métodos-de-selección"><span class="toc-section-number">6.1</span>  Métodos de selección</a>
+  <ul class="collapse">
+  <li><a href="#selección-del-mejor-subconjunto-de-variables" id="toc-selección-del-mejor-subconjunto-de-variables" class="nav-link" data-scroll-target="#selección-del-mejor-subconjunto-de-variables"><span class="toc-section-number">6.1.1</span>  Selección del mejor subconjunto (de variables)</a></li>
+  <li><a href="#selección-forwardbackward-stepwise" id="toc-selección-forwardbackward-stepwise" class="nav-link" data-scroll-target="#selección-forwardbackward-stepwise"><span class="toc-section-number">6.1.2</span>  Selección <em>Forward/Backward Stepwise</em></a></li>
+  <li><a href="#elección-de-modelos-mediante-validación-y-validación-cruzada" id="toc-elección-de-modelos-mediante-validación-y-validación-cruzada" class="nav-link" data-scroll-target="#elección-de-modelos-mediante-validación-y-validación-cruzada"><span class="toc-section-number">6.1.3</span>  Elección de modelos mediante validación y validación cruzada</a></li>
+  </ul></li>
+  <li><a href="#regresiones-ridge-y-lasso-regularización" id="toc-regresiones-ridge-y-lasso-regularización" class="nav-link" data-scroll-target="#regresiones-ridge-y-lasso-regularización"><span class="toc-section-number">6.2</span>  Regresiones ridge y lasso (regularización)</a>
+  <ul class="collapse">
+  <li><a href="#regresión-ridge" id="toc-regresión-ridge" class="nav-link" data-scroll-target="#regresión-ridge"><span class="toc-section-number">6.2.1</span>  Regresión ridge</a></li>
+  <li><a href="#regresión-lasso" id="toc-regresión-lasso" class="nav-link" data-scroll-target="#regresión-lasso"><span class="toc-section-number">6.2.2</span>  Regresión lasso</a></li>
+  </ul></li>
+  <li><a href="#regresión-pcr-y-pls-resumido" id="toc-regresión-pcr-y-pls-resumido" class="nav-link" data-scroll-target="#regresión-pcr-y-pls-resumido">Regresión PCR y PLS (resumido)</a>
+  <ul class="collapse">
+  <li><a href="#regresión-de-componentes-principales" id="toc-regresión-de-componentes-principales" class="nav-link" data-scroll-target="#regresión-de-componentes-principales">Regresión de componentes principales</a></li>
+  <li><a href="#mínimos-cuadrados-parciales-pls" id="toc-mínimos-cuadrados-parciales-pls" class="nav-link" data-scroll-target="#mínimos-cuadrados-parciales-pls">Mínimos cuadrados parciales (PLS)</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lab6 Selección de Variables (modelos lineales)</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<table class="table">
+<caption>Material original</caption>
+<colgroup>
+<col style="width: 15%">
+<col style="width: 85%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tipo</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Slides:</td>
+<td><a href="https://hastie.su.domains/ISLR2/Slides/Ch6_Model_Selection.pdf" class="uri">https://hastie.su.domains/ISLR2/Slides/Ch6_Model_Selection.pdf</a></td>
+</tr>
+<tr class="even">
+<td>Lab-html:</td>
+<td><a href="https://hastie.su.domains/ISLR2/Labs/Rmarkdown_Notebooks/Ch6-varselect-lab.html" class="uri">https://hastie.su.domains/ISLR2/Labs/Rmarkdown_Notebooks/Ch6-varselect-lab.html</a></td>
+</tr>
+<tr class="odd">
+<td>Lab-Rscript:</td>
+<td><a href="https://hastie.su.domains/ISLR2/Labs/R_Labs/Ch6-varselect-lab.R" class="uri">https://hastie.su.domains/ISLR2/Labs/R_Labs/Ch6-varselect-lab.R</a></td>
+</tr>
+<tr class="even">
+<td>Data:</td>
+<td><code>Hitters</code> (<code>ISLR2</code>)</td>
+</tr>
+</tbody>
+</table>
+<section id="métodos-de-selección" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="métodos-de-selección"><span class="header-section-number">6.1</span> Métodos de selección</h2>
+<section id="selección-del-mejor-subconjunto-de-variables" class="level3" data-number="6.1.1">
+<h3 data-number="6.1.1" class="anchored" data-anchor-id="selección-del-mejor-subconjunto-de-variables"><span class="header-section-number">6.1.1</span> Selección del mejor subconjunto (de variables)</h3>
+<p>Aplicamos el enfoque de selección del mejor subconjunto (de variables) a los datos de <code>Hitters</code>.</p>
+<p>Nos interesa predecir el <code>Salary</code> de un jugador de béisbol sobre la base de varias estadísticas asociadas con el rendimiento del año anterior.</p>
+<section id="na-valores-faltantes" class="level4" data-number="6.1.1.1">
+<h4 data-number="6.1.1.1" class="anchored" data-anchor-id="na-valores-faltantes"><span class="header-section-number">6.1.1.1</span> <code>NA</code> valores faltantes</h4>
+<p>En primer lugar, notamos que falta la variable <code>Salary</code> para algunos de los jugadores, contiene <code>NA</code>s. Con la función <code>na.omit()</code> se eliminan las filas que tienen valores faltantes en cualquier variable del conjunto de datos (véase el anexo <strong>Herramientas</strong> para más detalles).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Hitters)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 322  20</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(Hitters<span class="sc">$</span>Salary))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 59</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Hitters <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(Hitters)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Hitters)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 263  20</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(Hitters))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+</section>
+<section id="regsubsets" class="level4" data-number="6.1.1.2">
+<h4 data-number="6.1.1.2" class="anchored" data-anchor-id="regsubsets"><span class="header-section-number">6.1.1.2</span> <code>regsubsets()</code></h4>
+<p>La función <code>regsubsets()</code> (del paquete <code>leaps</code>) realiza la selección del mejor subconjunto de variables al identificar el mejor modelo que contiene un número dado de predictores, donde <em>mejor</em> se cuantifica usando RSS (<em>Residual sum of squares</em>). La sintaxis es la misma que para <code>lm()</code>. Por defecto, <code>regsubsets()</code> solo reporta resultados hasta el mejor modelo de 8 variables. Pero se puede usar la opción <code>nvmax</code> para devolver tantas variables como se desee. La función <code>summary()</code> muestra el mejor conjunto de variables para cada tamaño de modelo.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaps)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>regfit.full <span class="ot">&lt;-</span> <span class="fu">regsubsets</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(regfit.full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Subset selection object
+Call: regsubsets.formula(Salary ~ ., data = Hitters)
+19 Variables  (and intercept)
+           Forced in Forced out
+AtBat          FALSE      FALSE
+Hits           FALSE      FALSE
+HmRun          FALSE      FALSE
+Runs           FALSE      FALSE
+RBI            FALSE      FALSE
+Walks          FALSE      FALSE
+Years          FALSE      FALSE
+CAtBat         FALSE      FALSE
+CHits          FALSE      FALSE
+CHmRun         FALSE      FALSE
+CRuns          FALSE      FALSE
+CRBI           FALSE      FALSE
+CWalks         FALSE      FALSE
+LeagueN        FALSE      FALSE
+DivisionW      FALSE      FALSE
+PutOuts        FALSE      FALSE
+Assists        FALSE      FALSE
+Errors         FALSE      FALSE
+NewLeagueN     FALSE      FALSE
+1 subsets of each size up to 8
+Selection Algorithm: exhaustive
+         AtBat Hits HmRun Runs RBI Walks Years CAtBat CHits CHmRun CRuns CRBI
+1  ( 1 ) " "   " "  " "   " "  " " " "   " "   " "    " "   " "    " "   "*" 
+2  ( 1 ) " "   "*"  " "   " "  " " " "   " "   " "    " "   " "    " "   "*" 
+3  ( 1 ) " "   "*"  " "   " "  " " " "   " "   " "    " "   " "    " "   "*" 
+4  ( 1 ) " "   "*"  " "   " "  " " " "   " "   " "    " "   " "    " "   "*" 
+5  ( 1 ) "*"   "*"  " "   " "  " " " "   " "   " "    " "   " "    " "   "*" 
+6  ( 1 ) "*"   "*"  " "   " "  " " "*"   " "   " "    " "   " "    " "   "*" 
+7  ( 1 ) " "   "*"  " "   " "  " " "*"   " "   "*"    "*"   "*"    " "   " " 
+8  ( 1 ) "*"   "*"  " "   " "  " " "*"   " "   " "    " "   "*"    "*"   " " 
+         CWalks LeagueN DivisionW PutOuts Assists Errors NewLeagueN
+1  ( 1 ) " "    " "     " "       " "     " "     " "    " "       
+2  ( 1 ) " "    " "     " "       " "     " "     " "    " "       
+3  ( 1 ) " "    " "     " "       "*"     " "     " "    " "       
+4  ( 1 ) " "    " "     "*"       "*"     " "     " "    " "       
+5  ( 1 ) " "    " "     "*"       "*"     " "     " "    " "       
+6  ( 1 ) " "    " "     "*"       "*"     " "     " "    " "       
+7  ( 1 ) " "    " "     "*"       "*"     " "     " "    " "       
+8  ( 1 ) "*"    " "     "*"       "*"     " "     " "    " "       </code></pre>
+</div>
+</div>
+<p>Un asterisco indica que una determinada variable está incluida en el modelo correspondiente. Por ejemplo, la salida anterior indica que el mejor modelo de 2 variables contiene solo <code>Hits</code> y <code>CRBI</code>.</p>
+<p>Ajustamos ahora un modelo de hasta 19 variables (todas).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>regfit.full <span class="ot">&lt;-</span> <span class="fu">regsubsets</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters, <span class="at">nvmax =</span> <span class="dv">19</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>reg.summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(regfit.full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="selección-del-mejor-modelo" class="level4" data-number="6.1.1.3">
+<h4 data-number="6.1.1.3" class="anchored" data-anchor-id="selección-del-mejor-modelo"><span class="header-section-number">6.1.1.3</span> Selección del <em>mejor</em> modelo</h4>
+<p>La función <code>summary()</code> también devuelve <span class="math inline">\(R^2\)</span>, RSS, <span class="math inline">\(R^2\)</span> ajustado, <span class="math inline">\(C_p\)</span> y <span class="math inline">\(BIC\)</span>. Podemos examinarlos para tratar de seleccionar el <em>mejor</em> modelo general.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(reg.summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "which"  "rsq"    "rss"    "adjr2"  "cp"     "bic"    "outmat" "obj"   </code></pre>
+</div>
+</div>
+<p>Por ejemplo, vemos que el estadístico <span class="math inline">\(R^2\)</span> pasa del 32%, cuando solo se incluye una variable en el modelo, a casi el 55%, cuando se incluyen todas las variables. Como era de esperar, el estadístico <span class="math inline">\(R^2\)</span> aumenta monótonamente a medida que se incluyen más variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>reg.summary<span class="sc">$</span>rsq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0.3214501 0.4252237 0.4514294 0.4754067 0.4908036 0.5087146 0.5141227
+ [8] 0.5285569 0.5346124 0.5404950 0.5426153 0.5436302 0.5444570 0.5452164
+[15] 0.5454692 0.5457656 0.5459518 0.5460945 0.5461159</code></pre>
+</div>
+</div>
+<p>Dibujar los valores de RSS, <span class="math inline">\(R^2\)</span> ajustado, <span class="math inline">\(C_p\)</span> y BIC para todos los modelos a la vez nos ayudará a decidir qué modelo seleccionar.</p>
+<p><strong>Nota técnica</strong>: Se utiliza el argumento <code>type = "l"</code> para conectar los puntos dibujados con líneas. Con la función <code>which.max()</code> se identifica la ubicación del punto máximo de un vector. La función <code>points()</code> coloca puntos en un gráfico que ya se ha creado, en lugar de crear un gráfico nuevo como <code>plot()</code>. Al punto le asignamos el color rojo para indicar el modelo con el estadístico <span class="math inline">\(R^2\)</span> ajustado más grande.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(reg.summary<span class="sc">$</span>rss,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Variables"</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"RSS"</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"l"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>max.adjr2 <span class="ot">&lt;-</span> <span class="fu">which.max</span>(reg.summary<span class="sc">$</span>adjr2)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(reg.summary<span class="sc">$</span>adjr2,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Variables"</span>,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Adjusted RSq"</span>,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"l"</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  max.adjr2,</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  reg.summary<span class="sc">$</span>adjr2[max.adjr2],</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"red"</span>,</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="dv">2</span>,</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">20</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab6-Seleccion-Var_files/figure-html/chunk7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>De manera similar, dibujamos los valores de los estadísticos <span class="math inline">\(C_p\)</span> y <span class="math inline">\(BIC\)</span>, e indicamos los modelos con el estadístico más pequeño usando <code>which.min()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>min.Cp <span class="ot">&lt;-</span> <span class="fu">which.min</span>(reg.summary<span class="sc">$</span>cp)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>min.BIC <span class="ot">&lt;-</span> <span class="fu">which.min</span>(reg.summary<span class="sc">$</span>bic)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(reg.summary<span class="sc">$</span>cp,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Variables"</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Cp"</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"l"</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  min.Cp,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  reg.summary<span class="sc">$</span>cp[min.Cp],</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"red"</span>,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="dv">2</span>,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">20</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(reg.summary<span class="sc">$</span>bic,</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Variables"</span>,</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"BIC"</span>,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"l"</span>)</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  min.BIC,</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>  reg.summary<span class="sc">$</span>bic[min.BIC],</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"red"</span>,</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="dv">2</span>,</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">20</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab6-Seleccion-Var_files/figure-html/chunk9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>La función <code>regsubsets()</code> tiene una función <code>plot()</code> incorporada que se puede usar para mostrar las variables seleccionadas para el mejor modelo con un número determinado de predictores, clasificados según el <span class="math inline">\(BIC\)</span>, <span class="math inline">\(C_p\)</span>, <span class="math inline">\(R^2\)</span> ajustado, o <span class="math inline">\(AIC\)</span>. Para obtener más información ejecute (en la consola) <code>?plot.regsubsets</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(regfit.full, <span class="at">scale =</span> <span class="st">"adjr2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab6-Seleccion-Var_files/figure-html/chunk10-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(regfit.full, <span class="at">scale =</span> <span class="st">"Cp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab6-Seleccion-Var_files/figure-html/chunk10-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(regfit.full, <span class="at">scale =</span> <span class="st">"bic"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab6-Seleccion-Var_files/figure-html/chunk10-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>La fila superior de cada gráfico contiene un cuadrado negro para cada variable seleccionada según el modelo óptimo asociado con ese estadístico/criterio.</p>
+<blockquote class="blockquote">
+<p><strong>Nota Víctor</strong>: ¿Porque varios criterios?, ¿Cuál es el mejor?…</p>
+</blockquote>
+<p>Por ejemplo, vemos que varios modelos comparten un <span class="math inline">\(BIC\)</span> cercano a <span class="math inline">\(-150\)</span>. Sin embargo, el modelo con el <span class="math inline">\(BIC\)</span> más bajo es el modelo de seis variables que contiene solo <code>AtBat</code>, <code>Hits</code>, <code>Walks</code>, <code>CRBI</code>, <code>DivisionW</code> y <code>PutOuts</code>. Podemos usar la función <code>coef()</code> para ver las estimaciones de coeficiente asociadas con este modelo.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(regfit.full, <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept)        AtBat         Hits        Walks         CRBI    DivisionW 
+  91.5117981   -1.8685892    7.6043976    3.6976468    0.6430169 -122.9515338 
+     PutOuts 
+   0.2643076 </code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Nota Víctor</strong>: En resumen, la selección del mejor subconjunto de variables predictoras depende del criterio/métrica elegid@.</p>
+</blockquote>
+</section>
+</section>
+<section id="selección-forwardbackward-stepwise" class="level3" data-number="6.1.2">
+<h3 data-number="6.1.2" class="anchored" data-anchor-id="selección-forwardbackward-stepwise"><span class="header-section-number">6.1.2</span> Selección <em>Forward/Backward Stepwise</em></h3>
+<p>También podemos usar la función <code>regsubsets()</code> para realizar una selección <em>stepwise</em> (<em>paso a paso</em>): bien <em>forward</em> (<em>hacia adelante</em>), bien <em>backward</em> (<em>hacia atrás</em>), usando el argumento <code>method</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>regfit.fwd <span class="ot">&lt;-</span> <span class="fu">regsubsets</span>(Salary <span class="sc">~</span> .,</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">data =</span> Hitters,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">nvmax =</span> <span class="dv">19</span>,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">method =</span> <span class="st">"forward"</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(regfit.fwd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Subset selection object
+Call: regsubsets.formula(Salary ~ ., data = Hitters, nvmax = 19, method = "forward")
+19 Variables  (and intercept)
+           Forced in Forced out
+AtBat          FALSE      FALSE
+Hits           FALSE      FALSE
+HmRun          FALSE      FALSE
+Runs           FALSE      FALSE
+RBI            FALSE      FALSE
+Walks          FALSE      FALSE
+Years          FALSE      FALSE
+CAtBat         FALSE      FALSE
+CHits          FALSE      FALSE
+CHmRun         FALSE      FALSE
+CRuns          FALSE      FALSE
+CRBI           FALSE      FALSE
+CWalks         FALSE      FALSE
+LeagueN        FALSE      FALSE
+DivisionW      FALSE      FALSE
+PutOuts        FALSE      FALSE
+Assists        FALSE      FALSE
+Errors         FALSE      FALSE
+NewLeagueN     FALSE      FALSE
+1 subsets of each size up to 19
+Selection Algorithm: forward
+          AtBat Hits HmRun Runs RBI Walks Years CAtBat CHits CHmRun CRuns CRBI
+1  ( 1 )  " "   " "  " "   " "  " " " "   " "   " "    " "   " "    " "   "*" 
+2  ( 1 )  " "   "*"  " "   " "  " " " "   " "   " "    " "   " "    " "   "*" 
+3  ( 1 )  " "   "*"  " "   " "  " " " "   " "   " "    " "   " "    " "   "*" 
+4  ( 1 )  " "   "*"  " "   " "  " " " "   " "   " "    " "   " "    " "   "*" 
+5  ( 1 )  "*"   "*"  " "   " "  " " " "   " "   " "    " "   " "    " "   "*" 
+6  ( 1 )  "*"   "*"  " "   " "  " " "*"   " "   " "    " "   " "    " "   "*" 
+7  ( 1 )  "*"   "*"  " "   " "  " " "*"   " "   " "    " "   " "    " "   "*" 
+8  ( 1 )  "*"   "*"  " "   " "  " " "*"   " "   " "    " "   " "    "*"   "*" 
+9  ( 1 )  "*"   "*"  " "   " "  " " "*"   " "   "*"    " "   " "    "*"   "*" 
+10  ( 1 ) "*"   "*"  " "   " "  " " "*"   " "   "*"    " "   " "    "*"   "*" 
+11  ( 1 ) "*"   "*"  " "   " "  " " "*"   " "   "*"    " "   " "    "*"   "*" 
+12  ( 1 ) "*"   "*"  " "   "*"  " " "*"   " "   "*"    " "   " "    "*"   "*" 
+13  ( 1 ) "*"   "*"  " "   "*"  " " "*"   " "   "*"    " "   " "    "*"   "*" 
+14  ( 1 ) "*"   "*"  "*"   "*"  " " "*"   " "   "*"    " "   " "    "*"   "*" 
+15  ( 1 ) "*"   "*"  "*"   "*"  " " "*"   " "   "*"    "*"   " "    "*"   "*" 
+16  ( 1 ) "*"   "*"  "*"   "*"  "*" "*"   " "   "*"    "*"   " "    "*"   "*" 
+17  ( 1 ) "*"   "*"  "*"   "*"  "*" "*"   " "   "*"    "*"   " "    "*"   "*" 
+18  ( 1 ) "*"   "*"  "*"   "*"  "*" "*"   "*"   "*"    "*"   " "    "*"   "*" 
+19  ( 1 ) "*"   "*"  "*"   "*"  "*" "*"   "*"   "*"    "*"   "*"    "*"   "*" 
+          CWalks LeagueN DivisionW PutOuts Assists Errors NewLeagueN
+1  ( 1 )  " "    " "     " "       " "     " "     " "    " "       
+2  ( 1 )  " "    " "     " "       " "     " "     " "    " "       
+3  ( 1 )  " "    " "     " "       "*"     " "     " "    " "       
+4  ( 1 )  " "    " "     "*"       "*"     " "     " "    " "       
+5  ( 1 )  " "    " "     "*"       "*"     " "     " "    " "       
+6  ( 1 )  " "    " "     "*"       "*"     " "     " "    " "       
+7  ( 1 )  "*"    " "     "*"       "*"     " "     " "    " "       
+8  ( 1 )  "*"    " "     "*"       "*"     " "     " "    " "       
+9  ( 1 )  "*"    " "     "*"       "*"     " "     " "    " "       
+10  ( 1 ) "*"    " "     "*"       "*"     "*"     " "    " "       
+11  ( 1 ) "*"    "*"     "*"       "*"     "*"     " "    " "       
+12  ( 1 ) "*"    "*"     "*"       "*"     "*"     " "    " "       
+13  ( 1 ) "*"    "*"     "*"       "*"     "*"     "*"    " "       
+14  ( 1 ) "*"    "*"     "*"       "*"     "*"     "*"    " "       
+15  ( 1 ) "*"    "*"     "*"       "*"     "*"     "*"    " "       
+16  ( 1 ) "*"    "*"     "*"       "*"     "*"     "*"    " "       
+17  ( 1 ) "*"    "*"     "*"       "*"     "*"     "*"    "*"       
+18  ( 1 ) "*"    "*"     "*"       "*"     "*"     "*"    "*"       
+19  ( 1 ) "*"    "*"     "*"       "*"     "*"     "*"    "*"       </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>regfit.bwd <span class="ot">&lt;-</span> <span class="fu">regsubsets</span>(Salary <span class="sc">~</span> .,</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">data =</span> Hitters,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">nvmax =</span> <span class="dv">19</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">method =</span> <span class="st">"backward"</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(regfit.bwd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Subset selection object
+Call: regsubsets.formula(Salary ~ ., data = Hitters, nvmax = 19, method = "backward")
+19 Variables  (and intercept)
+           Forced in Forced out
+AtBat          FALSE      FALSE
+Hits           FALSE      FALSE
+HmRun          FALSE      FALSE
+Runs           FALSE      FALSE
+RBI            FALSE      FALSE
+Walks          FALSE      FALSE
+Years          FALSE      FALSE
+CAtBat         FALSE      FALSE
+CHits          FALSE      FALSE
+CHmRun         FALSE      FALSE
+CRuns          FALSE      FALSE
+CRBI           FALSE      FALSE
+CWalks         FALSE      FALSE
+LeagueN        FALSE      FALSE
+DivisionW      FALSE      FALSE
+PutOuts        FALSE      FALSE
+Assists        FALSE      FALSE
+Errors         FALSE      FALSE
+NewLeagueN     FALSE      FALSE
+1 subsets of each size up to 19
+Selection Algorithm: backward
+          AtBat Hits HmRun Runs RBI Walks Years CAtBat CHits CHmRun CRuns CRBI
+1  ( 1 )  " "   " "  " "   " "  " " " "   " "   " "    " "   " "    "*"   " " 
+2  ( 1 )  " "   "*"  " "   " "  " " " "   " "   " "    " "   " "    "*"   " " 
+3  ( 1 )  " "   "*"  " "   " "  " " " "   " "   " "    " "   " "    "*"   " " 
+4  ( 1 )  "*"   "*"  " "   " "  " " " "   " "   " "    " "   " "    "*"   " " 
+5  ( 1 )  "*"   "*"  " "   " "  " " "*"   " "   " "    " "   " "    "*"   " " 
+6  ( 1 )  "*"   "*"  " "   " "  " " "*"   " "   " "    " "   " "    "*"   " " 
+7  ( 1 )  "*"   "*"  " "   " "  " " "*"   " "   " "    " "   " "    "*"   " " 
+8  ( 1 )  "*"   "*"  " "   " "  " " "*"   " "   " "    " "   " "    "*"   "*" 
+9  ( 1 )  "*"   "*"  " "   " "  " " "*"   " "   "*"    " "   " "    "*"   "*" 
+10  ( 1 ) "*"   "*"  " "   " "  " " "*"   " "   "*"    " "   " "    "*"   "*" 
+11  ( 1 ) "*"   "*"  " "   " "  " " "*"   " "   "*"    " "   " "    "*"   "*" 
+12  ( 1 ) "*"   "*"  " "   "*"  " " "*"   " "   "*"    " "   " "    "*"   "*" 
+13  ( 1 ) "*"   "*"  " "   "*"  " " "*"   " "   "*"    " "   " "    "*"   "*" 
+14  ( 1 ) "*"   "*"  "*"   "*"  " " "*"   " "   "*"    " "   " "    "*"   "*" 
+15  ( 1 ) "*"   "*"  "*"   "*"  " " "*"   " "   "*"    "*"   " "    "*"   "*" 
+16  ( 1 ) "*"   "*"  "*"   "*"  "*" "*"   " "   "*"    "*"   " "    "*"   "*" 
+17  ( 1 ) "*"   "*"  "*"   "*"  "*" "*"   " "   "*"    "*"   " "    "*"   "*" 
+18  ( 1 ) "*"   "*"  "*"   "*"  "*" "*"   "*"   "*"    "*"   " "    "*"   "*" 
+19  ( 1 ) "*"   "*"  "*"   "*"  "*" "*"   "*"   "*"    "*"   "*"    "*"   "*" 
+          CWalks LeagueN DivisionW PutOuts Assists Errors NewLeagueN
+1  ( 1 )  " "    " "     " "       " "     " "     " "    " "       
+2  ( 1 )  " "    " "     " "       " "     " "     " "    " "       
+3  ( 1 )  " "    " "     " "       "*"     " "     " "    " "       
+4  ( 1 )  " "    " "     " "       "*"     " "     " "    " "       
+5  ( 1 )  " "    " "     " "       "*"     " "     " "    " "       
+6  ( 1 )  " "    " "     "*"       "*"     " "     " "    " "       
+7  ( 1 )  "*"    " "     "*"       "*"     " "     " "    " "       
+8  ( 1 )  "*"    " "     "*"       "*"     " "     " "    " "       
+9  ( 1 )  "*"    " "     "*"       "*"     " "     " "    " "       
+10  ( 1 ) "*"    " "     "*"       "*"     "*"     " "    " "       
+11  ( 1 ) "*"    "*"     "*"       "*"     "*"     " "    " "       
+12  ( 1 ) "*"    "*"     "*"       "*"     "*"     " "    " "       
+13  ( 1 ) "*"    "*"     "*"       "*"     "*"     "*"    " "       
+14  ( 1 ) "*"    "*"     "*"       "*"     "*"     "*"    " "       
+15  ( 1 ) "*"    "*"     "*"       "*"     "*"     "*"    " "       
+16  ( 1 ) "*"    "*"     "*"       "*"     "*"     "*"    " "       
+17  ( 1 ) "*"    "*"     "*"       "*"     "*"     "*"    "*"       
+18  ( 1 ) "*"    "*"     "*"       "*"     "*"     "*"    "*"       
+19  ( 1 ) "*"    "*"     "*"       "*"     "*"     "*"    "*"       </code></pre>
+</div>
+</div>
+<p>Por ejemplo, vemos que…</p>
+<ul>
+<li>al usar la selección <code>forward stepwise</code>: el mejor modelo de una variable contiene solo <code>CRBI</code>, y el mejor modelo de dos variables incluye además <code>Hits</code>.</li>
+<li>Para estos datos, los mejores modelos de una variable a seis variables son idénticos para la selección <code>best subset</code> y la <code>forward</code>.</li>
+<li>Sin embargo, los mejores modelos de siete variables identificados por la selección <code>forward stepwise</code>, <code>backward</code> y <code>best subset</code> son diferentes:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(regfit.full, <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept)         Hits        Walks       CAtBat        CHits       CHmRun 
+  79.4509472    1.2833513    3.2274264   -0.3752350    1.4957073    1.4420538 
+   DivisionW      PutOuts 
+-129.9866432    0.2366813 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(regfit.fwd, <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept)        AtBat         Hits        Walks         CRBI       CWalks 
+ 109.7873062   -1.9588851    7.4498772    4.9131401    0.8537622   -0.3053070 
+   DivisionW      PutOuts 
+-127.1223928    0.2533404 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(regfit.bwd, <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept)        AtBat         Hits        Walks        CRuns       CWalks 
+ 105.6487488   -1.9762838    6.7574914    6.0558691    1.1293095   -0.7163346 
+   DivisionW      PutOuts 
+-116.1692169    0.3028847 </code></pre>
+</div>
+</div>
+</section>
+<section id="elección-de-modelos-mediante-validación-y-validación-cruzada" class="level3" data-number="6.1.3">
+<h3 data-number="6.1.3" class="anchored" data-anchor-id="elección-de-modelos-mediante-validación-y-validación-cruzada"><span class="header-section-number">6.1.3</span> Elección de modelos mediante validación y validación cruzada</h3>
+<p>Acabamos de ver que es posible elegir entre un conjunto de modelos de diferentes tamaños usando <span class="math inline">\(C_p\)</span>, <span class="math inline">\(BIC\)</span> y <span class="math inline">\(R^2\)</span> ajustado. Ahora consideraremos cómo hacer esto usando un conjunto de observaciones de validación y usando validación cruzada.</p>
+<section id="train-y-test" class="level4" data-number="6.1.3.1">
+<h4 data-number="6.1.3.1" class="anchored" data-anchor-id="train-y-test"><span class="header-section-number">6.1.3.1</span> <code>train</code> y <code>test</code></h4>
+<p>Como ya se ha mencionado en apartados anteriores (véase, por ejemplo, el capítulo 2 Aprendizaje Estadístico), para que este enfoque produzcan estimaciones precisas del error en el conjunto de observaciones de validación (<em>test</em>), debemos usar <em>sólo las observaciones de entrenamiento</em> (<em>train</em>) para realizar todos los aspectos del ajuste del modelo, incluida la selección de variables. Por lo tanto, la determinación de qué modelo (de un tamaño dado) es mejor debe hacerse usando <em>sólo las observaciones de entrenamiento</em>. Este punto es sutil pero importante.</p>
+<p>Para utilizar el enfoque del conjunto de validación, comenzamos dividiendo las observaciones en un conjunto de entrenamiento (<em>train</em>) y un conjunto de validación (<em>test</em>). Hacemos esto creando un vector aleatorio, <code>train</code>, de elementos iguales a <code>TRUE</code> si la observación correspondiente está en el conjunto de entrenamiento, y <code>FALSE</code> en caso contrario (véase el anexo <strong>Herramientas</strong>).</p>
+<p>También, para reproducibilidad de resultados, para que el usuario obtenga la misma división de conjunto de entrenamiento/conjunto de test, establecemos una semilla aleatoria con <code>set.seed()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>), <span class="fu">nrow</span>(Hitters), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> (<span class="sc">!</span>train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Aplicamos <code>regsubsets()</code> al conjunto de entrenamiento para realizar la selección del mejor subconjunto de variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>regfit.best <span class="ot">&lt;-</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">regsubsets</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters[train,], <span class="at">nvmax =</span> <span class="dv">19</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>En la sentencia anterior accedemos solo al subconjunto de entrenamiento de los datos, usando la expresión <code>Hitters[train, ]</code>.</p>
+</section>
+<section id="validación" class="level4" data-number="6.1.3.2">
+<h4 data-number="6.1.3.2" class="anchored" data-anchor-id="validación"><span class="header-section-number">6.1.3.2</span> Validación</h4>
+<p>Ahora calculamos el error del conjunto de validación/test para el mejor modelo de cada tamaño de modelo. Primero creamos una <em>matriz del modelo</em> de los datos de test.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>test.mat <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters[test,])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>La función <code>model.matrix()</code> se usa en muchos paquetes de regresión para construir una matriz <code>X</code> a partir de datos.</p>
+<p>Ahora definimos un <strong>bucle</strong> con la función <code>for()</code> (véase el anexo <strong>Herramientas</strong>). Para cada tamaño <code>i</code>, extraemos los coeficientes de <code>regfit.best</code> para el mejor modelo de ese tamaño, multiplicándolos en las columnas apropiadas de la matriz del modelo de test para formar las predicciones y calcular el MSE (<em>Mean Square Error</em>) de test/validación.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>val.errors <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">19</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">19</span>) {</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  coefi <span class="ot">&lt;-</span> <span class="fu">coef</span>(regfit.best, <span class="at">id =</span> i)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> test.mat[, <span class="fu">names</span>(coefi)] <span class="sc">%*%</span> coefi</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  val.errors[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>((Hitters<span class="sc">$</span>Salary[test] <span class="sc">-</span> pred)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Encontramos que el mejor modelo es el que contiene siete variables, y mostramos sus coeficientes:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>val.errors</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 164377.3 144405.5 152175.7 145198.4 137902.1 139175.7 126849.0 136191.4
+ [9] 132889.6 135434.9 136963.3 140694.9 140690.9 141951.2 141508.2 142164.4
+[17] 141767.4 142339.6 142238.2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which.min</span>(val.errors)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(regfit.best, <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept)        AtBat         Hits        Walks        CRuns       CWalks 
+  67.1085369   -2.1462987    7.0149547    8.0716640    1.2425113   -0.8337844 
+   DivisionW      PutOuts 
+-118.4364998    0.2526925 </code></pre>
+</div>
+</div>
+<p>Esto fue un poco tedioso, en parte porque no existe un método <code>predict()</code> para <code>regsubsets()</code>. Dado que usaremos esta función nuevamente, podemos capturar nuestros pasos anteriores y <strong>definir una función</strong> (véase el anexo <strong>Herramientas</strong>) con nuestro propio método de predicción.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>predict.regsubsets <span class="ot">&lt;-</span> <span class="cf">function</span>(object, newdata, id, ...) {</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  form <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(object<span class="sc">$</span>call[[<span class="dv">2</span>]])</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  mat <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(form, newdata)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  coefi <span class="ot">&lt;-</span> <span class="fu">coef</span>(object, <span class="at">id =</span> id)</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  xvars <span class="ot">&lt;-</span> <span class="fu">names</span>(coefi)</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  mat[, xvars] <span class="sc">%*%</span> coefi</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Nuestra función imita lo que se ha hecho anteriormente. La única parte compleja es cómo se extrae la fórmula utilizada en la llamada a <code>regsubsets()</code>. Utilizaremos esta función en el siguiente punto de validación cruzada.</p>
+<p>Finalmente, realizamos la selección del mejor subconjunto de variables en el conjunto de datos completo y seleccionamos el mejor modelo de siete variables, porque el mejor modelo de siete variables en el conjunto de datos completo puede diferir del modelo correspondiente en el conjunto de entrenamiento. Es importante que hagamos uso del conjunto completo de datos para obtener estimaciones de coeficientes más precisas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>regfit.best <span class="ot">&lt;-</span> <span class="fu">regsubsets</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters, <span class="at">nvmax =</span> <span class="dv">19</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(regfit.best, <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept)         Hits        Walks       CAtBat        CHits       CHmRun 
+  79.4509472    1.2833513    3.2274264   -0.3752350    1.4957073    1.4420538 
+   DivisionW      PutOuts 
+-129.9866432    0.2366813 </code></pre>
+</div>
+</div>
+<p>De hecho, vemos que el mejor modelo de siete variables en el conjunto completo de datos tiene un conjunto diferente de variables que el mejor modelo de siete variables en el conjunto de entrenamiento.</p>
+</section>
+<section id="validación-cruzada" class="level4" data-number="6.1.3.3">
+<h4 data-number="6.1.3.3" class="anchored" data-anchor-id="validación-cruzada"><span class="header-section-number">6.1.3.3</span> Validación cruzada</h4>
+<p>Ahora tratamos de elegir el mejor modelo de entre los modelos de diferentes tamaños usando <em>validación cruzada</em>. Este enfoque es algo complicado, ya que debemos realizar la selección del mejor subconjunto <em>dentro de cada uno de los</em> <span class="math inline">\(k\)</span> conjuntos de entrenamiento. A pesar de esto, vemos que con su inteligente sintaxis de creación de subconjuntos, <code>R</code> hace que este trabajo sea bastante fácil. Primero, creamos un vector que asigna cada observación a uno de los <span class="math inline">\(k=10\)</span> <em>folds</em> (pliegues/dobleces/grupos), y creamos una <em>matriz</em> en la que almacenaremos los resultados, <code>cv.errors</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(Hitters)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>folds <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>k, <span class="at">length =</span> n))</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>cv.errors <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, k, <span class="dv">19</span>, <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="fu">paste</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">19</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ahora escribimos un nuevo <strong>bucle</strong> <code>for()</code> que realiza la validación cruzada.</p>
+<blockquote class="blockquote">
+<p><strong>Nota Víctor</strong>: El bucle es doble en este caso, se anida un bucle dentro de otro, por lo que se necesitan ¡variables índices distintas!: se usan <code>i</code> y <code>j</code>.</p>
+</blockquote>
+<p>En el <em>fold</em> <span class="math inline">\(j\)</span>-ésimo, los elementos de <code>folds</code> que son iguales a <code>j</code> están en el conjunto de test, y el resto está en el conjunto de entrenamiento.</p>
+<p>Hacemos nuestras predicciones para cada tamaño de modelo (usando nuestro nuevo método <code>predict()</code>), calculamos los errores de test en el subconjunto correspondiente, y los almacenamos en el espacio apropiado en la matriz <code>cv.errors</code>. Nótese que en el siguiente código <code>R</code> usará automáticamente nuestra función <code>predict.regsubsets()</code> cuando llamemos <code>predict()</code> porque el objeto <code>best.fit</code> tiene clase <code>regsubsets</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>k) {</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  best.fit <span class="ot">&lt;-</span> <span class="fu">regsubsets</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters[folds <span class="sc">!=</span> j,],</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">nvmax =</span> <span class="dv">19</span>)</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">19</span>) {</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(best.fit, Hitters[folds <span class="sc">==</span> j,], <span class="at">id =</span> i)</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    cv.errors[j, i] <span class="ot">&lt;-</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mean</span>((Hitters<span class="sc">$</span>Salary[folds <span class="sc">==</span> j] <span class="sc">-</span> pred)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Esto nos devuelve una <em>matriz</em> de 10 <span class="math inline">\(\times\)</span> 19, de la cual el elemento <span class="math inline">\((j,i)\)</span>-ésimo corresponde al MSE de test/validación para el <span class="math inline">\(j\)</span>-ésimo <em>fold</em> de validación cruzada para el mejor modelo de <span class="math inline">\(i\)</span> variables. Usamos la función <code>apply()</code> para promediar las columnas de esta matriz con el fin de obtener un vector para el cual el elemento <span class="math inline">\(i\)</span>-ésimo es el error de validación cruzada para el modelo de <span class="math inline">\(i\)</span> variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>(mean.cv.errors <span class="ot">&lt;-</span> <span class="fu">apply</span>(cv.errors, <span class="dv">2</span>, mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1        2        3        4        5        6        7        8 
+143439.8 126817.0 134214.2 131782.9 130765.6 120382.9 121443.1 114363.7 
+       9       10       11       12       13       14       15       16 
+115163.1 109366.0 112738.5 113616.5 115557.6 115853.3 115630.6 116050.0 
+      17       18       19 
+116117.0 116419.3 116299.1 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mean.cv.errors, <span class="at">type =</span> <span class="st">"b"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab6-Seleccion-Var_files/figure-html/chunk23-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Vemos que la validación cruzada lleva a seleccionar un modelo de 10 variables. Ahora, utilizando el conjunto de datos completo, realizamos la selección del mejor subconjunto de variables para obtener el modelo de 10 variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>reg.best <span class="ot">&lt;-</span> <span class="fu">regsubsets</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters, <span class="at">nvmax =</span> <span class="dv">19</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(reg.best, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept)        AtBat         Hits        Walks       CAtBat        CRuns 
+ 162.5354420   -2.1686501    6.9180175    5.7732246   -0.1300798    1.4082490 
+        CRBI       CWalks    DivisionW      PutOuts      Assists 
+   0.7743122   -0.8308264 -112.3800575    0.2973726    0.2831680 </code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="regresiones-ridge-y-lasso-regularización" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="regresiones-ridge-y-lasso-regularización"><span class="header-section-number">6.2</span> Regresiones ridge y lasso (regularización)</h2>
+<p>Usaremos el paquete <code>glmnet</code> para realizar las <em>regresiones ridge</em> y <em>lasso</em>.</p>
+<blockquote class="blockquote">
+<p><strong>Nota Víctor</strong>: Estas regresiones forman parte de los métodos <em>shrinkage</em>, que también pretenden reducir el número de variables del modelo, añadiendo una <em>penalización</em>/<em>regularización</em> en el número de coeficientes o su tamaño, en lugar de seleccionar las variables de forma explícita como los métodos anteriores.</p>
+</blockquote>
+<p>La función principal de este paquete es <code>glmnet()</code>, que puede usarse para ajustar modelos de regresión ridge, regresión lasso y más. Esta función tiene una sintaxis ligeramente diferente de otras funciones de ajuste de modelos que hemos encontrado hasta ahora (en el libro). En particular, debemos pasar una matriz <code>x</code> así como un vector <code>y</code>, y no usamos la sintaxis <code>y ~ x</code>.</p>
+<p>Realizaremos las regresiones ridge y lasso para predecir <code>Salary</code> en los datos de <code>Hitters</code>. Antes de continuar, asegúrese de que los valores faltantes se hayan eliminado de los datos, como se ha descrito antes (puede consultar la Sección 6.5.1. del libro)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Salary <span class="sc">~</span> ., Hitters)[,<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> Hitters<span class="sc">$</span>Salary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>La función <code>model.matrix()</code> es particularmente útil para crear <code>x</code>; no solo produce una matriz correspondiente a los <code>19</code> predictores, sino que también transforma automáticamente cualquier variable cualitativa en variables <em>dummys</em>. La última propiedad es importante porque <code>glmnet()</code> solo puede tomar entradas numéricas y cuantitativas.</p>
+<section id="regresión-ridge" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="regresión-ridge"><span class="header-section-number">6.2.1</span> Regresión ridge</h3>
+<p>La función <code>glmnet()</code> tiene un argumento <code>alpha</code> que determina qué tipo de modelo se ajusta. Si <code>alpha=0</code> entonces se ajusta un modelo de regresión ridge, y si <code>alpha=1</code> entonces se ajusta un modelo de regresión lasso. Primero ajustamos un modelo de regresión ridge.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loaded glmnet 4.1-8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">^</span><span class="fu">seq</span>(<span class="dv">10</span>,<span class="sc">-</span><span class="dv">2</span>, <span class="at">length =</span> <span class="dv">100</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>ridge.mod <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x, y, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lambda =</span> grid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>De forma predeterminada, la función <code>glmnet()</code> realiza una regresión ridge para un rango de valores <span class="math inline">\(\lambda\)</span> seleccionado automáticamente.</p>
+<blockquote class="blockquote">
+<p><strong>Nota Víctor</strong>: <span class="math inline">\(\lambda\)</span> es el parámetro de regularización/penalización (de la magnitud de los coeficientes: cuanto más grande es el coeficiente mayor es la penalización) que se añade a RSS en la expresión a minimizar. Mininizar sólo RSS es el método de <em>mínimos cuadrados</em>.</p>
+</blockquote>
+<p>Sin embargo, aquí hemos optado por implementar la función sobre una <em>malla</em>(<code>grid</code>) de valores que van desde <span class="math inline">\(\lambda=10^{10}\)</span> a <span class="math inline">\(\lambda=10^{-2}\)</span>, cubriendo esencialmente el rango completo de escenarios desde el modelo nulo que contiene solo la intersección, al ajuste de mínimos cuadrados. Como veremos, también podemos calcular el ajuste del modelo para un valor particular de <span class="math inline">\(\lambda\)</span> que no es uno de los valores originales de <code>grid</code>.</p>
+<p>Por defecto, la función <code>glmnet()</code> estandariza las variables para que estén en la misma escala. Para desactivar esta configuración predeterminada, utilice el argumento <code>standardize = FALSE</code>.</p>
+<p>Asociado con cada valor de <span class="math inline">\(\lambda\)</span> hay un vector de coeficientes de regresión ridge, almacenados en una matriz a la que se puede acceder mediante <code>coef()</code>. En este caso, es una matriz <span class="math inline">\(20 \times 100\)</span>, con 20 filas (una para cada predictor, más una intersección) y 100 columnas (una para cada valor de <span class="math inline">\(\lambda\)</span>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">coef</span>(ridge.mod))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  20 100</code></pre>
+</div>
+</div>
+<p>Esperamos que las estimaciones del coeficiente sean mucho más pequeñas, en términos de la norma <span class="math inline">\(\ell_2\)</span>, cuando se usa un valor grande de <span class="math inline">\(\lambda\)</span>, en comparación con cuando se usa un valor pequeño de <span class="math inline">\(\lambda\)</span>.</p>
+<blockquote class="blockquote">
+<p><strong>Nota Víctor</strong>: una norma se puede entender como una regla para medir la “magnitud” de un vector, por tanto, permite una fácil comparación entre vectores. La norma <span class="math inline">\(\ell_2\)</span> se calcula como la raíz cuadrada de la suma de los cuadrados de los elementos del vector.</p>
+</blockquote>
+<p>Para el valor <code>50</code> de la malla se tiene <span class="math inline">\(\lambda=\)</span><code>11498</code> y sus coeficientes, junto con su norma <span class="math inline">\(\ell_2\)</span>, son:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>ridge.mod<span class="sc">$</span>lambda[<span class="dv">50</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 11497.57</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(ridge.mod)[, <span class="dv">50</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept)         AtBat          Hits         HmRun          Runs 
+407.356050200   0.036957182   0.138180344   0.524629976   0.230701523 
+          RBI         Walks         Years        CAtBat         CHits 
+  0.239841459   0.289618741   1.107702929   0.003131815   0.011653637 
+       CHmRun         CRuns          CRBI        CWalks       LeagueN 
+  0.087545670   0.023379882   0.024138320   0.025015421   0.085028114 
+    DivisionW       PutOuts       Assists        Errors    NewLeagueN 
+ -6.215440973   0.016482577   0.002612988  -0.020502690   0.301433531 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">sum</span>(<span class="fu">coef</span>(ridge.mod)[<span class="sc">-</span><span class="dv">1</span>, <span class="dv">50</span>]<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.360612</code></pre>
+</div>
+</div>
+<p>En contraste, aquí están otros coeficientes junto con su norma <span class="math inline">\(\ell_2\)</span>, cuando el valor de la malla es <code>60</code> y entonces <span class="math inline">\(\lambda=\)</span><code>705</code>. Nótese que la norma de <span class="math inline">\(\ell_2\)</span> es mucho más grande para los coeficientes asociados con este valor más pequeño de <span class="math inline">\(\lambda\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>ridge.mod<span class="sc">$</span>lambda[<span class="dv">60</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 705.4802</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(ridge.mod)[, <span class="dv">60</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept)        AtBat         Hits        HmRun         Runs          RBI 
+ 54.32519950   0.11211115   0.65622409   1.17980910   0.93769713   0.84718546 
+       Walks        Years       CAtBat        CHits       CHmRun        CRuns 
+  1.31987948   2.59640425   0.01083413   0.04674557   0.33777318   0.09355528 
+        CRBI       CWalks      LeagueN    DivisionW      PutOuts      Assists 
+  0.09780402   0.07189612  13.68370191 -54.65877750   0.11852289   0.01606037 
+      Errors   NewLeagueN 
+ -0.70358655   8.61181213 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">sum</span>(<span class="fu">coef</span>(ridge.mod)[<span class="sc">-</span><span class="dv">1</span>, <span class="dv">60</span>]<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 57.11001</code></pre>
+</div>
+</div>
+<p>Podemos usar la función <code>predict()</code> para varios propósitos. Por ejemplo, podemos obtener los coeficientes de regresión ridge para un nuevo valor de <span class="math inline">\(\lambda\)</span>, digamos <span class="math inline">\(50\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(ridge.mod, <span class="at">s =</span> <span class="dv">50</span>, <span class="at">type =</span> <span class="st">"coefficients"</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept)         AtBat          Hits         HmRun          Runs 
+ 4.876610e+01 -3.580999e-01  1.969359e+00 -1.278248e+00  1.145892e+00 
+          RBI         Walks         Years        CAtBat         CHits 
+ 8.038292e-01  2.716186e+00 -6.218319e+00  5.447837e-03  1.064895e-01 
+       CHmRun         CRuns          CRBI        CWalks       LeagueN 
+ 6.244860e-01  2.214985e-01  2.186914e-01 -1.500245e-01  4.592589e+01 
+    DivisionW       PutOuts       Assists        Errors    NewLeagueN 
+-1.182011e+02  2.502322e-01  1.215665e-01 -3.278600e+00 -9.496680e+00 </code></pre>
+</div>
+</div>
+<p>Ahora dividimos las muestras en un conjunto de entrenamiento y un conjunto de test para estimar el error de test de las regresiones ridge y lasso. Elegiremos aleatoriamente un subconjunto de números entre <span class="math inline">\(1\)</span> y <span class="math inline">\(n\)</span>, que se usarán como índices para las observaciones de entrenamiento (véase el anexo <strong>Herramientas</strong>). Primero establecemos una semilla aleatoria para la reproducibilidad de los resultados obtenidos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(x), <span class="fu">nrow</span>(x) <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> (<span class="sc">-</span>train)</span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>y.test <span class="ot">&lt;-</span> y[test]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A continuación, ajustamos un modelo de regresión ridge en el conjunto de entrenamiento y evaluamos su MSE en el conjunto de test, usando <span class="math inline">\(\lambda=4\)</span> y reemplazando <code>type = "coefficients"</code> con el argumento <code>newx</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>ridge.mod <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x[train,],</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>                    y[train],</span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">alpha =</span> <span class="dv">0</span>,</span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">lambda =</span> grid,</span>
+<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">thresh =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a>ridge.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(ridge.mod, <span class="at">s =</span> <span class="dv">4</span>, <span class="at">newx =</span> x[test,])</span>
+<span id="cb75-7"><a href="#cb75-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((ridge.pred <span class="sc">-</span> y.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 142199.2</code></pre>
+</div>
+</div>
+<p>El MSE de validación es <code>142199</code>.</p>
+<p>Si, en cambio, simplemente hubiéramos ajustado un modelo con solo una intersección, habríamos predicho cada observación de test utilizando la media de las observaciones de entrenamiento. En ese caso, podríamos calcular el conjunto de test MSE de esta manera:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((<span class="fu">mean</span>(y[train]) <span class="sc">-</span> y.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 224669.9</code></pre>
+</div>
+</div>
+<p>También podríamos obtener el mismo resultado ajustando un modelo de regresión ridge con un valor <em>muy</em> grande de <span class="math inline">\(\lambda\)</span> (<code>1e10</code> significa <span class="math inline">\(10^{10}\)</span>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>ridge.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(ridge.mod, <span class="at">s =</span> <span class="fl">1e10</span>, <span class="at">newx =</span> x[test,])</span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((ridge.pred <span class="sc">-</span> y.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 224669.8</code></pre>
+</div>
+</div>
+<p>Por lo tanto, ajustar un modelo de regresión ridge con <span class="math inline">\(\lambda=4\)</span> conduce a un MSE de validación mucho más bajo que ajustar un modelo con solo una intersección.</p>
+<p>Ahora comprobamos si hay algún beneficio en realizar una regresión ridge con <span class="math inline">\(\lambda=4\)</span> en lugar de simplemente realizar una regresión de mínimos cuadrados. Recuerde que los mínimos cuadrados son simplemente una regresión ridge con <span class="math inline">\(\lambda=0\)</span>.</p>
+<p><strong>Detalle técnico</strong>: Para que <code>glmnet()</code> arroje los coeficientes de mínimos cuadrados exactos cuando <span class="math inline">\(\lambda=0\)</span>, usamos el argumento <code>exact = T</code> al llamar a la función <code>predict()</code>. De lo contrario, la función <code>predict()</code> interpolará sobre la malla de valores <span class="math inline">\(\lambda\)</span> utilizados en el ajuste del modelo <code>glmnet()</code>, arrojando resultados aproximados. Cuando usamos <code>exact = T</code>, queda una ligera discrepancia en el tercer lugar decimal entre la salida de <code>glmnet()</code> cuando <span class="math inline">\(\lambda = 0\)</span> y la salida de <code>lm()</code>; esto se debe a la aproximación numérica por parte de <code>glmnet()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>ridge.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>  ridge.mod,</span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">s =</span> <span class="dv">0</span>,</span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">newx =</span> x[test,],</span>
+<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">exact =</span> T,</span>
+<span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> x[train,],</span>
+<span id="cb81-7"><a href="#cb81-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> y[train]</span>
+<span id="cb81-8"><a href="#cb81-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb81-9"><a href="#cb81-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((ridge.pred <span class="sc">-</span> y.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 168588.6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">subset =</span> train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y ~ x, subset = train)
+
+Coefficients:
+(Intercept)       xAtBat        xHits       xHmRun        xRuns         xRBI  
+   274.0145      -0.3521      -1.6377       5.8145       1.5424       1.1243  
+     xWalks       xYears      xCAtBat       xCHits      xCHmRun       xCRuns  
+     3.7287     -16.3773      -0.6412       3.1632       3.4008      -0.9739  
+      xCRBI      xCWalks     xLeagueN   xDivisionW     xPutOuts     xAssists  
+    -0.6005       0.3379     119.1486    -144.0831       0.1976       0.6804  
+    xErrors  xNewLeagueN  
+    -4.7128     -71.0951  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>  ridge.mod,</span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">s =</span> <span class="dv">0</span>,</span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">exact =</span> T,</span>
+<span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"coefficients"</span>,</span>
+<span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> x[train,],</span>
+<span id="cb85-7"><a href="#cb85-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> y[train]</span>
+<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept)        AtBat         Hits        HmRun         Runs          RBI 
+ 274.0200994   -0.3521900   -1.6371383    5.8146692    1.5423361    1.1241837 
+       Walks        Years       CAtBat        CHits       CHmRun        CRuns 
+   3.7288406  -16.3795195   -0.6411235    3.1629444    3.4005281   -0.9739405 
+        CRBI       CWalks      LeagueN    DivisionW      PutOuts      Assists 
+  -0.6003976    0.3378422  119.1434637 -144.0853061    0.1976300    0.6804200 
+      Errors   NewLeagueN 
+  -4.7127879  -71.0898914 </code></pre>
+</div>
+</div>
+<p>En general, si queremos ajustar un modelo de mínimos cuadrados, es decir, sin penalización, deberíamos usar la función <code>lm()</code>, ya que esa función proporciona resultados más útiles, como errores estándar y p-valores para los coeficientes.</p>
+<section id="elección-de-lambda-por-validación-cruzada" class="level4" data-number="6.2.1.1">
+<h4 data-number="6.2.1.1" class="anchored" data-anchor-id="elección-de-lambda-por-validación-cruzada"><span class="header-section-number">6.2.1.1</span> Elección de <span class="math inline">\(\lambda\)</span> por validación cruzada</h4>
+<p>Por otro lado, en lugar de elegir arbitrariamente <span class="math inline">\(\lambda=4\)</span>, sería mejor usar la <em>validación cruzada</em> para elegir el parámetro de ajuste <span class="math inline">\(\lambda\)</span>. Podemos hacer esto usando la función de validación cruzada incorporada, <code>cv.glmnet()</code>. De forma predeterminada, la función realiza una validación cruzada 10-<em>fold</em>, aunque esto se puede cambiar usando el argumento <code>nfolds</code>. Primero establecemos una semilla aleatoria para que nuestros resultados sean reproducibles, ya que la elección de los <em>folds</em> de validación cruzada es aleatoria.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>cv.out <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(x[train,], y[train], <span class="at">alpha =</span> <span class="dv">0</span>)</span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cv.out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab6-Seleccion-Var_files/figure-html/chunk36-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>bestlam <span class="ot">&lt;-</span> cv.out<span class="sc">$</span>lambda.min</span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>bestlam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 326.0828</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(bestlam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.787151</code></pre>
+</div>
+</div>
+<p>Por lo tanto, vemos que el valor de <span class="math inline">\(\lambda\)</span> que da como resultado el error de validación cruzada más pequeño es <code>326</code>. ¿Cuál es el MSE de validación asociado con este valor de <span class="math inline">\(\lambda\)</span>?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>ridge.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(ridge.mod, <span class="at">s =</span> bestlam, <span class="at">newx =</span> x[test,])</span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((ridge.pred <span class="sc">-</span> y.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 139856.6</code></pre>
+</div>
+</div>
+<p>Esto representa una mejora adicional sobre el MSE de validación que obtuvimos usando <span class="math inline">\(\lambda=4\)</span>. Finalmente, reajustamos nuestro modelo de regresión ridge en el conjunto de datos completo, usando el valor de <span class="math inline">\(\lambda\)</span> elegido por validación cruzada, y examinando las estimaciones de los coeficientes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x, y, <span class="at">alpha =</span> <span class="dv">0</span>)</span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(out, <span class="at">type =</span> <span class="st">"coefficients"</span>, <span class="at">s =</span> bestlam)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept)        AtBat         Hits        HmRun         Runs          RBI 
+ 15.44383120   0.07715547   0.85911582   0.60103106   1.06369007   0.87936105 
+       Walks        Years       CAtBat        CHits       CHmRun        CRuns 
+  1.62444617   1.35254778   0.01134999   0.05746654   0.40680157   0.11456224 
+        CRBI       CWalks      LeagueN    DivisionW      PutOuts      Assists 
+  0.12116504   0.05299202  22.09143197 -79.04032656   0.16619903   0.02941950 
+      Errors   NewLeagueN 
+ -1.36092945   9.12487765 </code></pre>
+</div>
+</div>
+<p>Como era de esperar, ninguno de los coeficientes es cero, ¡la regresión ridge no realiza la selección de variables!</p>
+</section>
+</section>
+<section id="regresión-lasso" class="level3" data-number="6.2.2">
+<h3 data-number="6.2.2" class="anchored" data-anchor-id="regresión-lasso"><span class="header-section-number">6.2.2</span> Regresión lasso</h3>
+<p>Se ha visto que la regresión ridge con una sabia elección de <span class="math inline">\(\lambda\)</span> puede superar a los mínimos cuadrados, así como al modelo nulo en el conjunto de datos <code>Hitters</code>. Ahora preguntamos si la regresión lasso puede producir un modelo más preciso o más interpretable que la regresión ridge. Para ajustar un modelo de regresión lasso, usamos una vez más la función <code>glmnet()</code>; sin embargo, esta vez usaremos el argumento <code>alpha=1</code>. Aparte de ese cambio, procedemos tal como lo hicimos al ajustar un modelo ridge.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>lasso.mod <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x[train,], y[train], <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">lambda =</span> grid)</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lasso.mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in regularize.values(x, y, ties, missing(ties), na.rm = na.rm):
+collapsing to unique 'x' values</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="Lab6-Seleccion-Var_files/figure-html/chunk39-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Podemos ver en el diagrama de coeficientes que dependiendo de la elección del parámetro de ajuste (basado ahora en la norma <span class="math inline">\(\ell_1\)</span>), algunos de los coeficientes serán exactamente iguales a cero. Ahora realizamos una validación cruzada y calculamos el error de test asociado.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>cv.out <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(x[train,], y[train], <span class="at">alpha =</span> <span class="dv">1</span>)</span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cv.out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab6-Seleccion-Var_files/figure-html/chunk40-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>bestlam <span class="ot">&lt;-</span> cv.out<span class="sc">$</span>lambda.min</span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>lasso.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lasso.mod, <span class="at">s =</span> bestlam, <span class="at">newx =</span> x[test,])</span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((lasso.pred <span class="sc">-</span> y.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 143673.6</code></pre>
+</div>
+</div>
+<p>Esto es sustancialmente más bajo que el MSE del conjunto de test del modelo nulo y de mínimos cuadrados, y muy similar al MSE de validación de regresión ridge con <span class="math inline">\(\lambda\)</span> elegido por validación cruzada.</p>
+<p>Sin embargo, la regresión lasso tiene una ventaja <em>sustancial</em> sobre la regresión ridge: las estimaciones de los coeficientes resultantes son <em>sparse</em> (escasas). Aquí vemos que 8 de los 19 coeficientes estimados son <em>exactamente cero</em>; el modelo de regresión lasso con <span class="math inline">\(\lambda\)</span> elegido por validación cruzada contiene solo 11 variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x, y, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">lambda =</span> grid)</span>
+<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a>lasso.coef <span class="ot">&lt;-</span></span>
+<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(out, <span class="at">type =</span> <span class="st">"coefficients"</span>, <span class="at">s =</span> bestlam)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,]</span>
+<span id="cb101-4"><a href="#cb101-4" aria-hidden="true" tabindex="-1"></a>lasso.coef</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept)         AtBat          Hits         HmRun          Runs 
+   1.27479059   -0.05497143    2.18034583    0.00000000    0.00000000 
+          RBI         Walks         Years        CAtBat         CHits 
+   0.00000000    2.29192406   -0.33806109    0.00000000    0.00000000 
+       CHmRun         CRuns          CRBI        CWalks       LeagueN 
+   0.02825013    0.21628385    0.41712537    0.00000000   20.28615023 
+    DivisionW       PutOuts       Assists        Errors    NewLeagueN 
+-116.16755870    0.23752385    0.00000000   -0.85629148    0.00000000 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>lasso.coef[lasso.coef <span class="sc">!=</span> <span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept)         AtBat          Hits         Walks         Years 
+   1.27479059   -0.05497143    2.18034583    2.29192406   -0.33806109 
+       CHmRun         CRuns          CRBI       LeagueN     DivisionW 
+   0.02825013    0.21628385    0.41712537   20.28615023 -116.16755870 
+      PutOuts        Errors 
+   0.23752385   -0.85629148 </code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Nota Víctor</strong>: La imagen siguiente (de las slides -y el libro-) sirve de ilustración de la diferencia entre las regresiones ridge y lasso, y porque lasso es <em>sparse</em>.</p>
+</blockquote>
+<p><img src="img/lasso-picture.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="regresión-pcr-y-pls-resumido" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="regresión-pcr-y-pls-resumido">Regresión PCR y PLS (resumido)</h2>
+<blockquote class="blockquote">
+<p><strong>Nota Víctor</strong>: He optado por omitir los detalles de esta parte, dado el tiempo limitado del que disponemos. Se puede consultar el material original para profundizar en este punto. Aquí sólo se mencionan las ideas principales y las funciones de R para llevarla a cabo.</p>
+</blockquote>
+<section id="regresión-de-componentes-principales" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="regresión-de-componentes-principales">Regresión de componentes principales</h3>
+<p>La regresión de componentes principales (PCR) se puede realizar utilizando la función <code>pcr()</code>, del paquete <code>pls</code>.</p>
+<p>En el material original se aplica PCR a los datos de <code>Hitters</code> , para predecir <code>Salary</code> (también se deben eliminar los valores faltantes)</p>
+<p>La sintaxis de la función <code>pcr()</code> es similar a la de <code>lm()</code>, con algunos detalles adicionales.</p>
+<ul>
+<li>Establecer <code>scale = TRUE</code> tiene el efecto de <em>estandarizar</em> cada predictor, antes de generar los componentes principales, por lo que la escala en la que se mida cada variable no tendrá ningún efecto.</li>
+<li>Establecer <code>validation = "CV"</code> hace que <code>pcr()</code> calcule el error de validación cruzada de 10-<em>fold</em> para cada valor posible de <span class="math inline">\(M\)</span>, el número de componentes principales utilizados.</li>
+</ul>
+<p>El ajuste resultante se puede examinar usando <code>summary()</code>.</p>
+<p>También se pueden dibujar las puntuaciones de validación cruzada usando la función <code>validationplot()</code> (Gráfico de sedimentación). Usando <code>val.tipo = "MSEP"</code> hará que se trace el MSE de validación cruzada.</p>
+<p><strong>Comentario importante</strong>: El MSE de un conjunto de test/validación puede ser competitivo con los resultados obtenidos utilizando las regresiones ridge y lasso (es lo que se concluye en el ejemplo con <code>Hitters</code>). Sin embargo, como resultado de la forma en que se implementa la PCR, el modelo final es más difícil de interpretar porque no realiza ningún tipo de selección de variables ni produce directamente estimaciones de coeficientes.</p>
+</section>
+<section id="mínimos-cuadrados-parciales-pls" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="mínimos-cuadrados-parciales-pls">Mínimos cuadrados parciales (PLS)</h3>
+<p>Se pueden obtener los mínimos cuadrados parciales (PLS) usando la función <code>plsr()</code>, también en el paquete <code>pls</code>. La sintaxis es como la de la función <code>pcr()</code>.</p>
+<p>Con <code>summary()</code> se mostraría el resumen del ajuste y con <code>validationplot()</code> el correspondiente gráfico.</p>
+<p>En este contexto en lugar de componentes principales se habla de <span class="math inline">\(M\)</span> <em>direcciones</em> de mínimos cuadrados parciales.</p>
+<p><strong>Nota</strong>: En el ejemplo con <code>Hitters</code> el porcentaje de variación en <code>Salary</code> que explica el ajuste de PLS de una dirección, 43.05%, es casi tanto como el que se explica utilizando el ajuste final de PCR del modelo de cinco componentes, 44.90%. Esto se debe a que PCR solo intenta maximizar la cantidad de varianza explicada en los predictores, mientras que PLS busca <em>direcciones</em> que expliquen la varianza tanto en los predictores como en la respuesta.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./Lab5-Remuestreo.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lab5 Remuestreo</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./Lab7-NoLineal.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lab7 Modelización no lineal</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

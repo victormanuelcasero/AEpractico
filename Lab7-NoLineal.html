@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Aprendizaje Estadístico: un enfoque práctico con R - 7&nbsp; Lab7 Modelización no lineal</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Lab8-Arboles.html" rel="next">
+<link href="./Lab6-Seleccion-Var.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lab7 Modelización no lineal</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Aprendizaje Estadístico: un enfoque práctico con R</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Prefacio</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab1-intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab2-AE.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Aprendizaje Estadístico</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab3-RegLin.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lab3 Regresión lineal</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab4-Clasif.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lab4 Clasificación</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab5-Remuestreo.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lab5 Remuestreo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab6-Seleccion-Var.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lab6 Selección de Variables (modelos lineales)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab7-NoLineal.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lab7 Modelización no lineal</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab8-Arboles.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lab8 Árboles de decisión</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab9-SVM.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lab9 Support Vector Machines</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ZA_Herram.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Herramientas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#regresión-polinómica-y-funciones-escalonadas" id="toc-regresión-polinómica-y-funciones-escalonadas" class="nav-link active" data-scroll-target="#regresión-polinómica-y-funciones-escalonadas"><span class="toc-section-number">7.1</span>  Regresión polinómica y funciones escalonadas</a>
+  <ul class="collapse">
+  <li><a href="#regresión-polinómica-recortado" id="toc-regresión-polinómica-recortado" class="nav-link" data-scroll-target="#regresión-polinómica-recortado"><span class="toc-section-number">7.1.1</span>  Regresión polinómica (recortado)</a></li>
+  <li><a href="#funciones-escalonadas-omitido" id="toc-funciones-escalonadas-omitido" class="nav-link" data-scroll-target="#funciones-escalonadas-omitido"><span class="toc-section-number">7.1.2</span>  Funciones escalonadas (omitido)</a></li>
+  </ul></li>
+  <li><a href="#splines" id="toc-splines" class="nav-link" data-scroll-target="#splines"><span class="toc-section-number">7.2</span>  Splines</a>
+  <ul class="collapse">
+  <li><a href="#splines-de-regresión" id="toc-splines-de-regresión" class="nav-link" data-scroll-target="#splines-de-regresión"><span class="toc-section-number">7.2.1</span>  Splines de regresión</a></li>
+  <li><a href="#splines-de-suavizado" id="toc-splines-de-suavizado" class="nav-link" data-scroll-target="#splines-de-suavizado"><span class="toc-section-number">7.2.2</span>  Splines de suavizado</a></li>
+  <li><a href="#regresión-local-loess" id="toc-regresión-local-loess" class="nav-link" data-scroll-target="#regresión-local-loess"><span class="toc-section-number">7.2.3</span>  Regresión local: loess</a></li>
+  </ul></li>
+  <li><a href="#gams" id="toc-gams" class="nav-link" data-scroll-target="#gams"><span class="toc-section-number">7.3</span>  GAMs</a>
+  <ul class="collapse">
+  <li><a href="#gam-logístico" id="toc-gam-logístico" class="nav-link" data-scroll-target="#gam-logístico"><span class="toc-section-number">7.3.1</span>  GAM logístico</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lab7 Modelización no lineal</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<table class="table">
+<caption>Material original</caption>
+<colgroup>
+<col style="width: 15%">
+<col style="width: 85%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tipo</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Slides:</td>
+<td><a href="https://hastie.su.domains/ISLR2/Slides/Ch7_Moving_Beyond_Linearity.pdf" class="uri">https://hastie.su.domains/ISLR2/Slides/Ch7_Moving_Beyond_Linearity.pdf</a></td>
+</tr>
+<tr class="even">
+<td>Lab-html:</td>
+<td><a href="https://hastie.su.domains/ISLR2/Labs/Rmarkdown_Notebooks/Ch7-nonlin-lab.html" class="uri">https://hastie.su.domains/ISLR2/Labs/Rmarkdown_Notebooks/Ch7-nonlin-lab.html</a></td>
+</tr>
+<tr class="odd">
+<td>Lab-Rscript:</td>
+<td><a href="https://hastie.su.domains/ISLR2/Labs/R_Labs/Ch7-nonlin-lab.R" class="uri">https://hastie.su.domains/ISLR2/Labs/R_Labs/Ch7-nonlin-lab.R</a></td>
+</tr>
+<tr class="even">
+<td>Data:</td>
+<td><code>Wage</code> (<code>ISLR2</code>)</td>
+</tr>
+</tbody>
+</table>
+<section id="regresión-polinómica-y-funciones-escalonadas" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="regresión-polinómica-y-funciones-escalonadas"><span class="header-section-number">7.1</span> Regresión polinómica y funciones escalonadas</h2>
+<section id="regresión-polinómica-recortado" class="level3" data-number="7.1.1">
+<h3 data-number="7.1.1" class="anchored" data-anchor-id="regresión-polinómica-recortado"><span class="header-section-number">7.1.1</span> Regresión polinómica (recortado)</h3>
+<p>Existen diversas formas de ajustar un modelo lineal de regresión polinómica. Aquí usamos, dentro de <code>lm()</code>, la función <code>poly()</code>, evitando escribir una fórmula larga con potencias de la variable explicativa (véase el anexo <strong>Herramientas</strong>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">poly</span>(age, <span class="dv">4</span>), <span class="at">data =</span> Wage)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                Estimate Std. Error    t value     Pr(&gt;|t|)
+(Intercept)    111.70361  0.7287409 153.283015 0.000000e+00
+poly(age, 4)1  447.06785 39.9147851  11.200558 1.484604e-28
+poly(age, 4)2 -478.31581 39.9147851 -11.983424 2.355831e-32
+poly(age, 4)3  125.52169 39.9147851   3.144742 1.678622e-03
+poly(age, 4)4  -77.91118 39.9147851  -1.951938 5.103865e-02</code></pre>
+</div>
+</div>
+<ul>
+<li><p><code>poly(age, 4)</code> genera un polinomio de cuarto grado en <code>age</code>, con una <em>base</em> de <em>polinomios ortogonales</em> (cada columna es una combinación lineal de las variables <code>age</code>, <code>age^2</code>, <code>age^3</code> y <code>age^4</code>).</p></li>
+<li><p>para obtener <code>age</code>, <code>age^2</code>, <code>age^3</code> y <code>age^4</code> directamente, en lugar de los polinomios ortogonales, hay que hacer uso del argumento <code>raw = TRUE</code>.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">poly</span>(age, <span class="dv">4</span>, <span class="at">raw =</span> T), <span class="at">data =</span> Wage)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(fit2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                            Estimate   Std. Error   t value     Pr(&gt;|t|)
+(Intercept)            -1.841542e+02 6.004038e+01 -3.067172 0.0021802539
+poly(age, 4, raw = T)1  2.124552e+01 5.886748e+00  3.609042 0.0003123618
+poly(age, 4, raw = T)2 -5.638593e-01 2.061083e-01 -2.735743 0.0062606446
+poly(age, 4, raw = T)3  6.810688e-03 3.065931e-03  2.221409 0.0263977518
+poly(age, 4, raw = T)4 -3.203830e-05 1.641359e-05 -1.951938 0.0510386498</code></pre>
+</div>
+</div>
+<p>Como se indica en el anexo <strong>Herramientas</strong>, veremos que la elección de la “base” no afecta al modelo de manera significativa - sí que afecta a las estimaciones de los coeficientes, pero no afecta a los valores ajustados obtenidos.</p>
+<p><strong>Predicciones</strong><br>
+Ahora creamos una malla de valores para <code>age</code> en la que queremos predicciones, y luego llamamos a la función genérica <code>predict()</code>, especificando que también queremos errores estándar (<code>se = TRUE</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>agelims <span class="ot">&lt;-</span> <span class="fu">range</span>(Wage<span class="sc">$</span>age)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>age.grid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> agelims[<span class="dv">1</span>], <span class="at">to =</span> agelims[<span class="dv">2</span>])</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid), <span class="at">se =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>se.bands <span class="ot">&lt;-</span> <span class="fu">cbind</span>(preds<span class="sc">$</span>fit <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> preds<span class="sc">$</span>se.fit,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                  preds<span class="sc">$</span>fit <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> preds<span class="sc">$</span>se.fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finalmente, dibujamos los datos y añadimos el ajuste del polinomio de grado 4 (Figura 7.1. del libro)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">mar =</span> <span class="fu">c</span>(<span class="fl">4.5</span>, <span class="fl">4.5</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">oma =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">0</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  Wage<span class="sc">$</span>age,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  Wage<span class="sc">$</span>wage,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> agelims,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> .<span class="dv">5</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"darkgrey"</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"Polinomio de grado 4"</span>, <span class="at">outer =</span> T)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid, preds<span class="sc">$</span>fit, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"blue"</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">matlines</span>(age.grid,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>         se.bands,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">lwd =</span> <span class="dv">1</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> <span class="st">"blue"</span>,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">lty =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab7-NoLineal_files/figure-html/chunk7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Nota Víctor</strong>: más adelante se dibuja el subplot de la derecha (véase el libro).</p>
+</blockquote>
+<p><strong>Nota técnica</strong>: Los argumentos <code>mar</code> y <code>oma</code> para <code>par()</code> nos permiten controlar los márgenes del <code>plot</code>, y la función <code>title()</code> crea un título de figura que abarca ambos subplots.</p>
+<p>Mencionamos anteriormente que si se produce o no un conjunto ortogonal de funciones base en la función <code>poly()</code> no afectará al modelo obtenido de manera significativa. ¿Qué queremos decir con esto? Los valores ajustados obtenidos en cualquier caso son idénticos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>preds2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit2, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid), <span class="at">se =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(<span class="fu">abs</span>(preds<span class="sc">$</span>fit <span class="sc">-</span> preds2<span class="sc">$</span>fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.842527e-11</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Nota Víctor</strong>: El dato obtenido se puede considerar <code>0</code>. No aparece exactamente el valor <code>0</code> por la precisión de las predicciones con uno y otro ajuste.</p>
+</blockquote>
+<section id="contraste-anova" class="level4" data-number="7.1.1.1">
+<h4 data-number="7.1.1.1" class="anchored" data-anchor-id="contraste-anova"><span class="header-section-number">7.1.1.1</span> Contraste ANOVA</h4>
+<p>Al realizar una regresión polinomial, debemos decidir el grado del polinomio que se utilizará. Una forma de hacerlo es mediante el uso de contrastes de hipótesis. Vamos a ajustar modelos lineales que van desde el de grado 1 hasta un polinomio de grado 5 y buscaremos determinar el modelo más simple que sea suficiente para explicar la relación entre <code>wage</code> y <code>age</code>. Usamos la función <code>anova()</code>, que realiza un <strong>análisis de varianza</strong> (ANOVA, usando un contraste F) para probar la hipótesis nula de que un modelo <span class="math inline">\(\mathcal{M}_1\)</span> es suficiente para explicar los datos frente a la hipótesis alternativa de que se requiere un modelo más complejo <span class="math inline">\(\mathcal{M}_2\)</span>. Para usar la función <code>anova()</code>, <span class="math inline">\(\mathcal{M}_1\)</span> y <span class="math inline">\(\mathcal{M}_2\)</span> deben ser modelos <em>anidados</em> (véase el anexo <strong>Herramientas</strong>). En este caso, ajustamos cinco modelos diferentes y comparamos secuencialmente un modelo con el siguiente (siempre más complejo).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fit<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> age, <span class="at">data =</span> Wage)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fit<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">poly</span>(age, <span class="dv">2</span>), <span class="at">data =</span> Wage)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>fit<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">poly</span>(age, <span class="dv">3</span>), <span class="at">data =</span> Wage)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>fit<span class="fl">.4</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">poly</span>(age, <span class="dv">4</span>), <span class="at">data =</span> Wage)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>fit<span class="fl">.5</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">poly</span>(age, <span class="dv">5</span>), <span class="at">data =</span> Wage)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(fit<span class="fl">.1</span>, fit<span class="fl">.2</span>, fit<span class="fl">.3</span>, fit<span class="fl">.4</span>, fit<span class="fl">.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: wage ~ age
+Model 2: wage ~ poly(age, 2)
+Model 3: wage ~ poly(age, 3)
+Model 4: wage ~ poly(age, 4)
+Model 5: wage ~ poly(age, 5)
+  Res.Df     RSS Df Sum of Sq        F    Pr(&gt;F)    
+1   2998 5022216                                    
+2   2997 4793430  1    228786 143.5931 &lt; 2.2e-16 ***
+3   2996 4777674  1     15756   9.8888  0.001679 ** 
+4   2995 4771604  1      6070   3.8098  0.051046 .  
+5   2994 4770322  1      1283   0.8050  0.369682    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>El p-valor que compara el <code>Model 1</code> lineal con el <code>Model 2</code> cuadrático es esencialmente cero (<span class="math inline">\(&lt;10^{-16}\)</span>), lo que indica que un ajuste lineal no es suficiente. De manera similar, el p-valor que compara el <code>Model 2</code>, cuadrático, con el <code>Model 3</code>, cúbico, es muy bajo (0.0017), por lo que el ajuste cuadrático también es insuficiente. El p-valor que compara los polinomios cúbico y de grado 4, <code>Model 3</code> y <code>Model 4</code>, es de aproximadamente 5% mientras que el polinomio de grado 5, <code>Model 5</code>, parece innecesario porque su p-valor al compararlo con el <code>Model 4</code> es 0.37. Por lo tanto, un polinomio cúbico o cuártico parecen proporcionar un ajuste razonable a los datos, no estando justificados los modelos de orden inferior o superior.</p>
+<p>En este caso, en lugar de usar la función <code>anova()</code>, podríamos haber obtenido estos p-valores de manera más sucinta explotando el hecho de que <code>poly()</code> crea polinomios ortogonales (véase la función <code>poly()</code> en el anexo <strong>Herramientas</strong>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(fit<span class="fl">.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                Estimate Std. Error     t value     Pr(&gt;|t|)
+(Intercept)    111.70361  0.7287647 153.2780243 0.000000e+00
+poly(age, 5)1  447.06785 39.9160847  11.2001930 1.491111e-28
+poly(age, 5)2 -478.31581 39.9160847 -11.9830341 2.367734e-32
+poly(age, 5)3  125.52169 39.9160847   3.1446392 1.679213e-03
+poly(age, 5)4  -77.91118 39.9160847  -1.9518743 5.104623e-02
+poly(age, 5)5  -35.81289 39.9160847  -0.8972045 3.696820e-01</code></pre>
+</div>
+</div>
+<p>Observe que los p-valores son los mismos y, de hecho, el cuadrado de cada estadístico <span class="math inline">\(t\)</span> es igual al estadístico <span class="math inline">\(F\)</span> de la función <code>anova()</code>; por ejemplo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>(<span class="sc">-</span><span class="fl">11.983</span>)<span class="sc">^</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 143.5923</code></pre>
+</div>
+</div>
+<p>Sin embargo, el método ANOVA funciona tanto si usamos polinomios ortogonales como si no; también funciona cuando tenemos otros términos en el modelo. Por ejemplo, podemos usar <code>anova()</code> para comparar estos tres modelos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fit<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> education <span class="sc">+</span> age, <span class="at">data =</span> Wage)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>fit<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> education <span class="sc">+</span> <span class="fu">poly</span>(age, <span class="dv">2</span>), <span class="at">data =</span> Wage)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>fit<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> education <span class="sc">+</span> <span class="fu">poly</span>(age, <span class="dv">3</span>), <span class="at">data =</span> Wage)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(fit<span class="fl">.1</span>, fit<span class="fl">.2</span>, fit<span class="fl">.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: wage ~ education + age
+Model 2: wage ~ education + poly(age, 2)
+Model 3: wage ~ education + poly(age, 3)
+  Res.Df     RSS Df Sum of Sq        F Pr(&gt;F)    
+1   2994 3867992                                 
+2   2993 3725395  1    142597 114.6969 &lt;2e-16 ***
+3   2992 3719809  1      5587   4.4936 0.0341 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Como alternativa al uso de contrastes de hipótesis y ANOVA, podríamos elegir el grado del polinomio mediante validación cruzada, como se explica en el <em>Lab5 Remuestreo</em>.</p>
+</section>
+<section id="clasificación" class="level4" data-number="7.1.1.2">
+<h4 data-number="7.1.1.2" class="anchored" data-anchor-id="clasificación"><span class="header-section-number">7.1.1.2</span> Clasificación</h4>
+<p>Consideramos la tarea de predecir si una persona gana más de 250.000 $ por año. Procedemos como antes, excepto que primero creamos el vector de respuesta apropiado y luego aplicamos la función <code>glm()</code> usando <code>family = "binomial"</code> para ajustar un modelo de regresión logística polinomial.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glm</span>(<span class="fu">I</span>(wage <span class="sc">&gt;</span> <span class="dv">250</span>) <span class="sc">~</span> <span class="fu">poly</span>(age, <span class="dv">4</span>), <span class="at">data =</span> Wage, <span class="at">family =</span> binomial)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Tenga en cuenta que nuevamente usamos el ‘envoltorio’ <code>I()</code> para crear esta variable de respuesta binaria sobre la marcha. La expresión <code>wage &gt; 250</code> se evalúa como una variable lógica que contiene <code>TRUE</code>s y <code>FALSE</code>s, que <code>glm()</code> convierte en binario estableciendo <code>TRUE</code> como 1 y <code>FALSE</code> como 0.</p>
+<p>Una vez más, hacemos predicciones usando la función <code>predict()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid), <span class="at">se =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Calcular ahora los intervalos de confianza es un poco más complicado que en el caso de la regresión lineal. El tipo de predicción predeterminado para un modelo <code>glm()</code> es <code>type = "link"</code>, que es lo que usamos aquí. Esto significa que obtenemos predicciones para el <em>logit</em> , o log-odds: es decir, hemos ajustado un modelo de la forma <span class="math display">\[ \log\left(\frac{\Pr(Y=1|X)}{1-\Pr(Y=1|X)}\right)=X\beta,\]</span> y las predicciones dadas son de la forma <span class="math inline">\(X \hat\beta\)</span>. Los errores estándar dados también son para <span class="math inline">\(X \hat\beta\)</span>. Para obtener intervalos de confianza para <span class="math inline">\(\Pr(Y=1|X)\)</span>, usamos la transformación <span class="math display">\[\Pr(Y=1|X)=\frac{\exp(X\beta)}{1+\exp(X\beta)}.\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pfit <span class="ot">&lt;-</span> <span class="fu">exp</span>(preds<span class="sc">$</span>fit) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(preds<span class="sc">$</span>fit))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>se.bands.logit <span class="ot">&lt;-</span> <span class="fu">cbind</span>(preds<span class="sc">$</span>fit <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> preds<span class="sc">$</span>se.fit,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                        preds<span class="sc">$</span>fit <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> preds<span class="sc">$</span>se.fit)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>se.bands <span class="ot">&lt;-</span> <span class="fu">exp</span>(se.bands.logit) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(se.bands.logit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Tenga en cuenta que podríamos haber calculado directamente las probabilidades seleccionando la opción <code>type = "response"</code> en la función <code>predict()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid),</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">se =</span> T,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Sin embargo, los intervalos de confianza correspondientes no habrían sido sensatos porque terminaríamos con ¡probabilidades negativas!<br>
+Finalmente, el gráfico de la derecha de la Figura 7.1 se hizo de la siguiente manera:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  Wage<span class="sc">$</span>age,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">I</span>(Wage<span class="sc">$</span>wage <span class="sc">&gt;</span> <span class="dv">250</span>),</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> agelims,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"n"</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, .<span class="dv">2</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">jitter</span>(Wage<span class="sc">$</span>age),</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">I</span>((Wage<span class="sc">$</span>wage <span class="sc">&gt;</span> <span class="dv">250</span>) <span class="sc">/</span> <span class="dv">5</span>),</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> .<span class="dv">5</span>,</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="st">"|"</span>,</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"darkgrey"</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid, pfit, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"blue"</span>)</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="fu">matlines</span>(age.grid,</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>         se.bands,</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">lwd =</span> <span class="dv">1</span>,</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> <span class="st">"blue"</span>,</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">lty =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab7-NoLineal_files/figure-html/chunk17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Hemos dibujado los valores de <code>age</code> correspondientes a las observaciones con valores de <code>wage</code> por encima de 250 con marcas grises en la parte superior del gráfico, y aquellos con valores de <code>wage</code> por debajo de 250 se muestran con marcas grises en la parte inferior del gráfico. Usamos la función <code>jitter()</code> para alterar un poco los valores de <code>age</code> para que las observaciones con el mismo valor no se tapen entre ellas. Esto a menudo se llama un ‘rug plot’.</p>
+</section>
+</section>
+<section id="funciones-escalonadas-omitido" class="level3" data-number="7.1.2">
+<h3 data-number="7.1.2" class="anchored" data-anchor-id="funciones-escalonadas-omitido"><span class="header-section-number">7.1.2</span> Funciones escalonadas (omitido)</h3>
+<blockquote class="blockquote">
+<p><strong>Nota Víctor</strong>: Omito esta sección porque considero que desvía la atención del objetivo de conocer las “grandes” herramientas de modelización.<br>
+(Se puede consultar en el material original y en la Sección 7.2 del libro)</p>
+</blockquote>
+</section>
+</section>
+<section id="splines" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="splines"><span class="header-section-number">7.2</span> Splines</h2>
+<section id="splines-de-regresión" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="splines-de-regresión"><span class="header-section-number">7.2.1</span> Splines de regresión</h3>
+<p>Para ajustar unos <em>splines</em> de regresión (<em>regression splines</em>) en <code>R</code>, usamos el paquete <code>splines</code>. En la Sección 7.4 se ve que los splines de regresión se pueden ajustar construyendo una matriz apropiada de funciones base. La función <code>bs()</code> genera la matriz completa de funciones base para splines con el conjunto especificado de nodos (<code>knots</code>). Por defecto, se producen <em>splines cúbicos</em>. La sintaxis para ajustar <code>wage</code> a <code>age</code> usando un spline de regresión es simple:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(splines)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>age <span class="ot">&lt;-</span> Wage<span class="sc">$</span>age</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">bs</span>(age, <span class="at">knots =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">40</span>, <span class="dv">60</span>)), <span class="at">data =</span> Wage)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid), <span class="at">se =</span> T)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Wage<span class="sc">$</span>age, Wage<span class="sc">$</span>wage, <span class="at">col =</span> <span class="st">"gray"</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid, pred<span class="sc">$</span>fit, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid, pred<span class="sc">$</span>fit <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> pred<span class="sc">$</span>se, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid, pred<span class="sc">$</span>fit <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> pred<span class="sc">$</span>se, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab7-NoLineal_files/figure-html/chunk19-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Aquí tenemos nodos preespecificados con edades <code>25</code>, <code>40</code> y <code>60</code>. Esto produce un spline con seis funciones básicas.<br>
+<strong>Nota técnica</strong>: un spline cúbico con tres nodos tiene siete grados de libertad; estos grados de libertad se usan para la intersección, más seis funciones base.</p>
+<p>También podríamos usar la opción <code>df</code> para producir un spline con nodos en los cuantiles uniformes de los datos</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">bs</span>(age, <span class="at">knots =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">40</span>, <span class="dv">60</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3000    6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">bs</span>(age, <span class="at">df =</span> <span class="dv">6</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3000    6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(<span class="fu">bs</span>(age, <span class="at">df =</span> <span class="dv">6</span>), <span class="st">"knots"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 33.75 42.00 51.00</code></pre>
+</div>
+</div>
+<p>En este caso, <code>R</code> elige nodos en las edades <code>33.75</code>, <code>42</code> y <code>51</code>, que corresponden a los percentiles 25, 50 y 75 de <code>age</code>. La función <code>bs()</code> también tiene un argumento <code>degree</code>, por lo que podemos ajustar splines de cualquier grado, en lugar del grado predeterminado de 3 (que produce un spline cúbico).</p>
+<p><strong>Splines naturales</strong><br>
+Para ajustar a un spline natural, usamos la función <code>ns()</code>. Aquí ajustamos a uno con cuatro grados de libertad.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>age <span class="ot">&lt;-</span> Wage<span class="sc">$</span>age</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">ns</span>(age, <span class="at">df =</span> <span class="dv">4</span>), <span class="at">data =</span> Wage)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>pred2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit2, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid), <span class="at">se =</span> T)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Wage<span class="sc">$</span>age, Wage<span class="sc">$</span>wage, <span class="at">col =</span> <span class="st">"gray"</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid, pred2<span class="sc">$</span>fit, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab7-NoLineal_files/figure-html/chunk21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Al igual que con la función <code>bs()</code>, podríamos especificar los nodos directamente usando la opción <code>knots</code>.</p>
+</section>
+<section id="splines-de-suavizado" class="level3" data-number="7.2.2">
+<h3 data-number="7.2.2" class="anchored" data-anchor-id="splines-de-suavizado"><span class="header-section-number">7.2.2</span> Splines de suavizado</h3>
+<p>Para ajustar un <em>spline de suavizado</em>, usamos la función <code>smooth.spline()</code>. La figura 7.8 se obtuvo con el siguiente código:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  Wage<span class="sc">$</span>age,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  Wage<span class="sc">$</span>wage,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> agelims,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> .<span class="dv">5</span>,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"darkgrey"</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"Smoothing Spline"</span>)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">smooth.spline</span>(Wage<span class="sc">$</span>age, Wage<span class="sc">$</span>wage, <span class="at">df =</span> <span class="dv">16</span>)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">smooth.spline</span>(Wage<span class="sc">$</span>age, Wage<span class="sc">$</span>wage, <span class="at">cv =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in smooth.spline(Wage$age, Wage$wage, cv = TRUE): cross-validation with
+non-unique 'x' values seems doubtful</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>fit2<span class="sc">$</span>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.794596</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fit, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fit2, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"topright"</span>,</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"16 DF"</span>, <span class="st">"6.8 DF"</span>),</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>),</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">1</span>,</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">2</span>,</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> .<span class="dv">8</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab7-NoLineal_files/figure-html/chunk22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Note que en la primera llamada a <code>smooth.spline()</code>, especificamos <code>df = 16</code>. Luego, la función determina qué valor de <span class="math inline">\(\lambda\)</span> conduce a <code>16</code> grados de libertad. En la segunda llamada a <code>smooth.spline()</code>, seleccionamos el nivel de suavidad por validación cruzada, <code>cv = TRUE</code>; esto da como resultado un valor de <span class="math inline">\(\lambda\)</span> que produce <code>6.8</code> grados de libertad.</p>
+</section>
+<section id="regresión-local-loess" class="level3" data-number="7.2.3">
+<h3 data-number="7.2.3" class="anchored" data-anchor-id="regresión-local-loess"><span class="header-section-number">7.2.3</span> Regresión local: loess</h3>
+<p>Para realizar la regresión local, usamos la función <code>loess()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  Wage<span class="sc">$</span>age,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  Wage<span class="sc">$</span>wage,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> agelims,</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> .<span class="dv">5</span>,</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"darkgrey"</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"Local Regression"</span>)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">loess</span>(wage <span class="sc">~</span> age, <span class="at">span =</span> .<span class="dv">2</span>, <span class="at">data =</span> Wage)</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">loess</span>(wage <span class="sc">~</span> age, <span class="at">span =</span> .<span class="dv">5</span>, <span class="at">data =</span> Wage)</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid,</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">predict</span>(fit, <span class="fu">data.frame</span>(<span class="at">age =</span> age.grid)),</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="st">"red"</span>,</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid,</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">predict</span>(fit2, <span class="fu">data.frame</span>(<span class="at">age =</span> age.grid)),</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="st">"blue"</span>,</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>  <span class="st">"topright"</span>,</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Span = 0.2"</span>, <span class="st">"Span = 0.5"</span>),</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>),</span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">1</span>,</span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd =</span> <span class="dv">2</span>,</span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> .<span class="dv">8</span></span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab7-NoLineal_files/figure-html/chunk23-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Aquí hemos realizado una regresión lineal local utilizando intervalos de <code>0.2</code> y <code>0.5</code>: es decir, cada vecindario consta del 20% o el 50% de las observaciones. Cuanto mayor sea el intervalo, más suave será el ajuste. El paquete <code>locfit</code> también se puede usar para ajustar modelos de regresión locales en <code>R</code>.</p>
+</section>
+</section>
+<section id="gams" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="gams"><span class="header-section-number">7.3</span> GAMs</h2>
+<p>Ahora ajustamos un GAM para predecir <code>wage</code>:</p>
+<p><code>wage</code><span class="math inline">\(=\beta_0+f_1(\)</span><code>year</code><span class="math inline">\()+f_2(\)</span><code>age</code><span class="math inline">\()+f_3(\)</span><code>education</code><span class="math inline">\()+\epsilon \quad (7.16)\)</span></p>
+<p>utilizaremos funciones <em>splines naturales</em> de <code>year</code> y <code>age</code>, tratando <code>education</code> como un predictor cualitativo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>gam1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">ns</span>(year, <span class="dv">4</span>) <span class="sc">+</span> <span class="fu">ns</span>(age, <span class="dv">5</span>) <span class="sc">+</span> education, <span class="at">data =</span> Wage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dado que este es un modelo de regresión lineal que usa una selección adecuada de funciones básicas, se ha utilizando la función <code>lm()</code>.</p>
+<p>Para ajustar tipos más generales de GAM, usando <em>splines de suavizado</em> u otros componentes que no se pueden expresar en términos de funciones básicas y luego ajustar usando regresión de mínimos cuadrados, necesitaremos usar el paquete <code>gam</code> en <code>R</code>.</p>
+<p>La función <code>s()</code>, del paquete <code>gam</code>, se usa para indicar que nos gustaría usar un spline de suavizado. Especificamos que la función de <code>year</code> debe tener <code>4</code> grados de libertad, y que la función de <code>age</code> tendrá <code>5</code> grados de libertad. Dado que <code>education</code> es cualitativa, la dejamos como está (se convierte en cuatro variables <em>dummys</em>). Usamos la función <code>gam()</code> para ajustar un GAM usando estos componentes. Todos los términos en (7.16) se ajustan simultáneamente, tomándose en cuenta para explicar la respuesta.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: foreach</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loaded gam 1.22-2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>gam.m3 <span class="ot">&lt;-</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gam</span>(wage <span class="sc">~</span> <span class="fu">s</span>(year, <span class="dv">4</span>) <span class="sc">+</span> <span class="fu">s</span>(age, <span class="dv">5</span>) <span class="sc">+</span> education, <span class="at">data =</span> Wage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Para obtener la Figura 7.12, simplemente llamamos a la función <code>plot()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gam.m3, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab7-NoLineal_files/figure-html/chunk26-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>La función genérica <code>plot()</code> reconoce que <code>gam.m3</code> es un objeto de la clase <code>Gam</code>, e invoca el método apropiado <code>plot.Gam()</code>. Aunque <code>gam1</code> no es de la clase <code>Gam</code> sino de la clase <code>lm</code>, todavía podemos usar <code>plot.Gam()</code> con él (en lugar de la función genérica <code>plot()</code>). La figura 7.11 se produjo utilizando la siguiente expresión:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.Gam</span>(gam1, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab7-NoLineal_files/figure-html/chunk27-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>En estos gráficos, la función de <code>year</code> parece más bien lineal. Podemos realizar una serie de contrastes ANOVA para determinar cuál de estos tres modelos es mejor: un GAM que excluye <code>year</code> (<span class="math inline">\(\mathcal{M}_1\)</span>), un GAM que usa una función lineal de <code>year</code> (<span class="math inline">\(\mathcal{M}_2\)</span>), o un GAM que usa una función spline de <code>year</code> (<span class="math inline">\(\mathcal{M}_3\)</span>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>gam.m1 <span class="ot">&lt;-</span> <span class="fu">gam</span>(wage <span class="sc">~</span> <span class="fu">s</span>(age, <span class="dv">5</span>) <span class="sc">+</span> education, <span class="at">data =</span> Wage)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>gam.m2 <span class="ot">&lt;-</span> <span class="fu">gam</span>(wage <span class="sc">~</span> year <span class="sc">+</span> <span class="fu">s</span>(age, <span class="dv">5</span>) <span class="sc">+</span> education, <span class="at">data =</span> Wage)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(gam.m1, gam.m2, gam.m3, <span class="at">test =</span> <span class="st">"F"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Deviance Table
+
+Model 1: wage ~ s(age, 5) + education
+Model 2: wage ~ year + s(age, 5) + education
+Model 3: wage ~ s(year, 4) + s(age, 5) + education
+  Resid. Df Resid. Dev Df Deviance       F    Pr(&gt;F)    
+1      2990    3711731                                  
+2      2989    3693842  1  17889.2 14.4771 0.0001447 ***
+3      2986    3689770  3   4071.1  1.0982 0.3485661    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Encontramos que hay evidencia convincente de que una GAM con una función lineal de <code>year</code> es mejor que una GAM que no incluye <code>year</code> <code>p-value= 0.00014</code>. Sin embargo, no hay evidencia de que se necesite una función no lineal de <code>year</code> <code>p-value = 0.349</code>. En otras palabras, según los resultados de este ANOVA, se prefiere <span class="math inline">\(\mathcal{M}_2\)</span>.</p>
+<p>La función <code>summary()</code> produce un resumen del ajuste gam.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gam.m3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call: gam(formula = wage ~ s(year, 4) + s(age, 5) + education, data = Wage)
+Deviance Residuals:
+    Min      1Q  Median      3Q     Max 
+-119.43  -19.70   -3.33   14.17  213.48 
+
+(Dispersion Parameter for gaussian family taken to be 1235.69)
+
+    Null Deviance: 5222086 on 2999 degrees of freedom
+Residual Deviance: 3689770 on 2986 degrees of freedom
+AIC: 29887.75 
+
+Number of Local Scoring Iterations: NA 
+
+Anova for Parametric Effects
+             Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+s(year, 4)    1   27162   27162  21.981 2.877e-06 ***
+s(age, 5)     1  195338  195338 158.081 &lt; 2.2e-16 ***
+education     4 1069726  267432 216.423 &lt; 2.2e-16 ***
+Residuals  2986 3689770    1236                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Anova for Nonparametric Effects
+            Npar Df Npar F  Pr(F)    
+(Intercept)                          
+s(year, 4)        3  1.086 0.3537    
+s(age, 5)         4 32.380 &lt;2e-16 ***
+education                            
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Los p-valores de <code>Anova for Parametric Effects</code> demuestran claramente que <code>year</code>, <code>age</code> y <code>education</code> son estadísticamente muy significativos, incluso cuando solo se supone una relación lineal. Alternativamente, los p-valores de <code>Anova for Nonparametric Effects</code> para <code>year</code> y <code>age</code> corresponden a una hipótesis nula de una relación lineal frente a la alternativa de una relación no lineal. El gran p-valor para <code>year</code> refuerza nuestra conclusión del contraste ANOVA de que una función lineal es adecuada para este término. Sin embargo, hay evidencias muy claras de que se requiere un término no lineal para <code>age</code>.</p>
+<p>Podemos hacer predicciones usando el método <code>predict()</code> para la clase <code>Gam</code>. Aquí hacemos predicciones sobre el conjunto completo de datos <code>Wage</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(gam.m2, <span class="at">newdata =</span> Wage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>También podemos usar ajustes de regresión local como bloques de construcción en un GAM, usando la función <code>lo()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>gam.lo <span class="ot">&lt;-</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gam</span>(wage <span class="sc">~</span> <span class="fu">s</span>(year, <span class="at">df =</span> <span class="dv">4</span>) <span class="sc">+</span> <span class="fu">lo</span>(age, <span class="at">span =</span> <span class="fl">0.7</span>) <span class="sc">+</span> education, <span class="at">data =</span> Wage)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.Gam</span>(gam.lo, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"green"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab7-NoLineal_files/figure-html/chunk31-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Aquí hemos utilizado la regresión local para el término <code>age</code>, con un intervalo de 0.7. También podemos usar la función <code>lo()</code> para crear interacciones antes de llamar a la función <code>gam()</code>. Por ejemplo,</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>gam.lo.i <span class="ot">&lt;-</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gam</span>(wage <span class="sc">~</span> <span class="fu">lo</span>(year, age, <span class="at">span =</span> <span class="fl">0.5</span>) <span class="sc">+</span> education, <span class="at">data =</span> Wage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in lo.wam(x, z, wz, fit$smooth, which, fit$smooth.frame, bf.maxit, :
+liv too small.  (Discovered by lowesd)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in lo.wam(x, z, wz, fit$smooth, which, fit$smooth.frame, bf.maxit, : lv
+too small.  (Discovered by lowesd)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in lo.wam(x, z, wz, fit$smooth, which, fit$smooth.frame, bf.maxit, :
+liv too small.  (Discovered by lowesd)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in lo.wam(x, z, wz, fit$smooth, which, fit$smooth.frame, bf.maxit, : lv
+too small.  (Discovered by lowesd)</code></pre>
+</div>
+</div>
+<p>ajusta un modelo de dos términos, en el que el primer término es una interacción entre <code>year</code> y <code>age</code>, ajustado por una superficie de regresión local. Podemos trazar la superficie bidimensional resultante si primero instalamos el paquete <code>interp</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co">#library(akima) #aparece en el material original, no funciona desde octubre de 2023</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(interp)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gam.lo.i)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab7-NoLineal_files/figure-html/chunk33-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="Lab7-NoLineal_files/figure-html/chunk33-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="gam-logístico" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="gam-logístico"><span class="header-section-number">7.3.1</span> GAM logístico</h3>
+<p>Para ajustar una regresión logística GAM, usamos una vez más la función <code>I()</code> para construir la variable de respuesta binaria y establecemos <code>family=binomial</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>gam.lr <span class="ot">&lt;-</span> <span class="fu">gam</span>(<span class="fu">I</span>(wage <span class="sc">&gt;</span> <span class="dv">250</span>) <span class="sc">~</span> year <span class="sc">+</span> <span class="fu">s</span>(age, <span class="at">df =</span> <span class="dv">5</span>) <span class="sc">+</span> education,</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">family =</span> binomial,</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> Wage)</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gam.lr, <span class="at">se =</span> T, <span class="at">col =</span> <span class="st">"green"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab7-NoLineal_files/figure-html/chunk34-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Es fácil ver que no hay altos ingresos en la categoría <code>&lt; HS</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(Wage<span class="sc">$</span>education, <span class="fu">I</span>(Wage<span class="sc">$</span>wage <span class="sc">&gt;</span> <span class="dv">250</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    
+                     FALSE TRUE
+  1. &lt; HS Grad         268    0
+  2. HS Grad           966    5
+  3. Some College      643    7
+  4. College Grad      663   22
+  5. Advanced Degree   381   45</code></pre>
+</div>
+</div>
+<p>Por lo tanto, ajustamos una regresión logística GAM utilizando todas menos esta categoría. Esto proporciona resultados más sensibles.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>gam.lr.s <span class="ot">&lt;-</span> <span class="fu">gam</span>(</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">I</span>(wage <span class="sc">&gt;</span> <span class="dv">250</span>) <span class="sc">~</span> year <span class="sc">+</span> <span class="fu">s</span>(age, <span class="at">df =</span> <span class="dv">5</span>) <span class="sc">+</span> education,</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> binomial,</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> Wage,</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">subset =</span> (education <span class="sc">!=</span> <span class="st">"1. &lt; HS Grad"</span>)</span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gam.lr.s, <span class="at">se =</span> T, <span class="at">col =</span> <span class="st">"green"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Lab7-NoLineal_files/figure-html/chunk36-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>FIN</strong></p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./Lab6-Seleccion-Var.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lab6 Selección de Variables (modelos lineales)</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./Lab8-Arboles.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lab8 Árboles de decisión</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
