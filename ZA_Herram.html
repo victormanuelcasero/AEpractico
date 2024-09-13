@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Aprendizaje Estadístico: un enfoque práctico con R - Appendix A — Herramientas</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Lab9-SVM.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Appendix A — Herramientas</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Aprendizaje Estadístico: un enfoque práctico con R</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Prefacio</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab1-intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab2-AE.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Aprendizaje Estadístico</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab3-RegLin.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lab3 Regresión lineal</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab4-Clasif.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lab4 Clasificación</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab5-Remuestreo.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lab5 Remuestreo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab6-Seleccion-Var.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lab6 Selección de Variables (modelos lineales)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab7-NoLineal.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lab7 Modelización no lineal</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab8-Arboles.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lab8 Árboles de decisión</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Lab9-SVM.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lab9 Support Vector Machines</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ZA_Herram.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Herramientas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#paquetes" id="toc-paquetes" class="nav-link active" data-scroll-target="#paquetes"><span class="toc-section-number">A.1</span>  Paquetes</a></li>
+  <li><a href="#escritura-de-funciones" id="toc-escritura-de-funciones" class="nav-link" data-scroll-target="#escritura-de-funciones"><span class="toc-section-number">A.2</span>  Escritura de funciones</a></li>
+  <li><a href="#bucle-usando-for" id="toc-bucle-usando-for" class="nav-link" data-scroll-target="#bucle-usando-for"><span class="toc-section-number">A.3</span>  Bucle usando <code>for()</code></a></li>
+  <li><a href="#datos-de-entrenamiento-y-test" id="toc-datos-de-entrenamiento-y-test" class="nav-link" data-scroll-target="#datos-de-entrenamiento-y-test"><span class="toc-section-number">A.4</span>  Datos de entrenamiento y test</a>
+  <ul class="collapse">
+  <li><a href="#con-vector-booleano" id="toc-con-vector-booleano" class="nav-link" data-scroll-target="#con-vector-booleano"><span class="toc-section-number">A.4.1</span>  con vector <em>booleano</em></a></li>
+  <li><a href="#con-sample" id="toc-con-sample" class="nav-link" data-scroll-target="#con-sample"><span class="toc-section-number">A.4.2</span>  con <code>sample()</code></a></li>
+  <li><a href="#con-índices" id="toc-con-índices" class="nav-link" data-scroll-target="#con-índices"><span class="toc-section-number">A.4.3</span>  Con índices</a></li>
+  </ul></li>
+  <li><a href="#na-valores-faltantes" id="toc-na-valores-faltantes" class="nav-link" data-scroll-target="#na-valores-faltantes"><span class="toc-section-number">A.5</span>  <code>NA</code> valores faltantes</a></li>
+  <li><a href="#funciones-interesantes-utilizadas" id="toc-funciones-interesantes-utilizadas" class="nav-link" data-scroll-target="#funciones-interesantes-utilizadas"><span class="toc-section-number">A.6</span>  Funciones interesantes utilizadas</a>
+  <ul class="collapse">
+  <li><a href="#anova" id="toc-anova" class="nav-link" data-scroll-target="#anova"><span class="toc-section-number">A.6.1</span>  <code>anova()</code></a></li>
+  <li><a href="#contrast" id="toc-contrast" class="nav-link" data-scroll-target="#contrast"><span class="toc-section-number">A.6.2</span>  <code>contrast()</code></a></li>
+  <li><a href="#i" id="toc-i" class="nav-link" data-scroll-target="#i"><span class="toc-section-number">A.6.3</span>  <code>I()</code></a></li>
+  <li><a href="#poly" id="toc-poly" class="nav-link" data-scroll-target="#poly"><span class="toc-section-number">A.6.4</span>  <code>poly()</code></a></li>
+  <li><a href="#scale" id="toc-scale" class="nav-link" data-scroll-target="#scale"><span class="toc-section-number">A.6.5</span>  <code>scale()</code></a></li>
+  <li><a href="#set.seed" id="toc-set.seed" class="nav-link" data-scroll-target="#set.seed"><span class="toc-section-number">A.6.6</span>  <code>set.seed()</code></a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Appendix A — Herramientas</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Se han aglutinado en este anexo diversas herramientas transversales a varios <em>Labs</em>.</p>
+<section id="paquetes" class="level2" data-number="A.1">
+<h2 data-number="A.1" class="anchored" data-anchor-id="paquetes"><span class="header-section-number">A.1</span> Paquetes</h2>
+<p>El material original del <em>Lab3 Regresión lineal</em> empieza comentando las nociones básicas sobre cargar <em>paquetes</em> (o instalarlos cuando es necesario), pero en todos los <em>Labs</em> es necesario cargar paquetes. Aquí, simplemente recordamos que</p>
+<ul>
+<li><p>Al iniciar una sesión de <code>R</code> se cargan unos pocos paquetes, los <em>básicos</em>, por lo que el resto de <em>paquetes es necesario cargarlos en cada sesión</em>.</p></li>
+<li><p>la <em>función</em> para cargar un paquete en una sesión es <code>library()</code>.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>Basta con instalar un paquete 1 vez. Aunque existe una función para instalar paquetes, como es una tarea puntual mi <em>recomendación</em> es hacerlo mediante menús. En RStudio, Pestaña <code>Packages</code> &gt; <code>Install</code>…</li>
+</ul>
+</section>
+<section id="escritura-de-funciones" class="level2" data-number="A.2">
+<h2 data-number="A.2" class="anchored" data-anchor-id="escritura-de-funciones"><span class="header-section-number">A.2</span> Escritura de funciones</h2>
+<p>Aunque <code>R</code> viene con muchas funciones útiles, y hay muchas más funciones disponibles a través de los paquetes de <code>R</code>, en ocasiones nos interesará realizar una operación para la que no se dispone de ninguna función. Pues bien, es posible crear/escribir funciones nuevas.</p>
+<p>En el material original se crean varias funciones:</p>
+<ul>
+<li>El <em>Lab3 Regresión Lineal</em> dedica el último apartado (pequeño) a la creación/escritura de funciones. Se crea <code>LoadLibraries()</code> que lee los paquetes <code>ISLR2</code> y <code>MASS</code>.</li>
+<li>En el <em>Lab5 Remuestreo</em>: se crea <code>boot.fn()</code></li>
+<li>En el <em>Lab6 Selección de variables</em>: se crea <code>predict.regsubsets()</code></li>
+<li>En el <em>Lab9 SVM</em>: se crea <code>rocplot()</code></li>
+</ul>
+<p>Aquí se ha decidido explicar de forma práctica y sencilla cómo escribir una función. Aprovechamos el ejemplo de creación de la función <code>LoadLibraries()</code>.</p>
+<p>El nombre que le vamos a dar a la función es <code>LoadLibraries</code>. Para decirle a <code>R</code> que es una función utilizamos <code>function()</code> cuya sintaxis es:</p>
+<p><code>function( arglist ) expr</code></p>
+<p>Es decir hay que decir que argumentos espera la función: <code>arglist</code>, y en <code>expr</code> la expresión o expresiones que queremos que ejecute la función. Si son varias expresiones se deben escribir entre llaves, <code>{</code> al principio y <code>}</code> al final de la función.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>LoadLibraries <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">library</span>(ISLR2)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">library</span>(MASS)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">print</span>(<span class="st">"Los paquetes ISLR2 y MASS han sido cargados."</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>En este ejemplo sencillo, no hay <code>arglist</code> pues la función que se va a definir no necesita argumentos. Y se utilizan llaves dado que hay 3 expresiones que se van a ejecutar: cargar los dos paquetes e imprimir en la consola/pantalla que se han cargado.</p>
+<p>Ahora, si llamamos a la función, se cargan los paquetes y se imprime la sentencia indicada.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">LoadLibraries</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'MASS'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:ISLR2':
+
+    Boston</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Los paquetes ISLR2 y MASS han sido cargados."</code></pre>
+</div>
+</div>
+<p>Otro ejemplo es la función <code>boot.fn</code> definida en el <em>Lab5 Remuestreo</em>:</p>
+<p><code>boot.fn &lt;- function(data, index) ...</code></p>
+<p>Como se ve se define con 2 argumentos: <code>data</code> e <code>index</code>, que después se utilizan en la expresión (se omite por ser específica del tema, no tener aquí el contexto suficiente). Ahora bien, cabe mencionar que al ser una sola expresión la que se va a ejecutar se define sin llaves (véanse más detalles en el <em>Lab5 Remuestreo</em>).</p>
+</section>
+<section id="bucle-usando-for" class="level2" data-number="A.3">
+<h2 data-number="A.3" class="anchored" data-anchor-id="bucle-usando-for"><span class="header-section-number">A.3</span> Bucle usando <code>for()</code></h2>
+<p>En el material original se definen varios <em>bucles</em> usando esta función <code>for()</code>:</p>
+<ul>
+<li>en el <em>Lab5 Remuestreo</em></li>
+<li>en el <em>Lab6 Selección de variables</em> donde además uno de los bucles es doble, es decir, se anida un bucle dentro de otro.</li>
+</ul>
+<p>Esta función <code>for()</code> sirve para repetir un procedimiento de forma iterativa. Su sintaxis es:</p>
+<p><code>for(var in seq) expr</code></p>
+<p>donde <code>var</code> es la variable que va cambiando de valor según lo indicado en <code>seq</code>. Para cada valor que tome <code>var</code> ejecuta la expresión indica en <code>expr</code> que puede constar de una sola línea o varias (para lo que es necesario usar llaves de apertura y cierre).</p>
+<p>Ejemplo sencillo: imprimir por pantalla una serie de números. Una función para imprimir por pantalla es <code>print()</code>, basta utilizar <code>i</code> como variable índice y definir la serie de números, por ejemplo del 1 al 6, o los números 3, 7, 8 y 12.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>) <span class="fu">print</span>(i)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+[1] 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">12</span>)) <span class="fu">print</span>(i)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3
+[1] 7
+[1] 8
+[1] 12</code></pre>
+</div>
+</div>
+<p>Ejemplo algo más complejo: guardar en un par de vectores una serie de números. Previamente es necesario <em>inicializar</em> los vectores (si no <code>R</code> no sabe a qué se refieren los objetos <code>vector1</code> y <code>vector2</code>)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>vector1 <span class="ot">&lt;-</span> vector2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">5</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  vector1[i] <span class="ot">=</span> i<span class="dv">-1</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  vector2[i] <span class="ot">=</span> vector1[i]<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(vector1, vector2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  vector1 vector2
+1       0       0
+2       1       1
+3       2       4
+4       3       9
+5       4      16</code></pre>
+</div>
+</div>
+<p>Nótese que se han inicializado los dos vectores a la vez. El <code>vector1</code> se crea utilizando la variable índice <code>i</code>, restándole 1 a cada elemento, es decir que el elemento i-ésimo de dicho vector, <code>vector1[i]</code>, es <code>i-1</code>. El <code>vector2</code> se crea utilizando el <code>vector1</code>, elevando cada elemento <code>i</code> al cuadrado.</p>
+<p><strong>Nota</strong>: Estos mismos vectores se pueden definir de otras maneras alternativas. Una de ellas sería:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>vector1 <span class="ot">&lt;-</span> vector2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">5</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">4</span>) {</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  vector1[i<span class="sc">+</span><span class="dv">1</span>] <span class="ot">=</span> i</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>vector2 <span class="ot">&lt;-</span> vector1<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(vector1, vector2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  vector1 vector2
+1       0       0
+2       1       1
+3       2       4
+4       3       9
+5       4      16</code></pre>
+</div>
+</div>
+<p>Nótese la necesidad de poner <code>i+1</code> en el <em>índice</em> para obtener el mismo resultado que antes.</p>
+</section>
+<section id="datos-de-entrenamiento-y-test" class="level2" data-number="A.4">
+<h2 data-number="A.4" class="anchored" data-anchor-id="datos-de-entrenamiento-y-test"><span class="header-section-number">A.4</span> Datos de entrenamiento y test</h2>
+<p>Para crear, a partir de un conjunto de datos, dos subconjuntos (completamente separados), uno para utilizar como datos de entrenamiento (<em>train</em>) y otro para utilizarlos como datos de test/prueba/validación (<em>test</em>), tenemos varios opciones:</p>
+<ul>
+<li><p>Crear un vector de tipo <em>booleano</em><br>
+(aparece en el <em>Lab4 Clasificación</em>)</p></li>
+<li><p>Utilizar la función <code>sample()</code><br>
+(aparece en <em>Lab5 Remuestreo</em>, <em>Lab6 Selección de variables</em>, <em>Lab8 Árboles</em> y <em>Lab9 SVM</em>)</p></li>
+<li><p>Utilizar una variable índice, bien usando la función <code>sample()</code> anterior, bien usando los valores que se deseen, por ejemplo los números enteros entre <span class="math inline">\(1\)</span> y <span class="math inline">\(n\)</span>.<br>
+(aparece en el <em>Lab4 Clasificación</em>)</p></li>
+</ul>
+<p>De las tres opciones, en las que se use <code>sample()</code> es la que se puede considerar aleatoria. Ahora bien, cualquier enfoque funciona igualmente bien y es válido.</p>
+<p><strong>Nota técnica</strong>: Para ajustar los modelos se usará sólo el subconjunto de observaciones <code>train</code>:</p>
+<ul>
+<li>utilizando el argumento <code>subset</code>: <code>subset = train</code> (aparece en el <em>Lab6 Selección de variables</em>),</li>
+<li>utilizando expresiones del tipo: <code>Hitters[train, ]</code>, (aparece en el <em>Lab6 Selección de variables</em>)</li>
+</ul>
+<section id="con-vector-booleano" class="level3" data-number="A.4.1">
+<h3 data-number="A.4.1" class="anchored" data-anchor-id="con-vector-booleano"><span class="header-section-number">A.4.1</span> con vector <em>booleano</em></h3>
+<p>Se implementa esta estrategia utilizando inteligentemente alguna de las variables del conjunto de datos.</p>
+<p>Por ejemplo, en el <em>Lab4 Clasificación</em>, se dispone de los datos <code>Smarket</code> que contienen la variable <code>Year</code> que toma valores de 2001 a 2005 (en total 1250 valores). Se pueden tomar los datos de los años 2001 a 2004 como de entrenamiento y los de 2005 como de test. ¿Cómo se puede hacer esta división con R?… Usando esta estrategia de vector booleano: creando primero un vector correspondiente a las observaciones de 2001 a 2004, y usándolo después para crear el subconjunto de datos de observaciones de 2005.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> (Smarket<span class="sc">$</span>Year <span class="sc">&lt;</span> <span class="dv">2005</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>Smarket<span class="fl">.2005</span> <span class="ot">&lt;-</span> Smarket[<span class="sc">!</span>train, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><p>El objeto <code>train</code> es un vector <em>booleano</em>, ya que sus elementos son <code>TRUE</code> y <code>FALSE</code>. Es un vector de 1250 elementos, correspondientes a todas las observaciones en nuestro conjunto de datos.</p>
+<ul>
+<li>Los elementos del vector que corresponden a observaciones que ocurrieron antes de 2005 se establecen en <code>TRUE</code>,</li>
+<li>mientras que los que corresponden a observaciones en 2005 se establecen en <code>FALSE</code>.</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1250</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(train) <span class="co"># aprovechando que están ordenadas por Year</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(train) <span class="co"># aprovechando que están ordenadas por Year</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
+</div>
+</div>
+<ul>
+<li>Los vectores booleanos se pueden utilizar para obtener un subconjunto de filas o columnas de una matriz. Así,</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Smarket[train, ])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 998   9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Smarket<span class="fl">.2005</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 252   9</code></pre>
+</div>
+</div>
+<ul>
+<li><p>la sentencia <code>Smarket[train, ]</code> selecciona una submatriz del conjunto de datos del mercado de valores, correspondiente solo a las fechas anteriores a 2005, ya que esas son aquellas para las que los elementos de <code>train</code> son <code>TRUE</code>. El resultado de <code>dim()</code> indica que hay <code>998</code> observaciones del año 2001 al 2004.</p></li>
+<li><p><code>Smarket[!train, ]</code> produce una submatriz de los datos del mercado de valores que contiene solo las observaciones para las cuales <code>train</code> es <code>FALSE</code>—es decir, las observaciones con fechas en 2005. Esto es así por el símbolo <code>!</code> (que significa distinto) y se utiliza aquí para invertir todos los elementos del vector booleano. Es decir, <code>!train</code> es un vector similar a <code>train</code>, excepto que los elementos que son <code>TRUE</code> en <code>train</code> se cambian a <code>FALSE</code> en <code>!train</code>, y los elementos que son <code>FALSE</code> en <code>train</code> se cambia a <code>TRUE</code> en <code>!train</code>. El resultado de <code>dim()</code> indica que hay <code>252</code> de tales observaciones.</p></li>
+</ul>
+</section>
+<section id="con-sample" class="level3" data-number="A.4.2">
+<h3 data-number="A.4.2" class="anchored" data-anchor-id="con-sample"><span class="header-section-number">A.4.2</span> con <code>sample()</code></h3>
+<p>La función <code>sample()</code> permite obtener muestras aleatorias del conjunto <code>x</code> que se le especifique, y tantos valores como se le indiquen en <code>size</code>.</p>
+<p><code>sample(x, size,...)</code></p>
+<p>Al tener un componente aleatorio para garantizar la <em>reproducibilidad</em> de resultados se debe utilizar la función <code>set.seed()</code> que establece la semilla de aleatorización (véase más adelante en <strong>Funciones interesantes</strong>). Es decir, estableciendo la misma semilla aleatoria cualquier usuario obtendrá la misma división de conjuntos de entrenamiento y test.</p>
+<p>Se ilustra aquí su uso:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>numeros <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">9</span> <span class="sc">+</span> <span class="fl">0.5</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>(train1 <span class="ot">&lt;-</span> <span class="fu">sample</span>(numeros, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8.5 3.5 6.5 0.5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>(train2 <span class="ot">&lt;-</span> <span class="fu">sample</span>(numeros, <span class="dv">6</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.5 6.5 2.5 5.5 9.5 7.5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>(train2 <span class="ot">&lt;-</span> <span class="fu">sample</span>(numeros, <span class="dv">6</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.5 5.5 8.5 0.5 9.5 6.5</code></pre>
+</div>
+</div>
+<p>Con <code>sample()</code> se selecciona aleatoriamente del conjunto de observaciones las que se indiquen en <code>size</code> (segundo argumento): <code>4</code> en el primer caso, <code>6</code> en el segundo y tercero, por defecto <em>sin reemplazamiento</em>. Aquí se ha omitido el nombre del argumento (en tal caso debe ponerse en el orden indicado en la función), vea <code>?sample</code> para más detalles. Por ejemplo, para saber cómo se puede indicar que la selección aleatoria sea <em>con reemplazamiento</em>, como hace el método <em>bootstrap</em> que también aparece en el <em>Lab5 Remuestreo</em>.</p>
+<p>En dicho <em>Lab5 Remuestreo</em> se utiliza <code>sample()</code> de una forma ligeramente distinta a la aquí utilizada (los detalles se explican en dicha sección).</p>
+</section>
+<section id="con-índices" class="level3" data-number="A.4.3">
+<h3 data-number="A.4.3" class="anchored" data-anchor-id="con-índices"><span class="header-section-number">A.4.3</span> Con índices</h3>
+<p>En ocasiones la selección es <em>no aleatoria</em>, se elige por el <em>orden/índice</em> en el que están los datos.</p>
+<p>Por ejemplo, en el <em>Lab4 Clasificación</em> se utilizan los datos <code>Caravan</code> donde se escogen para el conjunto de test las primeras 1000 observaciones, y para el conjunto de entrenamiento, las observaciones restantes. En dicho <em>Lab</em>, primero se escalan/estandarizan las variables (véase la función <code>scale()</code> en el apartado <em>Funciones interesantes</em> de este mismo anexo). Aquí se ilustra el uso de la selección mediante índices sobre el conjunto de datos original:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Caravan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5822   86</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>test.X <span class="ot">&lt;-</span> Caravan[test, ]</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>train.X <span class="ot">&lt;-</span> Caravan[<span class="sc">-</span>test, ]</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(test.X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1000   86</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(train.X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4822   86</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Caravan[,<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 33 37 37  9 40 23</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(test.X[,<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 33 37 37  9 40 23</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>Caravan[<span class="dv">1001</span><span class="sc">:</span><span class="dv">1006</span> , <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 40 26 10 38 39  9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(train.X[,<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 40 26 10 38 39  9</code></pre>
+</div>
+</div>
+<p>El vector <code>test</code> se crea con valores desde <code>1</code> hasta <code>1000</code>. Al escribir <code>Caravan[test, ]</code> se obtiene la submatriz de los datos que contienen las observaciones cuyos índices varían entre <code>1</code> y <code>1000</code>, mientras que al escribir <code>Caravan[-test, ]</code> produce la submatriz que contiene las observaciones restantes, las que sus índices no están en ese rango. Para completitud, utilizando la función <code>head()</code> se muestran, para la primera variable, los primeros valores de ambos conjuntos y se comparan con los valores originales de <code>Caravan</code>.</p>
+</section>
+</section>
+<section id="na-valores-faltantes" class="level2" data-number="A.5">
+<h2 data-number="A.5" class="anchored" data-anchor-id="na-valores-faltantes"><span class="header-section-number">A.5</span> <code>NA</code> valores faltantes</h2>
+<p>Aparece sólo en el <em>Lab6 Selección de variables</em>, pero es un tema que puede afectar a otros <em>Labs</em>.</p>
+<p>Para algunos métodos estadísticos que el vector o el <em>data.frame</em> contenga <code>NA</code>s produce resultados no deseados. De una manera muy ilustrativa se explica la problemática de los valores faltantes en el libro <em>R for Data Science</em>, en este apartado: <a href="https://es.r4ds.hadley.nz/05-transform.html#valores-faltantes" class="uri">https://es.r4ds.hadley.nz/05-transform.html#valores-faltantes</a>… Se dice que los <code>NA</code> ¡son “contagiosos”!</p>
+<p>¿Cómo manejar/trabajar con datos/valores faltantes?</p>
+<p>La función <code>is.na()</code> se puede utilizar para identificar las observaciones que faltan. Devuelve un vector de la misma longitud que el vector de entrada, con un <code>TRUE</code> para los elementos que faltan y un <code>FALSE</code> para los elementos que no faltan.</p>
+<p>Aprovechamos el conjunto de datos <code>Hitters</code> que se utiliza en el <em>Lab6 Selección de variables</em>. Sabemos que en la variable <code>Salary</code> hay datos faltantes:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR2)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Hitters<span class="sc">$</span>Salary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]    NA 475.0 480.0 500.0  91.5 750.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(Hitters<span class="sc">$</span>Salary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 322</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(Hitters<span class="sc">$</span>Salary))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 59</code></pre>
+</div>
+</div>
+<p>La función <code>head()</code> muestra los primeros valores del vector, cuya <code>length()</code> es 322. Con la función <code>sum()</code> se obtienen los elementos/datos que faltan en <code>Salary</code>, concretamente falta el salario de 59 jugadores.</p>
+<p>Como se ha mencionado, trabajar con variables/vectores con <code>NA</code>s puede conducir a resultados no deseados. En algunos casos, la solución es incluir un argumento:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Hitters<span class="sc">$</span>Salary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Hitters<span class="sc">$</span>Salary, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 535.9259</code></pre>
+</div>
+</div>
+<p>En otros casos hay que acudir a la función <code>na.omit()</code>, que elimina todas las filas de un <em>data.frame</em> que tengan valores faltantes en cualquier variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Hitters)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 322  20</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>Hitters <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(Hitters)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Hitters<span class="sc">$</span>Salary) <span class="co"># sólo se han quitado los 59 sin Salary</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 535.9259</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Hitters)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 263  20</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(Hitters))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+</section>
+<section id="funciones-interesantes-utilizadas" class="level2" data-number="A.6">
+<h2 data-number="A.6" class="anchored" data-anchor-id="funciones-interesantes-utilizadas"><span class="header-section-number">A.6</span> Funciones interesantes utilizadas</h2>
+<p>Dado que el interés de cada función depende de factores subjetivos, aquí se presentan por orden alfabético (no subjetivo).</p>
+<section id="anova" class="level3" data-number="A.6.1">
+<h3 data-number="A.6.1" class="anchored" data-anchor-id="anova"><span class="header-section-number">A.6.1</span> <code>anova()</code></h3>
+<p>Aparece en: <em>Lab3 Regresión Lineal</em> y <em>Lab7 Modelización No lineal</em>.</p>
+<p>La función <code>anova()</code> realiza un contraste de hipótesis comparando los modelos que se le indiquen:</p>
+<p><code>anova(modelo1, modelo2, ...)</code></p>
+<p>Los modelos deben estar <em>anidados</em>: los predictores de <code>modelo1</code> deben ser un subconjunto de los predictores de <code>modelo2</code>; los de <code>modelo2</code> deben serlo de <code>modelo3</code>, etc.</p>
+<p>La comparación la hace por pares de modelos. La hipótesis nula es que los dos modelos se ajustan igualmente bien a los datos, y la hipótesis alternativa es que el modelo más grande se ajusta significativamente mejor a los datos.</p>
+<p>En lugar de proporcionar aquí un ejemplo, remitimos al <em>Lab7 Modelización No lineal</em> para ver un ejemplo con su contexto.</p>
+</section>
+<section id="contrast" class="level3" data-number="A.6.2">
+<h3 data-number="A.6.2" class="anchored" data-anchor-id="contrast"><span class="header-section-number">A.6.2</span> <code>contrast()</code></h3>
+<p>Aparece en: <em>Lab3 Regresión Lineal</em> y <em>Lab4 Clasificación</em>.</p>
+<p>La función <code>contrasts()</code> devuelve la codificación que <code>R</code> usa para las variables ficticias, <em>dummys</em>, asociadas a variables cualitativas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(iris<span class="sc">$</span>Species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           versicolor virginica
+setosa              0         0
+versicolor          1         0
+virginica           0         1</code></pre>
+</div>
+</div>
+<p>Así, <code>R</code> ha creado una variable ficticia <code>irisversicolor</code> que toma el valor 1 si la especie es <em>versicolor</em> y 0 en caso contrario. También ha creado una variable ficticia <code>irisvirginica</code> que equivale a 1 si la especie es <em>virginica</em> y 0 en caso contrario. La especie <em>setosa</em> corresponde a 0 para cada una de las dos variables ficticias anteriores.</p>
+<p>Use <code>?contrasts</code> para aprender sobre otros contrastes y cómo configurarlos.</p>
+</section>
+<section id="i" class="level3" data-number="A.6.3">
+<h3 data-number="A.6.3" class="anchored" data-anchor-id="i"><span class="header-section-number">A.6.3</span> <code>I()</code></h3>
+<p>Aparece en: <em>Lab3 Regresión Lineal</em>, <em>Lab5 Remuestreo</em> y <em>Lab7 Modelización No lineal</em>.</p>
+<p>La función <code>I()</code> permite <em>envolver</em> la expresión que se escriba dentro. Típicamente es necesaria para incluir en una fórmula una potencia usando <code>^</code>. Envolver con <code>I()</code> permite el uso estándar en <code>R</code>, que es elevar <code>X</code> a la potencia <code>2</code>, pues se crea un vector/variable con los valores correspondientes a la potencia considera. Con ello aparecerá el coeficiente asociado a dicha “potencia” en el modelo que se esté ajustando (con <code>lm()</code>, <code>glm()</code>, …).</p>
+<p>Sin embargo, en el <em>Lab7 Modelización No lineal</em> se hace un uso distinto al anterior: se crea una variable de respuesta binaria sobre la marcha: <code>I(wage &gt; 250)</code>.</p>
+</section>
+<section id="poly" class="level3" data-number="A.6.4">
+<h3 data-number="A.6.4" class="anchored" data-anchor-id="poly"><span class="header-section-number">A.6.4</span> <code>poly()</code></h3>
+<p>Aparece en: <em>Lab3 Regresión Lineal</em> y <em>Lab7 Modelización No lineal</em>.</p>
+<p>La función <code>poly()</code> permite crear de forma abreviada la fórmula de un polinomio, evitando escribir una fórmula larga con potencias de la variable explicativa o predictora. Típicamente se usa para incluirla en un modelo: <code>y ~ ...</code>. Por ejemplo, para definir el polinomio de quinto orden de una variable llamada <code>X1</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">poly</span>(X1, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Por defecto, la función <code>poly()</code> ortogonaliza los predictores: esto significa que las características que genera esta función no son simplemente una secuencia de potencias del argumento. Concretamente, devuelve una matriz cuyas columnas son una <em>base</em> de <em>polinomios ortogonales</em> (cada columna es una combinación lineal de las variables <code>X1</code>, <code>X1^2</code>, <code>X1^3</code>…).</p>
+<p>Para obtener los polinomios “sin procesar”, la <em>base polinómica</em>, se debe usar en <code>poly()</code> el argumento <code>Raw = TRUE</code>. Es equivalente a “<em>envolver</em>” las potencias <code>X1^2</code>, etc. a través de la función <code>I()</code> (vista anteriormente) pues el símbolo <code>^</code> tiene un significado especial en las fórmulas (de ahí la necesidad de <em>envolver</em> las potencias). Es decir,</p>
+<ul>
+<li><code>poly(X1, 4)</code> es equivalente a <code>X1 + I(X1^2) + I(X1^3) + I(X1^4)</code></li>
+</ul>
+<p>Otra forma equivalente (y algo más compacta) es:</p>
+<ul>
+<li><code>cbind(X1, X1^2, X1^3, X1^4)</code></li>
+</ul>
+<p>construye una matriz a partir de una colección de vectores. Cualquier llamada de función como <code>cbind()</code> dentro de una fórmula también sirve como ‘<em>envoltorio</em>’.</p>
+<p>Se muestra así la flexibilidad del lenguaje de fórmulas en <code>R</code>.</p>
+<p><strong>Nota</strong>: La elección de la base afecta a las estimaciones de los coeficientes del modelo que se quiera ajustar, pero no afecta a los valores ajustados obtenidos.</p>
+</section>
+<section id="scale" class="level3" data-number="A.6.5">
+<h3 data-number="A.6.5" class="anchored" data-anchor-id="scale"><span class="header-section-number">A.6.5</span> <code>scale()</code></h3>
+<p>Aparece en: <em>Lab4 Clasificación</em> e indirectamente en <em>Lab9 SVM</em>.</p>
+<p>En ocasiones es bueno/necesario <em>escalar/estandarizar/tipificar</em> las variables, en el sentido de llevarlas a la misma escala, que aquí significa que las variables tengan media 0 y desviación típica 1. Así se consigue que las variables sean comparables.</p>
+<p>En el <em>Lab4 Clasificación</em> en el método KNN es bueno/necesario escalar las variables dado que se busca el vecino más próximo de una observación/dato, por lo que la escala afecta a la cercanía. Las variables con una escala grande tendrán un efecto mucho mayor en la <em>distancia</em> entre las observaciones, que las variables con una escala pequeña. Por ejemplo, si en un conjunto de datos se tienen dos variables, “salario anual” y “edad” (medidas en dólares y años, respectivamente). En lo que respecta a “distancia”, una diferencia de 1000 en salario es enorme en comparación con una diferencia de 50 en edad. Esto es contrario a nuestra intuición de que una diferencia salarial de 1000 dólares anuales es bastante pequeña en comparación con una diferencia de edad de 50 años. Además, si midiéramos el “salario” en yenes japoneses, o si midiéramos la “edad” en minutos, los resultados de <em>distancia</em> serían bastante diferentes de los que obtenemos midiendo en dólares y años.</p>
+<p>La función <code>scale()</code> estandariza los datos. Lo hacemos sobre las dos primeras variables del conjunto de datos <code>Caravan</code>, del paquete <code>ISLR2</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Caravan[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  MOSTYPE MAANTHUI
+1      33        1
+2      37        1
+3      37        1
+4       9        1
+5      40        1
+6      23        1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Caravan[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    MOSTYPE         MAANTHUI     
+ Min.   : 1.00   Min.   : 1.000  
+ 1st Qu.:10.00   1st Qu.: 1.000  
+ Median :30.00   Median : 1.000  
+ Mean   :24.25   Mean   : 1.111  
+ 3rd Qu.:35.00   3rd Qu.: 1.000  
+ Max.   :41.00   Max.   :10.000  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">sd</span>(Caravan[, <span class="dv">1</span>]), <span class="fu">sd</span>(Caravan[, <span class="dv">2</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 12.8467057  0.4058421</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>standardized.X <span class="ot">&lt;-</span> <span class="fu">scale</span>(Caravan[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(standardized.X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      MOSTYPE   MAANTHUI
+1  0.68084775 -0.2725565
+2  0.99221162 -0.2725565
+3  0.99221162 -0.2725565
+4 -1.18733547 -0.2725565
+5  1.22573452 -0.2725565
+6 -0.09756193 -0.2725565</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(standardized.X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    MOSTYPE           MAANTHUI      
+ Min.   :-1.8101   Min.   :-0.2726  
+ 1st Qu.:-1.1095   1st Qu.:-0.2726  
+ Median : 0.4473   Median :-0.2726  
+ Mean   : 0.0000   Mean   : 0.0000  
+ 3rd Qu.: 0.8365   3rd Qu.:-0.2726  
+ Max.   : 1.3036   Max.   :21.9036  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">sd</span>(standardized.X[, <span class="dv">1</span>]), <span class="fu">sd</span>(standardized.X[, <span class="dv">2</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 1</code></pre>
+</div>
+</div>
+</section>
+<section id="set.seed" class="level3" data-number="A.6.6">
+<h3 data-number="A.6.6" class="anchored" data-anchor-id="set.seed"><span class="header-section-number">A.6.6</span> <code>set.seed()</code></h3>
+<p>Aparece en casi todos los <em>Labs</em></p>
+<p>La función <code>set.seed()</code> permite establecer una semilla de aleatorización. Siempre que se utilice la misma semilla, los resultados aleatorios posteriores arrojarán los mismos resultados en cualquier máquina que se ejecuten: <em>reproducibilidad</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="dv">4</span>) <span class="co"># genera 4 números aleatorios utilizando la Normal(0,1)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  0.1256203 -0.7098623 -0.9122442  1.0517744</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># En cada ordenador se obtendrán unos valores distintos</span></span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="dv">4</span>) <span class="co"># en todos los ordenadores se obtendrán los mismos valores</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.6264538  0.1836433 -0.8356286  1.5952808</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./Lab9-SVM.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lab9 Support Vector Machines</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
