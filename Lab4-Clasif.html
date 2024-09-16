@@ -301,13 +301,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <blockquote class="blockquote">
-<p><strong>Nota Víctor</strong>: En este apartado se van a mostrar varios métodos estadísticos para el problema estadístico de <em>clasificación supervisada</em>. El más conocido es la regresión logística, cuyos resultados poseen una interpretabilidad que el resto de métodos que vamos a ver: Análisis Discriminante, Naive Bayes y <span class="math inline">\(K\)</span>-vecinos más próximos (KNN), no poseen, como se ve en la imagen del capítulo 2.<br>
-En el material original también se incluye en el lab Regresión de Poisson que para mí no encaja en “métodos de clasificación”, por ello se omite aquí.<br>
-Por último, hecho en falta en el material original mostrar en este apartado el tema de curvas ROC. Aparece más adelante en el apartado de SVM.</p>
+<p><strong>Nota Víctor</strong>: En este apartado se van a mostrar varios métodos estadísticos para el problema de <em>clasificación supervisada</em>. El más conocido es la regresión logística, cuyos resultados poseen una interpretabilidad que el resto de métodos que vamos a ver: Análisis Discriminante, Naive Bayes y <span class="math inline">\(K\)</span>-vecinos más próximos (KNN), no poseen, como se ve en la imagen del Capítulo 2.<br>
+En el material original también se incluye en el Lab Regresión de Poisson que para mí no encaja en “métodos de clasificación”, por ello he decidido omitirla aquí (pongo sólo unos comentarios).<br>
+Por último, hecho en falta en el material original mostrar en este apartado el tema de curvas ROC. Aparece más adelante en el Lab de SVM (apartado 9.3).</p>
 </blockquote>
 <section id="datos-smarket-mercado-de-valores" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="datos-smarket-mercado-de-valores">Datos: <code>Smarket</code>, mercado de valores</h2>
-<p>Examinamos algunos resúmenes numéricos y gráficos de los datos <code>Smarket</code> del paquete <code>ISLR2</code>. Este conjunto de datos consiste en rendimientos porcentuales para el índice bursátil S&amp;P 500 durante 1.250 días, desde comienzos de 2001 hasta finales de 2005. Para cada fecha, hemos registrado los rendimientos porcentuales de cada uno de los cinco días de negociación anteriores, desde <code>lagone</code> hasta <code>lagfive</code>. También hemos registrado <code>volume</code> (el número de acciones negociadas el día anterior, en miles de millones), <code>Today</code> (el rendimiento porcentual en la fecha en cuestión) y <code>direction</code> (si el mercado estaba <code>Up</code> o <code>Down</code> en esta fecha). Nuestro objetivo es predecir <code>direction</code> (una variable respuesta cualitativa) usando las otras características.</p>
+<p>Examinamos algunos resúmenes numéricos y gráficos de los datos <code>Smarket</code> del paquete <code>ISLR2</code>. Este conjunto de datos consiste en rendimientos porcentuales para el índice bursátil S&amp;P 500 durante 1.250 días, desde comienzos de 2001 hasta finales de 2005. Para cada fecha, se han registrado los rendimientos porcentuales de cada uno de los cinco días de negociación anteriores, desde <code>lagone</code> hasta <code>lagfive</code>. También se han registrado <code>volume</code> (el número de acciones negociadas el día anterior, en miles de millones), <code>Today</code> (el rendimiento porcentual en la fecha en cuestión) y <code>direction</code> (si el mercado estaba <code>Up</code> o <code>Down</code> en esta fecha). Nuestro objetivo es predecir <code>direction</code> (una variable respuesta cualitativa) usando las otras características.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR2)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(Smarket)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -353,7 +353,7 @@ Por último, hecho en falta en el material original mostrar en este apartado el 
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(Smarket)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
-<pre><code>Error in cor(Smarket): 'x' must be numeric</code></pre>
+<pre><code>Error in cor(Smarket): 'x' debe ser numérico</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(Smarket[, <span class="sc">-</span><span class="dv">9</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -377,7 +377,7 @@ Volume -0.022002315  1.00000000  0.014591823
 Today  -0.034860083  0.01459182  1.000000000</code></pre>
 </div>
 </div>
-<p>Como era de esperar, las correlaciones entre las variables <code>lag...</code> y los rendimientos de hoy (<code>Today</code>) son cercanas a cero. En otras palabras, parece haber poca correlación entre los rendimientos de hoy y los rendimientos de días anteriores. La única correlación sustancial es entre <code>Year</code> y <code>volume</code>. Al dibujar los datos, que están ordenados cronológicamente, vemos que <code>volume</code> aumenta con el tiempo. En otras palabras, el número promedio de acciones negociadas diariamente aumentó de 2001 a 2005.</p>
+<p>Como era de esperar, las correlaciones entre las variables <code>lag...</code> y los rendimientos de hoy (<code>Today</code>) son cercanas a 0. En otras palabras, parece haber poca correlación entre los rendimientos de hoy y los rendimientos de días anteriores. La única correlación sustancial es entre <code>Year</code> y <code>volume</code>. Al dibujar los datos, que están ordenados cronológicamente, vemos que <code>volume</code> aumenta con el tiempo. En otras palabras, el número promedio de acciones negociadas diariamente aumentó de 2001 a 2005.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Smarket<span class="sc">$</span>Volume, <span class="at">type =</span> <span class="st">"l"</span>) <span class="co"># añadido el "type"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -387,7 +387,7 @@ Today  -0.034860083  0.01459182  1.000000000</code></pre>
 </section>
 <section id="regresión-logística" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="regresión-logística"><span class="header-section-number">4.1</span> Regresión logística</h2>
-<p>Vamos a ajustar un modelo de <em>regresión logística</em> para predecir la <code>direction</code> utilizando desde <code>lagone</code> hasta <code>lagfive</code> y <code>volume</code>. La función <code>glm()</code> se puede utilizar para ajustar muchos tipos de <em>modelos lineales generalizados</em>, incluida la regresión logística. La sintaxis de la función <code>glm()</code> es similar a la de <code>lm()</code>, excepto que debemos pasar el argumento <code>family = binomial</code> para decirle a <code>R</code> que ejecute una regresión logística en lugar de otro tipo de modelo lineal generalizado.</p>
+<p>Vamos a ajustar un modelo de <em>regresión logística</em> para predecir la <code>direction</code> utilizando desde <code>lagone</code> hasta <code>lagfive</code> y <code>volume</code>. La función <code>glm()</code> se puede utilizar para ajustar muchos tipos de <em>modelos lineales generalizados</em>, incluida la regresión logística. La sintaxis de la función <code>glm()</code> es similar a la de <code>lm()</code>, pero ahora debemos pasar el argumento <code>family = binomial</code> para decirle a <code>R</code> que ejecute una regresión logística en lugar de otro tipo de modelo lineal generalizado.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>glm.fits <span class="ot">&lt;-</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glm</span>(Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2 <span class="sc">+</span> Lag3 <span class="sc">+</span> Lag4 <span class="sc">+</span> Lag5 <span class="sc">+</span> Volume,</span>
@@ -426,9 +426,12 @@ Number of Fisher Scoring iterations: 3</code></pre>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(glm.fits)<span class="sc">$</span>coef</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(glm.fits)<span class="sc">$</span>coef[, <span class="dv">4</span>] <span class="co"># sólo p-valores</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<blockquote class="blockquote">
+<p><strong>Nota Víctor</strong>: No se muestran los resultados ni se dan más detalles… Por “no perder tiempo” con un modelo ajustado que “no merece la pena”.</p>
+</blockquote>
 <section id="predicción" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="predicción"><span class="header-section-number">4.1.1</span> Predicción</h3>
-<p>La función <code>predict()</code> se puede utilizar para predecir la probabilidad de que el mercado suba, dados los valores de los predictores. La opción <code>type = "response"</code> le dice a <code>R</code> que genere probabilidades de la forma <span class="math inline">\(P(Y=1|X)\)</span>, en lugar de generar el <em>logit</em> (<em>log odds</em>, por defecto, <code>type = "link"</code>). Si no se proporciona ningún conjunto de datos a la función <code>predict()</code>, entonces se calculan las probabilidades para los datos de entrenamiento que se usaron para ajustar el modelo de regresión logística. Aquí hemos impreso solo las primeras diez probabilidades.</p>
+<p>La función <code>predict()</code> se puede utilizar para predecir la probabilidad de que el mercado suba, dados los valores de los predictores. La opción <code>type = "response"</code> le dice a <code>R</code> que genere probabilidades de la forma <span class="math inline">\(P(Y=1|X)\)</span>, en lugar de generar el <em>logit</em> (<em>log odds</em>, por defecto, <code>type = "link"</code>). Si no se proporciona ningún conjunto de datos a la función <code>predict()</code>, entonces se calculan las probabilidades para los datos de entrenamiento que se usaron para ajustar el modelo de regresión logística. A continuación se muestran sólo las primeras diez probabilidades (¡Ojo! con el modelo ajustado previamente -“que no merece la pena”-).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>glm.probs <span class="ot">&lt;-</span> <span class="fu">predict</span>(glm.fits, <span class="at">type =</span> <span class="st">"response"</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>glm.probs[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -456,7 +459,7 @@ Up    1</code></pre>
 </section>
 <section id="matriz-de-confusión" class="level3" data-number="4.1.2">
 <h3 data-number="4.1.2" class="anchored" data-anchor-id="matriz-de-confusión"><span class="header-section-number">4.1.2</span> Matriz de confusión</h3>
-<p>Dadas estas predicciones, la función <code>table()</code> se puede usar para producir una <strong>matriz de confusión</strong> para determinar cuántas observaciones se clasificaron correcta o incorrectamente. Al ingresar dos vectores cualitativos, R creará una tabla <em>2x2</em> con recuentos del número de veces que ocurrió cada combinación, p.ej. pronosticó <code>Up</code> y el mercado aumentó, predijo <code>Up</code> y el mercado disminuyó, etc.</p>
+<p>Dadas estas predicciones, la función <code>table()</code> se puede usar para producir una <strong>matriz de confusión</strong> para determinar cuántas observaciones se clasificaron correcta o incorrectamente. Al ingresar en <code>table()</code> dos vectores cualitativos, R creará una tabla <em>2x2</em> con recuentos del número de veces que ocurrió cada combinación, p.ej. pronosticó <code>Up</code> y el mercado aumentó, predijo <code>Up</code> y el mercado disminuyó, etc.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(glm.pred, Smarket<span class="sc">$</span>Direction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -465,7 +468,7 @@ glm.pred Down  Up
     Down  145 141
     Up    457 507</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">507</span> <span class="sc">+</span> <span class="dv">145</span>) <span class="sc">/</span> <span class="dv">1250</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">145</span> <span class="sc">+</span> <span class="dv">507</span>) <span class="sc">/</span> <span class="dv">1250</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.5216</code></pre>
 </div>
@@ -477,21 +480,23 @@ glm.pred Down  Up
 <p>Los elementos diagonales de la matriz de confusión indican predicciones correctas, mientras que los que están fuera de la diagonal representan predicciones incorrectas. Por lo tanto, nuestro modelo predijo correctamente que el mercado subiría en <code>507</code> días y que bajaría en <code>145</code> días, para un total de <code>507+145 = 652</code> predicciones correctas. La función <code>mean()</code> se puede utilizar para calcular la fracción de días en los que la predicción fue correcta. En este caso, la regresión logística predijo correctamente el movimiento del mercado el <code>52.2</code>% de las veces.</p>
 <p>A primera vista, parece que el modelo de regresión logística funciona un poco mejor que las conjeturas aleatorias (<em>“lanzar una moneda”</em>). Sin embargo, este resultado es engañoso porque entrenamos y probamos el modelo en el mismo conjunto de <code>1250</code> observaciones En otras palabras, <code>100%-52.2%=47.8%</code>, es la tasa de error de <em>entrenamiento</em>.</p>
 <blockquote class="blockquote">
-<p><strong>Nota Víctor</strong>: Puede probar a cambiar el valor del punto de corte y ver cómo cambian las prediccciones, la matriz de confusión y, por tanto, la tasa de error.</p>
+<p><strong>Nota Víctor</strong>: Es un muy buen ejercicio cambiar el valor del punto de corte y ver cómo cambian las prediccciones, la matriz de confusión y, por tanto, la tasa de error.</p>
 </blockquote>
 </section>
 <section id="datos-de-entrenamiento-y-testprueba" class="level3" data-number="4.1.3">
 <h3 data-number="4.1.3" class="anchored" data-anchor-id="datos-de-entrenamiento-y-testprueba"><span class="header-section-number">4.1.3</span> Datos de entrenamiento y test/prueba</h3>
-<p>Como se ha mencionado en el capítulo de Aprendizaje Estadístico, la tasa de error de entrenamiento suele ser demasiado optimista: tiende a subestimar la tasa de error de test. Por ello se acude al enfoque de dividir los datos en los subconjuntos de entrenamiento y test/validación, que se ve en detalle en el siguiente capítulo (Remuestreo).</p>
-<p>Para implementar esta estrategia, primero crearemos un vector correspondiente a las observaciones de 2001 a 2004. Luego usaremos este vector para crear un conjunto de datos retenidos de observaciones de 2005, que constituyen el conjunto de datos de test/validación.</p>
+<p>Como se ha mencionado en el Capítulo de Aprendizaje Estadístico, la tasa de error de entrenamiento suele ser demasiado optimista: tiende a subestimar la tasa de error de test. Por ello se acude al enfoque de dividir los datos en los subconjuntos de entrenamiento y test/validación, que se ve en detalle en el siguiente Capítulo (Remuestreo).</p>
+<p>Para implementar esta estrategia, primero crearemos un vector correspondiente a las observaciones de 2001 a 2004 (datos de entrenamiento). Luego usaremos este vector para crear un conjunto de datos retenidos de observaciones de 2005, que constituyen el conjunto de datos de test/validación.</p>
+<blockquote class="blockquote">
+<p><strong>Nota Víctor</strong>: Al tratarse de datos de serie temporal, no tiene sentido que los datos de entrenamiento y test se escojan aleatoriamente, como es habitual.</p>
+</blockquote>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> (Smarket<span class="sc">$</span>Year <span class="sc">&lt;</span> <span class="dv">2005</span>)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>Smarket<span class="fl">.2005</span> <span class="ot">&lt;-</span> Smarket[<span class="sc">!</span>train, ]</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>Direction<span class="fl">.2005</span> <span class="ot">&lt;-</span> Smarket<span class="sc">$</span>Direction[<span class="sc">!</span>train]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Los elementos del vector <code>train</code> que corresponden a observaciones que ocurrieron antes de 2005 se establecen en <code>TRUE</code>, mientras que los que corresponden a observaciones en 2005 se establecen en <code>FALSE</code>.</p>
-<p>Por lo tanto, <code>Smarket[!train, ]</code> produce una submatriz de los datos del mercado de valores que contiene solo las observaciones para las cuales <code>train</code> es <code>FALSE</code>—es decir, las observaciones con fechas en 2005. (véanse más detalles en el anexo <strong>Herramientas</strong>)</p>
-<p>Ajustamos un modelo de regresión logística usando solo el subconjunto de las observaciones que corresponden a fechas anteriores a 2005, usando el argumento <code>subset</code>. Posteriormente obtenemos las probabilidades pronosticadas de que el mercado de valores suba para cada uno de los días de nuestro conjunto de prueba, es decir, para los días de 2005.</p>
+<p>Los elementos del vector <code>train</code> que corresponden a observaciones que ocurrieron antes de 2005 se establecen en <code>TRUE</code>, mientras que los que corresponden a observaciones en 2005 se establecen en <code>FALSE</code>. La notación <code>!=</code> significa que <em>no es igual a</em>, por lo tanto, <code>Smarket[!train, ]</code> produce una submatriz de los datos del mercado de valores que contiene solo las observaciones para las cuales <code>train</code> es <code>FALSE</code>—es decir, las observaciones con fechas en 2005. (véanse más detalles en el anexo <strong>Herramientas</strong>)</p>
+<p>Ajustamos un modelo de regresión logística usando solo el subconjunto de las observaciones que corresponden a fechas anteriores a 2005, usando el argumento <code>subset</code>. Posteriormente obtenemos las probabilidades pronosticadas de que el mercado de valores suba para cada uno de los días de nuestro conjunto de test, es decir, para los días de 2005.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>glm.fits <span class="ot">&lt;-</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glm</span>(</span>
@@ -503,7 +508,7 @@ glm.pred Down  Up
 <span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>glm.probs <span class="ot">&lt;-</span> <span class="fu">predict</span>(glm.fits, Smarket<span class="fl">.2005</span>,</span>
 <span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Tenga en cuenta que hemos entrenado y probado nuestro modelo en dos conjuntos de datos completamente separados: el entrenamiento se realizó solo con las fechas anteriores a 2005 y la prueba se realizó solo con las fechas de 2005. Finalmente, calculamos las predicciones para 2005, <code>glm.pred</code> y las comparamos con los movimientos reales del mercado durante ese período de tiempo, recogidos en <code>Direction.2005</code>. Se obtiene así la <em>matriz de confusión</em>.</p>
+<p>Tenga en cuenta que hemos entrenado y probado nuestro modelo en dos conjuntos de datos completamente separados: el entrenamiento se realizó solo con las fechas anteriores a 2005 y el test se realizó solo con las fechas de 2005. Finalmente, calculamos las predicciones para 2005, <code>glm.pred</code> y las comparamos con los movimientos reales del mercado durante ese período de tiempo, recogidos en <code>Direction.2005</code>. Se obtiene así la <em>matriz de confusión</em>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>glm.pred <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">"Down"</span>, <span class="dv">252</span>)</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>glm.pred[glm.probs <span class="sc">&gt;</span> .<span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="st">"Up"</span></span>
@@ -523,9 +528,9 @@ glm.pred Down Up
 <pre><code>[1] 0.5198413</code></pre>
 </div>
 </div>
-<p><strong>Nota</strong>: La notación <code>!=</code> significa que <em>no es igual a</em>, por lo que el último comando calcula la tasa de error del conjunto de test.</p>
+<p><strong>Nota</strong>: Como la notación <code>!=</code> significa que <em>no es igual a</em>, el último comando calcula la tasa de error del conjunto de test.</p>
 <p>Los resultados son bastante decepcionantes: la tasa de error del conjunto de datos de test es de 52%, ¡peor que seleccionar al azar! Por supuesto, este resultado no es tan sorprendente, dado que, en general, no se esperaría poder utilizar los rendimientos de días anteriores para predecir el rendimiento futuro del mercado. (Después de todo, si fuera posible hacerlo, los autores se harían ricos en lugar de escribir un libro de texto de estadística).</p>
-<p>Recordemos que el modelo de regresión logística tenía p-valores muy decepcionantes asociados con todos los predictores, y que el p-valor más pequeño, pero no significativo, correspondía a <code>lagone</code>. Quizá eliminando las variables que parecen no ser útiles para predecir <code>direction</code>, podemos obtener un modelo más efectivo. Después de todo, el uso de predictores que no tienen relación con la respuesta tiende a causar un deterioro en la tasa de error del conjunto de datos de prueba (dado que dichos predictores provocan un aumento en la varianza sin una disminución correspondiente en el sesgo), por lo que eliminar dichos predictores puede, a su vez, generar una mejora. A continuación, reajustamos la regresión logística usando solo <code>lagone</code> y <code>lagtwo</code>, que parecían tener el mayor poder predictivo en el modelo de regresión logística original.</p>
+<p>Recordemos que el modelo de regresión logística tenía p-valores muy decepcionantes asociados con todos los predictores, y que el p-valor más pequeño, pero no significativo, correspondía a <code>lagone</code>. Quizá eliminando las variables que parecen no ser útiles para predecir <code>direction</code>, podemos obtener un modelo más efectivo. Después de todo, el uso de predictores que no tienen relación con la respuesta tiende a causar un deterioro en la tasa de error del conjunto de datos de test (dado que dichos predictores provocan un aumento en la varianza sin una disminución correspondiente en el sesgo), por lo que eliminar dichos predictores puede, a su vez, generar una mejora. A continuación, reajustamos la regresión logística usando solo <code>lagone</code> y <code>lagtwo</code>, que parecían tener el mayor poder predictivo en el modelo de regresión logística original.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>glm.fits <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2,</span>
@@ -557,9 +562,8 @@ glm.pred Down  Up
 <p>Supongamos que queremos predecir los rendimientos asociados con valores particulares de <code>lagone</code> y <code>lagtwo</code>. En particular, queremos predecir <code>direction</code> en un día en que <code>lagone</code> y <code>lagtwo</code> sean iguales a 1.2 y 1.1, respectivamente, y en un día en que sean iguales a 1.5 y -0.8. Hacemos esto usando la función <code>predict()</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(glm.fits,</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">newdata =</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>          <span class="fu">data.frame</span>(<span class="at">Lag1 =</span> <span class="fu">c</span>(<span class="fl">1.2</span>, <span class="fl">1.5</span>), <span class="at">Lag2 =</span> <span class="fu">c</span>(<span class="fl">1.1</span>, <span class="sc">-</span><span class="fl">0.8</span>)),</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">Lag1 =</span> <span class="fu">c</span>(<span class="fl">1.2</span>, <span class="fl">1.5</span>), <span class="at">Lag2 =</span> <span class="fu">c</span>(<span class="fl">1.1</span>, <span class="sc">-</span><span class="fl">0.8</span>)),</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        1         2 
 0.4791462 0.4960939 </code></pre>
@@ -576,16 +580,17 @@ glm.pred Down  Up
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
-Attaching package: 'MASS'</code></pre>
+Adjuntando el paquete: 'MASS'</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>The following object is masked from 'package:ISLR2':
 
     Boston</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>lda.fit <span class="ot">&lt;-</span> <span class="fu">lda</span>(Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2, <span class="at">data =</span> Smarket,</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">subset =</span> train)</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>lda.fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>lda.fit <span class="ot">&lt;-</span> <span class="fu">lda</span>(Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2, </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> Smarket,</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">subset =</span> train)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>lda.fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Call:
 lda(Direction ~ Lag1 + Lag2, data = Smarket, subset = train)
@@ -609,7 +614,7 @@ Lag2 -0.5135293</code></pre>
 <p><img src="Lab4-Clasif_files/figure-html/chunk14-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>La salida de LDA indica que <span class="math inline">\(\hat\pi_1=\)</span><code>0.492</code> y <span class="math inline">\(\hat\pi_2=\)</span><code>0.508</code>; es decir, <code>49.2</code>% de las observaciones de entrenamiento corresponden a días en los que el mercado bajó. También proporciona las medias del grupo; estos son el promedio de cada predictor dentro de cada clase, y LDA los utiliza como estimaciones de <span class="math inline">\(\mu_k\)</span> (véase el libro). Esto sugiere que existe una tendencia a que los rendimientos de los 2 días anteriores sean negativos en los días en que el mercado aumenta, y una tendencia a que los rendimientos de los días anteriores sean positivos en los días en que el mercado cae.</p>
+<p>La salida de LDA indica que <span class="math inline">\(\hat\pi_1=\)</span><code>0.492</code> y <span class="math inline">\(\hat\pi_2=\)</span><code>0.508</code> (en la salida anterior: Prior probabilities of groups<code>); es decir, el</code>49.2`% de las observaciones de entrenamiento corresponden a días en los que el mercado bajó. También proporciona las medias del grupo; estos son el promedio de cada predictor dentro de cada clase, y LDA los utiliza como estimaciones de <span class="math inline">\(\mu_k\)</span> (véase el libro). Esto sugiere que existe una tendencia a que los rendimientos de los 2 días anteriores sean negativos en los días en que el mercado aumenta, y una tendencia a que los rendimientos de los días anteriores sean positivos en los días en que el mercado cae.</p>
 <p>La salida <em>coefficients of linear discriminants</em> (<em>coeficientes de discriminantes lineales</em>) proporciona la combinación lineal de <code>lagone</code> y <code>lagtwo</code> que se utilizan para formar la regla de decisión LDA. En otras palabras, estos son los multiplicadores de los elementos de <span class="math inline">\(X=x\)</span> en (4.24) (Véase la ecuación en el libro). Si <span class="math inline">\(-0.642\times\)</span> <code>lagone</code> <span class="math inline">\(- 0.514 \times\)</span> <code>lagtwo</code> es grande, entonces el clasificador LDA pronosticará un aumento del mercado, y si es pequeño, entonces el clasificador LDA pronosticará una caída del mercado.</p>
 <p>La función <code>plot()</code> produce gráficos de los <em>discriminantes lineales</em>, obtenidos al calcular <span class="math inline">\(-0.642\times\)</span> <code>lagone</code> <span class="math inline">\(- 0.514 \times\)</span> <code>lagtwo</code> para cada una de las observaciones de entrenamiento. Las observaciones <code>Up</code> y <code>Down</code> se muestran por separado.</p>
 <p>La función <code>predict()</code> devuelve una lista con tres elementos. El primer elemento, <code>class</code>, contiene las predicciones de LDA sobre el movimiento del mercado. El segundo elemento, <code>posterior</code>, es una matriz cuya <span class="math inline">\(k\)</span>-ésima columna contiene la probabilidad posterior de que la observación correspondiente pertenezca a la <span class="math inline">\(k\)</span>-ésima clase, calculada a partir de (4.15). Finalmente, <code>x</code> contiene los discriminantes lineales, descritos anteriormente.</p>
@@ -622,7 +627,7 @@ Lag2 -0.5135293</code></pre>
 </div>
 <section id="lda-vs-reg.log" class="level4" data-number="4.2.1.1">
 <h4 data-number="4.2.1.1" class="anchored" data-anchor-id="lda-vs-reg.log"><span class="header-section-number">4.2.1.1</span> LDA vs reg.log</h4>
-<p>Como se puede observar las predicciones de LDA y de regresión logística son idénticas en este caso.</p>
+<p>Como se puede observar las predicciones de LDA son idénticas en este caso a las de regresión logística que obteníamos antes.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>lda.class <span class="ot">&lt;-</span> lda.pred<span class="sc">$</span>class</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(lda.class, Direction<span class="fl">.2005</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -676,9 +681,10 @@ Levels: Down Up</code></pre>
 <h3 data-number="4.2.2" class="anchored" data-anchor-id="análisis-discriminante-cuadrático"><span class="header-section-number">4.2.2</span> Análisis Discriminante Cuadrático</h3>
 <p>Ajustaremos un modelo QDA (Quadratic Discriminant Analysis) con los datos de <code>Smarket</code>, mediante la función <code>qda()</code>, del paquete <code>MASS</code>. La sintaxis es idéntica a la de <code>lda()</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>qda.fit <span class="ot">&lt;-</span> <span class="fu">qda</span>(Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2, <span class="at">data =</span> Smarket,</span>
-<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">subset =</span> train)</span>
-<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>qda.fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>qda.fit <span class="ot">&lt;-</span> <span class="fu">qda</span>(Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2, </span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> Smarket,</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">subset =</span> train)</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>qda.fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Call:
 qda(Direction ~ Lag1 + Lag2, data = Smarket, subset = train)
@@ -708,16 +714,17 @@ qda.class Down  Up
 <pre><code>[1] 0.5992063</code></pre>
 </div>
 </div>
-<p>Curiosamente, las predicciones de QDA son precisas casi el <code>60</code>% de las veces, a pesar de que los datos de 2005 no se usaron para ajustar el modelo. Este nivel de precisión es bastante impresionante para los datos del mercado de valores, que se sabe que son bastante difíciles de modelar con precisión. Esto sugiere que la forma cuadrática asumida por QDA puede capturar la verdadera relación con mayor precisión que las formas lineales asumidas por LDA y la regresión logística. Sin embargo, recomendamos evaluar el rendimiento de este método en un conjunto de prueba más grande antes de apostar a que este enfoque vencerá constantemente al mercado.</p>
+<p>En este caso, las predicciones de QDA son precisas casi el <code>60</code>% de las veces, a pesar de que los datos de 2005 no se usaron para ajustar el modelo. Este nivel de precisión es bastante impresionante para los datos del mercado de valores, que se sabe que son bastante difíciles de modelar con precisión. Esto sugiere que la forma cuadrática asumida por QDA puede capturar la verdadera relación con mayor precisión que las formas lineales asumidas por LDA y la regresión logística. Sin embargo, recomendamos evaluar el rendimiento de este método en un conjunto de test más grande antes de apostar a que este enfoque tendrá siempre más éxito.</p>
 </section>
 <section id="naive-bayes" class="level3" data-number="4.2.3">
 <h3 data-number="4.2.3" class="anchored" data-anchor-id="naive-bayes"><span class="header-section-number">4.2.3</span> Naive Bayes</h3>
 <p>El modelo Naive Bayes se implementa en <code>R</code> mediante la función <code>naiveBayes()</code>, del paquete <code>e1071</code>. La sintaxis es idéntica a la de <code>lda()</code> y <code>qda()</code>. Por defecto, esta implementación del clasificador naive Bayes modela cada característica cuantitativa mediante una distribución gaussiana. Sin embargo, también se puede utilizar un método de densidad kernel para estimar las distribuciones.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(e1071)</span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>nb.fit <span class="ot">&lt;-</span> <span class="fu">naiveBayes</span>(Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2, <span class="at">data =</span> Smarket,</span>
-<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">subset =</span> train)</span>
-<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>nb.fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>nb.fit <span class="ot">&lt;-</span> <span class="fu">naiveBayes</span>(Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2, </span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> Smarket,</span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">subset =</span> train)</span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>nb.fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Naive Bayes Classifier for Discrete Predictors
@@ -854,8 +861,8 @@ knn.pred Down Up
 <section id="escalado-de-variables" class="level4" data-number="4.2.4.2">
 <h4 data-number="4.2.4.2" class="anchored" data-anchor-id="escalado-de-variables"><span class="header-section-number">4.2.4.2</span> Escalado de variables</h4>
 <p>Debido a que el clasificador KNN predice la clase de una observación dada del conjunto de validación al identificar las observaciones más próximas a ella, la escala de las variables es importante. Las variables con una escala grande tendrán un efecto mucho mayor en la <em>distancia</em> entre las observaciones, y por lo tanto en el clasificador KNN, que las variables con una escala pequeña.</p>
-<p>Una buena forma de manejar este problema es ajustar los datos de modo que todas las variables tengan una media de cero y una desviación estándar de uno. Entonces todas las variables estarán en una escala comparable. La función <code>scale()</code> hace precisamente esto (véase el anexo <strong>Herramientas</strong>).</p>
-<p>Estandarizamos los variables de <code>Caravan</code>, excepto la columna <code>86</code>, porque esa es la variable cualitativa <code>Purchase</code>.</p>
+<p>Una buena forma de manejar este problema es ajustar los datos de modo que todas las variables tengan media 0 y desviación estándar 1. Entonces todas las variables estarán en una escala comparable. La función <code>scale()</code> hace precisamente esto (véase el anexo <strong>Herramientas</strong>).</p>
+<p>Estandarizamos las variables de <code>Caravan</code>, excepto la columna <code>86</code>, porque esa es la variable cualitativa <code>Purchase</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>standardized.X <span class="ot">&lt;-</span> <span class="fu">scale</span>(Caravan[, <span class="sc">-</span><span class="dv">86</span>])</span>
 <span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(Caravan[, <span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -875,9 +882,9 @@ knn.pred Down Up
 <pre><code>[1] 1</code></pre>
 </div>
 </div>
-<p>Ahora cada columna de <code>standardized.X</code> tiene una desviación estándar de uno y una media de cero.</p>
-<p>Pasamos a dividir las observaciones en un conjunto de prueba, que contiene las primeras 1000 observaciones, y un conjunto de entrenamiento, que contiene las observaciones restantes. Es decir, seleccionamos los conjuntos usando su <em>índice</em> no hay aquí una selección aleatoria (véase el anexo <strong>Herramientas</strong>)</p>
-<p>Ajustamos un modelo KNN en los datos de entrenamiento usando <span class="math inline">\(K=1\)</span> y evaluamos su desempeño en los datos de prueba.</p>
+<p>Ahora cada columna de <code>standardized.X</code> tiene desviación estándar 1 y media 0.</p>
+<p>Pasamos a dividir las observaciones en un conjunto de test, que contiene las primeras 1000 observaciones, y un conjunto de entrenamiento, que contiene las observaciones restantes. Es decir, seleccionamos los conjuntos usando su <em>índice</em> no hay aquí una selección aleatoria (véase el anexo <strong>Herramientas</strong>)</p>
+<p>Ajustamos un modelo KNN en los datos de entrenamiento usando <span class="math inline">\(K=1\)</span> y evaluamos su desempeño en los datos de test.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span></span>
 <span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a>test.X <span class="ot">&lt;-</span> standardized.X[test, ]</span>
@@ -895,7 +902,7 @@ knn.pred Down Up
 <pre><code>[1] 0.059</code></pre>
 </div>
 </div>
-<p>La tasa de error de KNN en las 1000 observaciones para prueba es un poco menos de <code>12</code>%. A primera vista, esto puede parecer bastante bueno. Sin embargo, dado que solo <code>6</code>% de los clientes compraron un seguro, podríamos reducir la tasa de error a <code>6</code>% prediciendo siempre <code>No</code> (última línea del <em>chunk</em> anterior) ¡independientemente de los valores de los predictores!</p>
+<p>La tasa de error de KNN en las 1000 observaciones para test es un poco menos de <code>12</code>%. A primera vista, esto puede parecer bastante bueno. Sin embargo, dado que solo <code>6</code>% de los clientes compraron un seguro, podríamos reducir la tasa de error a <code>6</code>% prediciendo siempre <code>No</code> (última línea del <em>chunk</em> anterior) ¡independientemente de los valores de los predictores!</p>
 <p>Suponga que hay algún costo no trivial al tratar de vender un seguro a un individuo determinado. Por ejemplo, tal vez un vendedor deba visitar a cada cliente potencial. Si la empresa trata de vender seguros a una selección aleatoria de clientes, entonces la tasa de éxito será de solo <code>6</code>%, lo que puede ser demasiado bajo dados los costos involucrados. En cambio, a la compañía le gustaría tratar de vender seguros solo a los clientes que probablemente lo compren. Por lo tanto, <em>la tasa de error general no es de interés</em>. En cambio, <em>la fracción de individuos que se predice correctamente que comprará un seguro es de interés</em>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(knn.pred, test.Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -986,7 +993,7 @@ glm.pred  No Yes
 <section id="regresión-de-poisson-omitido" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="regresión-de-poisson-omitido">Regresión de Poisson (omitido)</h2>
 <blockquote class="blockquote">
-<p><strong>Nota Víctor</strong>: Como se ha comentado al principio, en el material original también se incluye en este lab Regresión de Poisson que para mí no encaja en “métodos de clasificación”. Además el enfoque que se da, utilizando primero la función <code>lm()</code> es enrevesado (opinión personal). Por ambas cosas se omiten aquí los detalles, pero se mantienen las ideas generales de este tipo de regresión (también habitual en la práctica).</p>
+<p><strong>Nota Víctor</strong>: Como se ha comentado al principio, en el material original también se incluye en este Lab Regresión de Poisson que para mí no encaja en “métodos de clasificación”. Además el enfoque que se da, utilizando primero la función <code>lm()</code> es enrevesado (opinión personal). Por ambas cosas se omiten aquí los detalles, pero se mantienen las ideas generales de este tipo de regresión (también habitual en la práctica).</p>
 </blockquote>
 <ul>
 <li><p><code>Bikeshare</code> (en el paquete <code>ISLR2</code>) es el conjunto de datos elegido para ajustar un modelo de regresión de Poisson. Mide el número de alquileres de bicicletas (<code>bikers</code>) por hora en Washington, DC.</p></li>

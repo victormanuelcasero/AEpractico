@@ -308,7 +308,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <p>Las funciones básicas para realizar regresión lineal (simple o múltiple) de mínimos cuadrados y otros análisis sencillos vienen de serie con la <em>distribución base</em>, pero las funciones más “exóticas” requieren paquetes adicionales.</p>
-<p><strong>Paquetes:</strong> En el material original comenta las nociones básicas sobre cargar (o instalar cuando sea necesario) <em>paquetes</em>, que he resumido y trasladado al anexo <strong>Herramientas</strong>.</p>
+<p><strong>Paquetes:</strong> En el material original comenta las nociones básicas sobre cargar (o instalar cuando sea necesario) <em>paquetes</em>, que he resumido y trasladado al Anexo <strong>Herramientas</strong>.</p>
 <p>Cargamos los paquetes <code>MASS</code> e <code>ISLR2</code>.</p>
 <ul>
 <li>El paquete <code>MASS</code> es una gran colección de conjuntos de datos y funciones. Está disponible con la instalación base.</li>
@@ -320,7 +320,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
-Attaching package: 'ISLR2'</code></pre>
+Adjuntando el paquete: 'ISLR2'</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>The following object is masked from 'package:MASS':
@@ -330,7 +330,7 @@ Attaching package: 'ISLR2'</code></pre>
 </div>
 <section id="regresión-lineal-simple" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="regresión-lineal-simple"><span class="header-section-number">3.1</span> Regresión lineal simple</h2>
-<p>El paquete <code>ISLR2</code> contiene el conjunto de datos <code>Boston</code>, que registra <code>medv</code> (valor mediano de la casa) para <code>506</code> distritos censales de Boston. Buscaremos predecir <code>medv</code> utilizando 12 predictores como <code>rm</code> (número promedio de habitaciones por casa), <code>age</code> (edad promedio de las casas) y <code>lstat</code> (porcentaje de hogares con nivel socioeconómico bajo).</p>
+<p>El paquete <code>ISLR2</code> contiene el conjunto de datos <code>Boston</code>, que registra <code>medv</code> (“median value”: valor mediano de las casas ocupadas por sus propietarios, en $1000s) para <code>506</code> distritos censales de Boston. Buscaremos predecir <code>medv</code> utilizando 12 predictores como <code>rm</code> (“room mean”: número promedio de habitaciones por casa), <code>age</code> (“casas construidas antes de 1940, en %”!!) y <code>lstat</code> (“lower status”: población de menor estatus -nivel socioeconómico bajo-, en %).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Boston)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -346,7 +346,7 @@ Attaching package: 'ISLR2'</code></pre>
 <p>Para obtener más información sobre el conjunto de datos, podemos escribir <code>?Boston</code>.</p>
 <section id="lm-ajustar-modelos" class="level3" data-number="3.1.1">
 <h3 data-number="3.1.1" class="anchored" data-anchor-id="lm-ajustar-modelos"><span class="header-section-number">3.1.1</span> <code>lm()</code> (ajustar modelos)</h3>
-<p>Comenzaremos usando la función <code>lm()</code> para ajustar un modelo de regresión lineal simple, con <code>medv</code> como variable respuesta y <code>lstat</code> como variable predictora. La sintaxis básica es <code>lm(y ~ x, data)</code>, donde <code>y</code> es la respuesta, <code>X</code> es el predictor y <code>data</code> es el conjunto de datos en el que están las dos variables.</p>
+<p>Comenzaremos usando la función <code>lm()</code> para ajustar un modelo de regresión lineal simple, con <code>medv</code> como variable respuesta y <code>lstat</code> como variable predictora. La sintaxis básica es <code>lm(y ~ x, data)</code>, donde <code>y</code> es la respuesta, <code>x</code> es el predictor y <code>data</code> es el conjunto de datos en el que están las dos variables.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>lm.fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(medv <span class="sc">~</span> lstat, <span class="at">data =</span> Boston)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -387,9 +387,9 @@ F-statistic: 601.6 on 1 and 504 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <blockquote class="blockquote">
-<p><strong>Nota Víctor</strong>: El material original no comenta algo fundamental de la salida anterior… ¿cómo se interpretan los coeficientes?, ¿p-valores?… ¿<span class="math inline">\(R^2\)</span>?…</p>
+<p><strong>Nota Víctor</strong>: El material original no comenta algo fundamental de la salida anterior… ¿cómo se interpretan los coeficientes?, ¿p-valores?… ¿<span class="math inline">\(R^2\)</span>?… En el Capítulo <a href="https://cdr-book.github.io/cap-lm.html"><em>Modelización lineal</em></a> del libro <em>Fundamentos de ciencia de datos con R (“CDR”)</em> se puede encontrar las respuestas de las preguntas anteriores.</p>
 </blockquote>
-<p>Podemos usar la función <code>names()</code> para averiguar qué otra información se almacena en <code>lm.fit</code>. Aunque podemos extraer dicha información por su nombre —p.ej. <code>lm.fit$coefficients</code> — es más seguro usar las funciones de extracción como <code>coef()</code> para acceder a ellas.</p>
+<p>Podemos usar la función <code>names()</code> para averiguar qué otra información se almacena en <code>lm.fit</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(lm.fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -397,6 +397,9 @@ F-statistic: 601.6 on 1 and 504 DF,  p-value: &lt; 2.2e-16</code></pre>
  [5] "fitted.values" "assign"        "qr"            "df.residual"  
  [9] "xlevels"       "call"          "terms"         "model"        </code></pre>
 </div>
+</div>
+<p>Aunque podemos extraer dicha información por su nombre —p.ej. <code>lm.fit$coefficients</code> — es más seguro usar las funciones de extracción como <code>coef()</code> para acceder a ellas.</p>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(lm.fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(Intercept)       lstat 
@@ -434,16 +437,16 @@ lstat       -1.026148 -0.8739505</code></pre>
 3 20.30310  8.077742 32.52846</code></pre>
 </div>
 </div>
-<p>Por ejemplo, el intervalo de confianza del 95% asociado con un valor <code>lstat</code> de 10 es <code>(24.47, 25.63)</code>, y el intervalo de predicción del 95% es <code>(12.83, 37.28)</code>. Como era de esperar, los intervalos de confianza y de predicción se centran en torno al mismo punto (un valor predicho de <code>25.05</code> para <code>medv</code> cuando <code>lstat</code> es igual a 10), pero estos últimos son sustancialmente más amplios.</p>
+<p>De estas salidas se obtiene, que el intervalo de confianza del 95% asociado con un valor <code>lstat</code> de 10 es <code>(24.47, 25.63)</code>, y el intervalo de predicción del 95% es <code>(12.83, 37.28)</code>. Como era de esperar, los intervalos de confianza y de predicción se centran en torno al mismo punto (un valor predicho de <code>25.05</code> para <code>medv</code> cuando <code>lstat</code> es igual a 10), pero estos últimos son sustancialmente más amplios.</p>
 </section>
 <section id="diagrama-de-dispersión" class="level3" data-number="3.1.3">
 <h3 data-number="3.1.3" class="anchored" data-anchor-id="diagrama-de-dispersión"><span class="header-section-number">3.1.3</span> Diagrama de dispersión</h3>
-<p>Ahora dibujaremos <code>medv</code> y <code>lstat</code> junto con la recta de regresión de mínimos cuadrados usando las funciones <code>plot()</code> y <code>abline()</code>.</p>
+<p>Ahora dibujaremos <code>medv</code> y <code>lstat</code> junto con la recta de regresión de mínimos cuadrados (obtenida con el ajuste <code>lm.fit</code>) usando las funciones <code>plot()</code> y <code>abline()</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">pty =</span> <span class="st">"s"</span>) <span class="co"># sentencia añadida (no incluida en el código original)</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># "p"lot "ty"pe "s"quare (recomendado para gráficos de dispersión)</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Boston<span class="sc">$</span>lstat, Boston<span class="sc">$</span>medv)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(lm.fit, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(lm.fit, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"red"</span>) <span class="co"># a=intercept, b=slope</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Lab3-RegLin_files/figure-html/chunk9-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -463,7 +466,7 @@ lstat       -1.026148 -0.8739505</code></pre>
 </section>
 <section id="diagnóstico" class="level3" data-number="3.1.4">
 <h3 data-number="3.1.4" class="anchored" data-anchor-id="diagnóstico"><span class="header-section-number">3.1.4</span> Diagnóstico</h3>
-<p>A continuación examinamos algunos diagramas de diagnóstico, varios de los cuales se discuten en la Sección 3.3.3 del libro. Cuatro gráficos de diagnóstico se producen automáticamente al aplicar la función <code>plot()</code> directamente a la salida de <code>lm()</code>.</p>
+<p>A continuación examinamos algunos diagramas de diagnóstico, varios de los cuales se discuten en la Sección 3.3.3 del libro. Al aplicar la función <code>plot()</code> a la salida de <code>lm()</code> se producen automáticamente 4 gráficos de diagnóstico.</p>
 <p><strong>Nota técnica</strong>: En la consola esta función producirá un gráfico, y al presionar <code>ENTER</code> se generará el siguiente gráfico, etc. Sin embargo, a menudo es conveniente ver los cuatro gráficos juntos. Podemos lograr esto usando las funciones <code>par()</code> y <code>mfrow()</code>, que le dicen a <code>R</code> que divida la pantalla de visualización en paneles separados para que se puedan ver múltiples gráficos simultáneamente. Por ejemplo, <code>par(mfrow = c(2, 2))</code> divide la ventana de gráficos en una cuadrícula de paneles de <em>2x2</em>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),</span>
@@ -570,7 +573,7 @@ F-statistic: 113.5 on 12 and 493 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <blockquote class="blockquote">
-<p><strong>Nota Víctor</strong>: De nuevo, el material original no interpreta la salida anterior donde hay coeficientes positivos y negativos, ¡significativos y no significativos! ¿<span class="math inline">\(R^2\)</span>? ¿significación global del modelo?</p>
+<p><strong>Nota Víctor</strong>: De nuevo, el material original no interpreta la salida anterior donde hay coeficientes positivos y negativos, ¡significativos y no significativos! ¿<span class="math inline">\(R^2\)</span>? ¿significación global del modelo?… (véase el citado Capítulo <a href="https://cdr-book.github.io/cap-lm.html"><em>Modelización lineal</em></a> del libro “CDR”).</p>
 </blockquote>
 <p>Como antes, se puede acceder por nombre a los componentes individuales, ahora del objeto de resumen (escriba <code>?summary.lm</code> para ver qué hay disponible). Así</p>
 <ul>
@@ -580,11 +583,12 @@ F-statistic: 113.5 on 12 and 493 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="vif" class="level3" data-number="3.2.2">
 <h3 data-number="3.2.2" class="anchored" data-anchor-id="vif"><span class="header-section-number">3.2.2</span> <code>vif()</code></h3>
-<p>La función <code>vif()</code>, del paquete <code>car</code>, se puede utilizar para calcular los <em>factores de inflación de la varianza</em>. La mayoría de los VIF son bajos o moderados para estos datos. El paquete <code>car</code> no forma parte de la instalación básica de <code>R</code>, por lo que debe instalarse para poder usarlo (véase el anexo <strong>Herramientas</strong>).</p>
+<p>La función <code>vif()</code>, del paquete <code>car</code>, se puede utilizar para calcular los <em>factores de inflación de la varianza</em>. El paquete <code>car</code> no forma parte de la instalación básica de <code>R</code>, por lo que debe instalarse para poder usarlo (véase el Anexo <strong>Herramientas</strong>).</p>
+<p>Para estos datos, la mayoría de los VIF son bajos o moderados.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: carData</code></pre>
+<pre><code>Cargando paquete requerido: carData</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vif</span>(lm.fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -675,7 +679,7 @@ F-statistic: 209.3 on 3 and 502 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="transformaciones-no-lineales-de-los-predictores" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="transformaciones-no-lineales-de-los-predictores"><span class="header-section-number">3.4</span> Transformaciones no lineales de los predictores</h2>
-<p>La función <code>lm()</code> también puede acomodar transformaciones no lineales de los predictores. Por ejemplo, dado un predictor <code>X</code>, podemos crear un predictor <code>X^2</code> usando <code>I(X^2)</code> (véase el anexo <strong>Herramientas</strong>). Realizamos la regresión de <code>medv</code> sobre <code>lstat</code> y <code>lstat^2</code>.</p>
+<p>La función <code>lm()</code> también admite transformaciones no lineales de los predictores. Por ejemplo, dado un predictor <code>X</code>, podemos crear un predictor <code>X^2</code> usando <code>I(X^2)</code> (véase el Anexo <strong>Herramientas</strong>). Realizamos la regresión de <code>medv</code> sobre <code>lstat</code> y <code>lstat^2</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>lm.fit2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(medv <span class="sc">~</span> lstat <span class="sc">+</span> <span class="fu">I</span>(lstat<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> Boston)</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm.fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -701,10 +705,10 @@ Multiple R-squared:  0.6407,    Adjusted R-squared:  0.6393
 F-statistic: 448.5 on 2 and 503 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p>El p-valor cercano a cero asociado con el término cuadrático sugiere que conduce a un modelo mejorado.</p>
+<p>El p-valor cercano a cero asociado con el término cuadrático sugiere que, su inclusión, conduce a un modelo mejorado.</p>
 <section id="anova" class="level3" data-number="3.4.1">
 <h3 data-number="3.4.1" class="anchored" data-anchor-id="anova"><span class="header-section-number">3.4.1</span> <code>anova()</code></h3>
-<p>Usamos la función <code>anova()</code> (véase el anexo <strong>Herramientas</strong>) para cuantificar aún más hasta qué punto el ajuste cuadrático es superior al ajuste lineal.</p>
+<p>Usamos la función <code>anova()</code> (véase el Anexo <strong>Herramientas</strong>) para cuantificar aún más hasta qué punto el ajuste cuadrático es superior al ajuste lineal.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>lm.fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(medv <span class="sc">~</span> lstat, <span class="at">data =</span> Boston)</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(lm.fit, lm.fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -738,7 +742,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </section>
 <section id="ajuste-polinomial" class="level3" data-number="3.4.2">
 <h3 data-number="3.4.2" class="anchored" data-anchor-id="ajuste-polinomial"><span class="header-section-number">3.4.2</span> Ajuste polinomial</h3>
-<p>Para crear un ajuste cúbico, podemos incluir un predictor de la forma <code>I(X^3)</code>. Sin embargo, un mejor enfoque consiste en usar la función <code>poly()</code> para crear el polinomio dentro de <code>lm()</code> (véase el anexo <strong>Herramientas</strong>). Por ejemplo, la siguiente sentencia produce un ajuste polinomial de quinto orden:</p>
+<p>Para crear un ajuste cúbico, podemos incluir un predictor de la forma <code>I(X^3)</code>. Sin embargo, existe un mejor enfoque consistente en usar la función <code>poly()</code> para crear el polinomio dentro de <code>lm()</code> (véase el Anexo <strong>Herramientas</strong>). Por ejemplo, la siguiente sentencia produce un ajuste polinomial de quinto orden:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>lm.fit5 <span class="ot">&lt;-</span> <span class="fu">lm</span>(medv <span class="sc">~</span> <span class="fu">poly</span>(lstat, <span class="dv">5</span>), <span class="at">data =</span> Boston)</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm.fit5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -768,7 +772,7 @@ F-statistic: 214.2 on 5 and 500 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <p>Esto sugiere que la inclusión de términos polinómicos adicionales, hasta el quinto orden, ¡conduce a una mejora en el ajuste del modelo! Sin embargo, una investigación más profunda de los datos revela que ningún término polinomial más allá del quinto orden tiene p-valores significativos en un ajuste de regresión.</p>
-<p><strong>Nota técnica</strong>: en el anexo <strong>Herramientas</strong> se menciona que la función <code>ploy()</code> ortogonaliza los predictores por defecto. Sin embargo un modelo lineal aplicado a la salida de la función <code>poly()</code> tendrá los mismos valores ajustados que un modelo lineal aplicado a los polinomios sin procesar (al incluir en poly el argumento <code>raw = TRUE</code>), aunque las estimaciones de los coeficientes, los errores estándar y los p-valores serán diferentes.</p>
+<p><strong>Nota técnica</strong>: en el Anexo <strong>Herramientas</strong> se menciona que la función <code>ploy()</code> ortogonaliza los predictores por defecto. Sin embargo un modelo lineal aplicado a la salida de la función <code>poly()</code> tendrá los mismos valores ajustados que un modelo lineal aplicado a los polinomios sin procesar (al incluir en poly el argumento <code>raw = TRUE</code>), aunque las estimaciones de los coeficientes, los errores estándar y los p-valores serán diferentes.</p>
 </section>
 <section id="transformación-logarítmica" class="level3" data-number="3.4.3">
 <h3 data-number="3.4.3" class="anchored" data-anchor-id="transformación-logarítmica"><span class="header-section-number">3.4.3</span> Transformación logarítmica</h3>
@@ -820,7 +824,7 @@ F-statistic: 389.3 on 1 and 504 DF,  p-value: &lt; 2.2e-16</code></pre>
 6    No Yes</code></pre>
 </div>
 </div>
-<p>El conjunto de datos <code>Carseats</code> incluye predictores cualitativos como <code>ShelveLoc</code>, un indicador de la calidad de la ubicación de las estanterías, es decir, el espacio dentro de una tienda en el que se muestra el asiento para el automóvil. El predictor <code>ShelveLoc</code> toma tres valores posibles: <em>Mala</em>, <em>Media</em> y <em>Buena</em> (ubicación). Dada una variable cualitativa como <code>ShelveLoc</code>, <code>R</code> genera automáticamente variables ficticias, <em>variables dummys</em>. La función <code>contrasts()</code> devuelve la codificación que <code>R</code> usa para las variables ficticias (véase el anexo <strong>Herramientas</strong>).</p>
+<p>El conjunto de datos <code>Carseats</code> incluye predictores cualitativos como <code>ShelveLoc</code>, un indicador de la calidad de la ubicación de las estanterías, es decir, el espacio dentro de una tienda en el que se muestra el asiento para el automóvil. El predictor <code>ShelveLoc</code> toma tres valores posibles: <em>Mala</em>, <em>Media</em> y <em>Buena</em> (ubicación). Dada una variable cualitativa como <code>ShelveLoc</code>, <code>R</code> genera automáticamente variables ficticias, <em>variables dummys</em>. La función <code>contrasts()</code> devuelve la codificación que <code>R</code> usa para las variables ficticias (véase el Anexo <strong>Herramientas</strong>).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(Carseats<span class="sc">$</span>ShelveLoc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -876,7 +880,7 @@ F-statistic:   210 on 13 and 386 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="escritura-de-funciones-movido" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="escritura-de-funciones-movido">Escritura de funciones (movido)</h2>
-<p>En el <em>Lab3</em> original se dedica este último apartado (pequeño) a la creación/escritura de funciones. Como su contenido es transversal se ha movido al anexo <strong>Herramientas</strong>.</p>
+<p>En el <em>Lab3</em> original se dedica este último apartado (pequeño) a la creación/escritura de funciones. Como su contenido es transversal se ha movido al Anexo <strong>Herramientas</strong>.</p>
 
 
 </section>
