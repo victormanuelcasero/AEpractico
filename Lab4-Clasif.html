@@ -269,6 +269,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
+<style>
+body {text-align: justify}
+</style>
 <table class="table">
 <caption>Material original</caption>
 <colgroup>
@@ -448,7 +451,7 @@ Down  0
 Up    1</code></pre>
 </div>
 </div>
-<p><strong>Nota</strong>: Sabemos que estos valores corresponden a la probabilidad de que el mercado suba, en lugar de que baje, porque con la función <code>contrasts()</code> (véase el anexo <strong>Herramientas</strong>) se ve que <code>R</code> ha creado una variable <em>dummy</em> con un 1 para <code>Up</code>.</p>
+<p><strong>Nota</strong>: Sabemos que estos valores corresponden a la probabilidad de que el mercado suba, en lugar de que baje, porque con la función <code>contrasts()</code> (véase el Anexo <strong>Herramientas</strong>) se ve que <code>R</code> ha creado una variable <em>dummy</em> con un 1 para <code>Up</code>.</p>
 <p>Para hacer una predicción sobre si el mercado subirá o bajará en un día en particular, debemos convertir estas probabilidades pronosticadas en etiquetas de clase, <code>Up</code> o <code>Down</code>. Los siguientes dos comandos crean un vector de predicciones de clase basado en si la probabilidad prevista de un aumento del mercado es mayor o menor que un determinado valor denominado <em>punto de corte</em>, en este caso <code>0.5</code> (elegido arbitrariamente)</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>glm.pred <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">"Down"</span>, <span class="dv">1250</span>)</span>
@@ -495,7 +498,7 @@ glm.pred Down  Up
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>Smarket<span class="fl">.2005</span> <span class="ot">&lt;-</span> Smarket[<span class="sc">!</span>train, ]</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>Direction<span class="fl">.2005</span> <span class="ot">&lt;-</span> Smarket<span class="sc">$</span>Direction[<span class="sc">!</span>train]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Los elementos del vector <code>train</code> que corresponden a observaciones que ocurrieron antes de 2005 se establecen en <code>TRUE</code>, mientras que los que corresponden a observaciones en 2005 se establecen en <code>FALSE</code>. La notación <code>!=</code> significa que <em>no es igual a</em>, por lo tanto, <code>Smarket[!train, ]</code> produce una submatriz de los datos del mercado de valores que contiene solo las observaciones para las cuales <code>train</code> es <code>FALSE</code>—es decir, las observaciones con fechas en 2005. (véanse más detalles en el anexo <strong>Herramientas</strong>)</p>
+<p>Los elementos del vector <code>train</code> que corresponden a observaciones que ocurrieron antes de 2005 se establecen en <code>TRUE</code>, mientras que los que corresponden a observaciones en 2005 se establecen en <code>FALSE</code>. La notación <code>!=</code> significa que <em>no es igual a</em>, por lo tanto, <code>Smarket[!train, ]</code> produce una submatriz de los datos del mercado de valores que contiene solo las observaciones para las cuales <code>train</code> es <code>FALSE</code>—es decir, las observaciones con fechas en 2005. (véanse más detalles en el Anexo <strong>Herramientas</strong>)</p>
 <p>Ajustamos un modelo de regresión logística usando solo el subconjunto de las observaciones que corresponden a fechas anteriores a 2005, usando el argumento <code>subset</code>. Posteriormente obtenemos las probabilidades pronosticadas de que el mercado de valores suba para cada uno de los días de nuestro conjunto de test, es decir, para los días de 2005.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>glm.fits <span class="ot">&lt;-</span></span>
@@ -861,7 +864,7 @@ knn.pred Down Up
 <section id="escalado-de-variables" class="level4" data-number="4.2.4.2">
 <h4 data-number="4.2.4.2" class="anchored" data-anchor-id="escalado-de-variables"><span class="header-section-number">4.2.4.2</span> Escalado de variables</h4>
 <p>Debido a que el clasificador KNN predice la clase de una observación dada del conjunto de validación al identificar las observaciones más próximas a ella, la escala de las variables es importante. Las variables con una escala grande tendrán un efecto mucho mayor en la <em>distancia</em> entre las observaciones, y por lo tanto en el clasificador KNN, que las variables con una escala pequeña.</p>
-<p>Una buena forma de manejar este problema es ajustar los datos de modo que todas las variables tengan media 0 y desviación estándar 1. Entonces todas las variables estarán en una escala comparable. La función <code>scale()</code> hace precisamente esto (véase el anexo <strong>Herramientas</strong>).</p>
+<p>Una buena forma de manejar este problema es ajustar los datos de modo que todas las variables tengan media 0 y desviación estándar 1. Entonces todas las variables estarán en una escala comparable. La función <code>scale()</code> hace precisamente esto (véase el Anexo <strong>Herramientas</strong>).</p>
 <p>Estandarizamos las variables de <code>Caravan</code>, excepto la columna <code>86</code>, porque esa es la variable cualitativa <code>Purchase</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>standardized.X <span class="ot">&lt;-</span> <span class="fu">scale</span>(Caravan[, <span class="sc">-</span><span class="dv">86</span>])</span>
@@ -883,7 +886,7 @@ knn.pred Down Up
 </div>
 </div>
 <p>Ahora cada columna de <code>standardized.X</code> tiene desviación estándar 1 y media 0.</p>
-<p>Pasamos a dividir las observaciones en un conjunto de test, que contiene las primeras 1000 observaciones, y un conjunto de entrenamiento, que contiene las observaciones restantes. Es decir, seleccionamos los conjuntos usando su <em>índice</em> no hay aquí una selección aleatoria (véase el anexo <strong>Herramientas</strong>)</p>
+<p>Pasamos a dividir las observaciones en un conjunto de test, que contiene las primeras 1000 observaciones, y un conjunto de entrenamiento, que contiene las observaciones restantes. Es decir, seleccionamos los conjuntos usando su <em>índice</em> no hay aquí una selección aleatoria (véase el Anexo <strong>Herramientas</strong>)</p>
 <p>Ajustamos un modelo KNN en los datos de entrenamiento usando <span class="math inline">\(K=1\)</span> y evaluamos su desempeño en los datos de test.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span></span>

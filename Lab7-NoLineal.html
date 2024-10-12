@@ -269,6 +269,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
+<style>
+body {text-align: justify}
+</style>
 <table class="table">
 <caption>Material original</caption>
 <colgroup>
@@ -304,7 +307,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 data-number="7.1" class="anchored" data-anchor-id="regresión-polinómica-y-funciones-escalonadas"><span class="header-section-number">7.1</span> Regresión polinómica y funciones escalonadas</h2>
 <section id="regresión-polinómica-recortado" class="level3" data-number="7.1.1">
 <h3 data-number="7.1.1" class="anchored" data-anchor-id="regresión-polinómica-recortado"><span class="header-section-number">7.1.1</span> Regresión polinómica (recortado)</h3>
-<p>Existen diversas formas de ajustar un modelo lineal de regresión polinómica. Aquí usamos, dentro de <code>lm()</code>, la función <code>poly()</code>, evitando escribir una fórmula larga con potencias de la variable explicativa (véase el anexo <strong>Herramientas</strong>).</p>
+<p>Existen diversas formas de ajustar un modelo lineal de regresión polinómica. Aquí usamos, dentro de <code>lm()</code>, la función <code>poly()</code>, evitando escribir una fórmula larga con potencias de la variable explicativa (véase el Anexo <strong>Herramientas</strong>).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR2)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">poly</span>(age, <span class="dv">4</span>), <span class="at">data =</span> Wage)</span>
@@ -334,15 +337,17 @@ poly(age, 4, raw = T)3  6.810688e-03 3.065931e-03  2.221409 0.0263977518
 poly(age, 4, raw = T)4 -3.203830e-05 1.641359e-05 -1.951938 0.0510386498</code></pre>
 </div>
 </div>
-<p>Como se indica en el anexo <strong>Herramientas</strong>, veremos que la elección de la “base” no afecta al modelo de manera significativa - sí que afecta a las estimaciones de los coeficientes, pero no afecta a los valores ajustados obtenidos.</p>
+<p>Como se indica en el Anexo <strong>Herramientas</strong>, veremos que la elección de la “base” no afecta al modelo de manera significativa - sí que afecta a las estimaciones de los coeficientes, pero no afecta a las predicciones/valores ajustados.</p>
 <p><strong>Predicciones</strong><br>
 Ahora creamos una malla de valores para <code>age</code> en la que queremos predicciones, y luego llamamos a la función genérica <code>predict()</code>, especificando que también queremos errores estándar (<code>se = TRUE</code>).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>agelims <span class="ot">&lt;-</span> <span class="fu">range</span>(Wage<span class="sc">$</span>age)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>age.grid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> agelims[<span class="dv">1</span>], <span class="at">to =</span> agelims[<span class="dv">2</span>])</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid), <span class="at">se =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>se.bands <span class="ot">&lt;-</span> <span class="fu">cbind</span>(preds<span class="sc">$</span>fit <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> preds<span class="sc">$</span>se.fit,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                  preds<span class="sc">$</span>fit <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> preds<span class="sc">$</span>se.fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>age.grid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> agelims[<span class="dv">1</span>], </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">to =</span> agelims[<span class="dv">2</span>])</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid), </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">se =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>se.bands <span class="ot">&lt;-</span> <span class="fu">cbind</span>(preds<span class="sc">$</span>fit <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> preds<span class="sc">$</span>se.fit,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                  preds<span class="sc">$</span>fit <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> preds<span class="sc">$</span>se.fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Finalmente, dibujamos los datos y añadimos el ajuste del polinomio de grado 4 (Figura 7.1. del libro)</p>
 <div class="cell">
@@ -373,20 +378,21 @@ Ahora creamos una malla de valores para <code>age</code> en la que queremos pred
 <p><strong>Nota Víctor</strong>: más adelante se dibuja el subplot de la derecha (véase el libro).</p>
 </blockquote>
 <p><strong>Nota técnica</strong>: Los argumentos <code>mar</code> y <code>oma</code> para <code>par()</code> nos permiten controlar los márgenes del <code>plot</code>, y la función <code>title()</code> crea un título de figura que abarca ambos subplots.</p>
-<p>Mencionamos anteriormente que si se produce o no un conjunto ortogonal de funciones base en la función <code>poly()</code> no afectará al modelo obtenido de manera significativa. ¿Qué queremos decir con esto? Los valores ajustados obtenidos en cualquier caso son idénticos:</p>
+<p>Mencionamos anteriormente que si se produce o no un conjunto ortogonal de funciones base en la función <code>poly()</code> no afectará al modelo obtenido de manera significativa. ¿Qué queremos decir con esto? Las predicciones o valores ajustados obtenidos son idénticos:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>preds2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit2, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid), <span class="at">se =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(<span class="fu">abs</span>(preds<span class="sc">$</span>fit <span class="sc">-</span> preds2<span class="sc">$</span>fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>preds2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit2, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid), </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">se =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(<span class="fu">abs</span>(preds<span class="sc">$</span>fit <span class="sc">-</span> preds2<span class="sc">$</span>fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 6.842527e-11</code></pre>
 </div>
 </div>
 <blockquote class="blockquote">
-<p><strong>Nota Víctor</strong>: El dato obtenido se puede considerar <code>0</code>. No aparece exactamente el valor <code>0</code> por la precisión de las predicciones con uno y otro ajuste.</p>
+<p><strong>Nota Víctor</strong>: El resultado obtenido se puede considerar <code>0</code>. No aparece exactamente el valor <code>0</code> por la precisión de las predicciones con uno y otro ajuste.</p>
 </blockquote>
 <section id="contraste-anova" class="level4" data-number="7.1.1.1">
 <h4 data-number="7.1.1.1" class="anchored" data-anchor-id="contraste-anova"><span class="header-section-number">7.1.1.1</span> Contraste ANOVA</h4>
-<p>Al realizar una regresión polinomial, debemos decidir el grado del polinomio que se utilizará. Una forma de hacerlo es mediante el uso de contrastes de hipótesis. Vamos a ajustar modelos lineales que van desde el de grado 1 hasta un polinomio de grado 5 y buscaremos determinar el modelo más simple que sea suficiente para explicar la relación entre <code>wage</code> y <code>age</code>. Usamos la función <code>anova()</code>, que realiza un <strong>análisis de varianza</strong> (ANOVA, usando un contraste F) para probar la hipótesis nula de que un modelo <span class="math inline">\(\mathcal{M}_1\)</span> es suficiente para explicar los datos frente a la hipótesis alternativa de que se requiere un modelo más complejo <span class="math inline">\(\mathcal{M}_2\)</span>. Para usar la función <code>anova()</code>, <span class="math inline">\(\mathcal{M}_1\)</span> y <span class="math inline">\(\mathcal{M}_2\)</span> deben ser modelos <em>anidados</em> (véase el anexo <strong>Herramientas</strong>). En este caso, ajustamos cinco modelos diferentes y comparamos secuencialmente un modelo con el siguiente (siempre más complejo).</p>
+<p>Al realizar una regresión polinomial, debemos decidir el grado del polinomio que se utilizará. Una forma de hacerlo es mediante el uso de contrastes de hipótesis. Vamos a ajustar modelos lineales que van desde el de grado 1 hasta un polinomio de grado 5 y buscaremos determinar el modelo más simple que sea suficiente para explicar la relación entre <code>wage</code> y <code>age</code>. Usamos la función <code>anova()</code>, que realiza un <strong>análisis de varianza</strong> (ANOVA, usando un contraste F) para comprobar la hipótesis nula de que un modelo <span class="math inline">\(\mathcal{M}_1\)</span> es suficiente para explicar los datos frente a la hipótesis alternativa de que se requiere un modelo más complejo <span class="math inline">\(\mathcal{M}_2\)</span>. Para usar la función <code>anova()</code>, <span class="math inline">\(\mathcal{M}_1\)</span> y <span class="math inline">\(\mathcal{M}_2\)</span> deben ser modelos <em>anidados</em> (véase el Anexo <strong>Herramientas</strong>). En este caso, ajustamos cinco modelos diferentes y comparamos secuencialmente un modelo con el siguiente (siempre más complejo).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fit<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> age, <span class="at">data =</span> Wage)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fit<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">poly</span>(age, <span class="dv">2</span>), <span class="at">data =</span> Wage)</span>
@@ -412,8 +418,8 @@ Model 5: wage ~ poly(age, 5)
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
-<p>El p-valor que compara el <code>Model 1</code> lineal con el <code>Model 2</code> cuadrático es esencialmente cero (<span class="math inline">\(&lt;10^{-16}\)</span>), lo que indica que un ajuste lineal no es suficiente. De manera similar, el p-valor que compara el <code>Model 2</code>, cuadrático, con el <code>Model 3</code>, cúbico, es muy bajo (0.0017), por lo que el ajuste cuadrático también es insuficiente. El p-valor que compara los polinomios cúbico y de grado 4, <code>Model 3</code> y <code>Model 4</code>, es de aproximadamente 5% mientras que el polinomio de grado 5, <code>Model 5</code>, parece innecesario porque su p-valor al compararlo con el <code>Model 4</code> es 0.37. Por lo tanto, un polinomio cúbico o cuártico parecen proporcionar un ajuste razonable a los datos, no estando justificados los modelos de orden inferior o superior.</p>
-<p>En este caso, en lugar de usar la función <code>anova()</code>, podríamos haber obtenido estos p-valores de manera más sucinta explotando el hecho de que <code>poly()</code> crea polinomios ortogonales (véase la función <code>poly()</code> en el anexo <strong>Herramientas</strong>).</p>
+<p>El p-valor que compara el <code>Model 1</code> (lineal) con el <code>Model 2</code> (cuadrático) es esencialmente cero (<span class="math inline">\(&lt;10^{-16}\)</span>), lo que indica que un ajuste lineal no es suficiente. De manera similar, el p-valor que compara el <code>Model 2</code> con el <code>Model 3</code> (cúbico) es muy bajo (0.0017), por lo que el ajuste cuadrático también es insuficiente. El p-valor que compara los polinomios cúbico y de grado 4, <code>Model 3</code> y <code>Model 4</code>, es de aproximadamente 5% mientras que el polinomio de grado 5, <code>Model 5</code>, parece innecesario porque su p-valor al compararlo con el <code>Model 4</code> es 0.37. Por lo tanto, un polinomio cúbico o cuártico parecen proporcionar un ajuste razonable a los datos, no estando justificados los modelos de orden inferior o superior.</p>
+<p>En este caso, en lugar de usar la función <code>anova()</code>, podríamos haber obtenido estos p-valores de manera más sucinta explotando el hecho de que <code>poly()</code> crea polinomios ortogonales (véase la función <code>poly()</code> en el Anexo <strong>Herramientas</strong>).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(fit<span class="fl">.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -457,29 +463,32 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </section>
 <section id="clasificación" class="level4" data-number="7.1.1.2">
 <h4 data-number="7.1.1.2" class="anchored" data-anchor-id="clasificación"><span class="header-section-number">7.1.1.2</span> Clasificación</h4>
-<p>Consideramos la tarea de predecir si una persona gana más de 250.000 $ por año. Procedemos como antes, excepto que primero creamos el vector de respuesta apropiado y luego aplicamos la función <code>glm()</code> usando <code>family = "binomial"</code> para ajustar un modelo de regresión logística polinomial.</p>
+<p>Consideramos la tarea de predecir si una persona gana más de 250.000$ por año. Procedemos como antes, excepto que primero creamos el vector de respuesta apropiado y luego aplicamos la función <code>glm()</code> usando <code>family = "binomial"</code> para ajustar un modelo de regresión logística polinomial.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glm</span>(<span class="fu">I</span>(wage <span class="sc">&gt;</span> <span class="dv">250</span>) <span class="sc">~</span> <span class="fu">poly</span>(age, <span class="dv">4</span>), <span class="at">data =</span> Wage, <span class="at">family =</span> binomial)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="fu">I</span>(wage <span class="sc">&gt;</span> <span class="dv">250</span>) <span class="sc">~</span> <span class="fu">poly</span>(age, <span class="dv">4</span>), </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> Wage, </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> binomial)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Tenga en cuenta que nuevamente usamos el ‘envoltorio’ <code>I()</code> para crear esta variable de respuesta binaria sobre la marcha. La expresión <code>wage &gt; 250</code> se evalúa como una variable lógica que contiene <code>TRUE</code>s y <code>FALSE</code>s, que <code>glm()</code> convierte en binario estableciendo <code>TRUE</code> como 1 y <code>FALSE</code> como 0.</p>
 <p>Una vez más, hacemos predicciones usando la función <code>predict()</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid), <span class="at">se =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid), </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">se =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Calcular ahora los intervalos de confianza es un poco más complicado que en el caso de la regresión lineal. El tipo de predicción predeterminado para un modelo <code>glm()</code> es <code>type = "link"</code>, que es lo que usamos aquí. Esto significa que obtenemos predicciones para el <em>logit</em> , o log-odds: es decir, hemos ajustado un modelo de la forma <span class="math display">\[ \log\left(\frac{\Pr(Y=1|X)}{1-\Pr(Y=1|X)}\right)=X\beta,\]</span> y las predicciones dadas son de la forma <span class="math inline">\(X \hat\beta\)</span>. Los errores estándar dados también son para <span class="math inline">\(X \hat\beta\)</span>. Para obtener intervalos de confianza para <span class="math inline">\(\Pr(Y=1|X)\)</span>, usamos la transformación <span class="math display">\[\Pr(Y=1|X)=\frac{\exp(X\beta)}{1+\exp(X\beta)}.\]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pfit <span class="ot">&lt;-</span> <span class="fu">exp</span>(preds<span class="sc">$</span>fit) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(preds<span class="sc">$</span>fit))</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>se.bands.logit <span class="ot">&lt;-</span> <span class="fu">cbind</span>(preds<span class="sc">$</span>fit <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> preds<span class="sc">$</span>se.fit,</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                        preds<span class="sc">$</span>fit <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> preds<span class="sc">$</span>se.fit)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>se.bands <span class="ot">&lt;-</span> <span class="fu">exp</span>(se.bands.logit) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(se.bands.logit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pfit <span class="ot">&lt;-</span> <span class="fu">exp</span>(preds<span class="sc">$</span>fit) <span class="sc">/</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>        (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(preds<span class="sc">$</span>fit))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>se.bands.logit <span class="ot">&lt;-</span> <span class="fu">cbind</span>(preds<span class="sc">$</span>fit <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> preds<span class="sc">$</span>se.fit,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                        preds<span class="sc">$</span>fit <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> preds<span class="sc">$</span>se.fit)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>se.bands <span class="ot">&lt;-</span> <span class="fu">exp</span>(se.bands.logit) <span class="sc">/</span> </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>            (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(se.bands.logit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Tenga en cuenta que podríamos haber calculado directamente las probabilidades seleccionando la opción <code>type = "response"</code> en la función <code>predict()</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit,</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid),</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">se =</span> T,</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid),</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">se =</span> T,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Sin embargo, los intervalos de confianza correspondientes no habrían sido sensatos porque terminaríamos con ¡probabilidades negativas!<br>
 Finalmente, el gráfico de la derecha de la Figura 7.1 se hizo de la siguiente manera:</p>
@@ -527,12 +536,14 @@ Finalmente, el gráfico de la derecha de la Figura 7.1 se hizo de la siguiente m
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(splines)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>age <span class="ot">&lt;-</span> Wage<span class="sc">$</span>age</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">bs</span>(age, <span class="at">knots =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">40</span>, <span class="dv">60</span>)), <span class="at">data =</span> Wage)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid), <span class="at">se =</span> T)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Wage<span class="sc">$</span>age, Wage<span class="sc">$</span>wage, <span class="at">col =</span> <span class="st">"gray"</span>)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid, pred<span class="sc">$</span>fit, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid, pred<span class="sc">$</span>fit <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> pred<span class="sc">$</span>se, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid, pred<span class="sc">$</span>fit <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> pred<span class="sc">$</span>se, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">bs</span>(age, <span class="at">knots =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">40</span>, <span class="dv">60</span>)), </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Wage)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid), </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">se =</span> T)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Wage<span class="sc">$</span>age, Wage<span class="sc">$</span>wage, <span class="at">col =</span> <span class="st">"gray"</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid, pred<span class="sc">$</span>fit, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid, pred<span class="sc">$</span>fit <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> pred<span class="sc">$</span>se, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid, pred<span class="sc">$</span>fit <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> pred<span class="sc">$</span>se, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Lab7-NoLineal_files/figure-html/chunk19-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -541,15 +552,15 @@ Finalmente, el gráfico de la derecha de la Figura 7.1 se hizo de la siguiente m
 <strong>Nota técnica</strong>: un spline cúbico con tres nodos tiene siete grados de libertad; estos grados de libertad se usan para la intersección, más seis funciones base.</p>
 <p>También podríamos usar la opción <code>df</code> para producir un spline con nodos en los cuantiles uniformes de los datos</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">bs</span>(age, <span class="at">knots =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">40</span>, <span class="dv">60</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">bs</span>(age, <span class="at">knots =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">40</span>, <span class="dv">60</span>))) <span class="co">#nodos indicados antes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3000    6</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">bs</span>(age, <span class="at">df =</span> <span class="dv">6</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">bs</span>(age, <span class="at">df =</span> <span class="dv">6</span>)) <span class="co">#df equivalente a los 3 nodos indicados</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3000    6</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(<span class="fu">bs</span>(age, <span class="at">df =</span> <span class="dv">6</span>), <span class="st">"knots"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(<span class="fu">bs</span>(age, <span class="at">df =</span> <span class="dv">6</span>), <span class="st">"knots"</span>) <span class="co">#nodos seleccionados (cuantiles uniformes)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 33.75 42.00 51.00</code></pre>
 </div>
@@ -559,10 +570,12 @@ Finalmente, el gráfico de la derecha de la Figura 7.1 se hizo de la siguiente m
 Para ajustar a un spline natural, usamos la función <code>ns()</code>. Aquí ajustamos a uno con cuatro grados de libertad.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>age <span class="ot">&lt;-</span> Wage<span class="sc">$</span>age</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">ns</span>(age, <span class="at">df =</span> <span class="dv">4</span>), <span class="at">data =</span> Wage)</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>pred2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit2, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid), <span class="at">se =</span> T)</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Wage<span class="sc">$</span>age, Wage<span class="sc">$</span>wage, <span class="at">col =</span> <span class="st">"gray"</span>)</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid, pred2<span class="sc">$</span>fit, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">ns</span>(age, <span class="at">df =</span> <span class="dv">4</span>), </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> Wage)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>pred2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit2, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">age =</span> age.grid), </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">se =</span> T)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Wage<span class="sc">$</span>age, Wage<span class="sc">$</span>wage, <span class="at">col =</span> <span class="st">"gray"</span>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(age.grid, pred2<span class="sc">$</span>fit, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Lab7-NoLineal_files/figure-html/chunk21-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -650,22 +663,23 @@ non-unique 'x' values seems doubtful</code></pre>
 <p><code>wage</code><span class="math inline">\(=\beta_0+f_1(\)</span><code>year</code><span class="math inline">\()+f_2(\)</span><code>age</code><span class="math inline">\()+f_3(\)</span><code>education</code><span class="math inline">\()+\epsilon \quad (7.16)\)</span></p>
 <p>utilizaremos funciones <em>splines naturales</em> de <code>year</code> y <code>age</code>, tratando <code>education</code> como un predictor cualitativo:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>gam1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">ns</span>(year, <span class="dv">4</span>) <span class="sc">+</span> <span class="fu">ns</span>(age, <span class="dv">5</span>) <span class="sc">+</span> education, <span class="at">data =</span> Wage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>gam1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> <span class="fu">ns</span>(year, <span class="dv">4</span>) <span class="sc">+</span> <span class="fu">ns</span>(age, <span class="dv">5</span>) <span class="sc">+</span> education, </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> Wage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Dado que este es un modelo de regresión lineal que usa una selección adecuada de funciones básicas, se ha utilizando la función <code>lm()</code>.</p>
 <p>Para ajustar tipos más generales de GAM, usando <em>splines de suavizado</em> u otros componentes que no se pueden expresar en términos de funciones básicas y luego ajustar usando regresión de mínimos cuadrados, necesitaremos usar el paquete <code>gam</code> en <code>R</code>.</p>
-<p>La función <code>s()</code>, del paquete <code>gam</code>, se usa para indicar que nos gustaría usar un spline de suavizado. Especificamos que la función de <code>year</code> debe tener <code>4</code> grados de libertad, y que la función de <code>age</code> tendrá <code>5</code> grados de libertad. Dado que <code>education</code> es cualitativa, la dejamos como está (se convierte en cuatro variables <em>dummys</em>). Usamos la función <code>gam()</code> para ajustar un GAM usando estos componentes. Todos los términos en (7.16) se ajustan simultáneamente, tomándose en cuenta para explicar la respuesta.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: foreach</code></pre>
+<pre><code>Cargando paquete requerido: foreach</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Loaded gam 1.22-2</code></pre>
+<pre><code>Loaded gam 1.22-5</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>gam.m3 <span class="ot">&lt;-</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gam</span>(wage <span class="sc">~</span> <span class="fu">s</span>(year, <span class="dv">4</span>) <span class="sc">+</span> <span class="fu">s</span>(age, <span class="dv">5</span>) <span class="sc">+</span> education, <span class="at">data =</span> Wage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>gam.m3 <span class="ot">&lt;-</span> <span class="fu">gam</span>(wage <span class="sc">~</span> <span class="fu">s</span>(year, <span class="dv">4</span>) <span class="sc">+</span> <span class="fu">s</span>(age, <span class="dv">5</span>) <span class="sc">+</span> education, </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> Wage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Usamos la función <code>gam()</code> para ajustar un GAM usando estos componentes: la función <code>s()</code>, del paquete <code>gam</code>, se usa para indicar que nos gustaría usar un spline de suavizado. Especificamos que la función de <code>year</code> debe tener <code>4</code> grados de libertad, y que la función de <code>age</code> tendrá <code>5</code> grados de libertad. Dado que <code>education</code> es cualitativa, la dejamos como está (se convierte en cuatro variables <em>dummys</em>). Todos los términos en (7.16) se ajustan simultáneamente, tomándose en cuenta para explicar la respuesta.</p>
 <p>Para obtener la Figura 7.12, simplemente llamamos a la función <code>plot()</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
@@ -701,7 +715,7 @@ Model 3: wage ~ s(year, 4) + s(age, 5) + education
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
-<p>Encontramos que hay evidencia convincente de que una GAM con una función lineal de <code>year</code> es mejor que una GAM que no incluye <code>year</code> <code>p-value= 0.00014</code>. Sin embargo, no hay evidencia de que se necesite una función no lineal de <code>year</code> <code>p-value = 0.349</code>. En otras palabras, según los resultados de este ANOVA, se prefiere <span class="math inline">\(\mathcal{M}_2\)</span>.</p>
+<p>Encontramos que hay evidencia convincente de que un GAM con una función lineal de <code>year</code> es mejor que un GAM que no incluye <code>year</code> <code>p-value= 0.00014</code>. Sin embargo, no hay evidencia de que se necesite una función no lineal de <code>year</code>: <code>p-value = 0.349</code>. En otras palabras, según los resultados de este ANOVA, se prefiere <span class="math inline">\(\mathcal{M}_2\)</span>.</p>
 <p>La función <code>summary()</code> produce un resumen del ajuste gam.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gam.m3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -744,10 +758,10 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(gam.m2, <span class="at">newdata =</span> Wage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>También podemos usar ajustes de regresión local como bloques de construcción en un GAM, usando la función <code>lo()</code>.</p>
+<p>También podemos usar ajustes de regresión local como “bloques de construcción” en un GAM, usando la función <code>lo()</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>gam.lo <span class="ot">&lt;-</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gam</span>(wage <span class="sc">~</span> <span class="fu">s</span>(year, <span class="at">df =</span> <span class="dv">4</span>) <span class="sc">+</span> <span class="fu">lo</span>(age, <span class="at">span =</span> <span class="fl">0.7</span>) <span class="sc">+</span> education, <span class="at">data =</span> Wage)</span>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>gam.lo <span class="ot">&lt;-</span> <span class="fu">gam</span>(wage <span class="sc">~</span> <span class="fu">s</span>(year, <span class="at">df =</span> <span class="dv">4</span>) <span class="sc">+</span> <span class="fu">lo</span>(age, <span class="at">span =</span> <span class="fl">0.7</span>) <span class="sc">+</span> education, </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> Wage)</span>
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
 <span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.Gam</span>(gam.lo, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"green"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -789,7 +803,7 @@ too small.  (Discovered by lowesd)</code></pre>
 </div>
 <section id="gam-logístico" class="level3" data-number="7.3.1">
 <h3 data-number="7.3.1" class="anchored" data-anchor-id="gam-logístico"><span class="header-section-number">7.3.1</span> GAM logístico</h3>
-<p>Para ajustar una regresión logística GAM, usamos una vez más la función <code>I()</code> para construir la variable de respuesta binaria y establecemos <code>family=binomial</code>.</p>
+<p>Para ajustar un GAM logístico, usamos una vez más la función <code>I()</code> para construir la variable de respuesta binaria y establecemos <code>family=binomial</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>gam.lr <span class="ot">&lt;-</span> <span class="fu">gam</span>(<span class="fu">I</span>(wage <span class="sc">&gt;</span> <span class="dv">250</span>) <span class="sc">~</span> year <span class="sc">+</span> <span class="fu">s</span>(age, <span class="at">df =</span> <span class="dv">5</span>) <span class="sc">+</span> education,</span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">family =</span> binomial,</span>
@@ -813,16 +827,14 @@ too small.  (Discovered by lowesd)</code></pre>
   5. Advanced Degree   381   45</code></pre>
 </div>
 </div>
-<p>Por lo tanto, ajustamos una regresión logística GAM utilizando todas menos esta categoría. Esto proporciona resultados más sensibles.</p>
+<p>Por lo tanto, ajustamos un GAM logístico utilizando todas menos esta categoría. Esto proporciona resultados más sensibles.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>gam.lr.s <span class="ot">&lt;-</span> <span class="fu">gam</span>(</span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">I</span>(wage <span class="sc">&gt;</span> <span class="dv">250</span>) <span class="sc">~</span> year <span class="sc">+</span> <span class="fu">s</span>(age, <span class="at">df =</span> <span class="dv">5</span>) <span class="sc">+</span> education,</span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> binomial,</span>
-<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> Wage,</span>
-<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">subset =</span> (education <span class="sc">!=</span> <span class="st">"1. &lt; HS Grad"</span>)</span>
-<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
-<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gam.lr.s, <span class="at">se =</span> T, <span class="at">col =</span> <span class="st">"green"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>gam.lr.s <span class="ot">&lt;-</span> <span class="fu">gam</span>(<span class="fu">I</span>(wage <span class="sc">&gt;</span> <span class="dv">250</span>) <span class="sc">~</span> year <span class="sc">+</span> <span class="fu">s</span>(age, <span class="at">df =</span> <span class="dv">5</span>) <span class="sc">+</span> education,</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">family =</span> binomial,</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> Wage,</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">subset =</span> (education <span class="sc">!=</span> <span class="st">"1. &lt; HS Grad"</span>))</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gam.lr.s, <span class="at">se =</span> T, <span class="at">col =</span> <span class="st">"green"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Lab7-NoLineal_files/figure-html/chunk36-1.png" class="img-fluid" width="672"></p>
 </div>

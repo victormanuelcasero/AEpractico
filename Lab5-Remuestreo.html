@@ -265,6 +265,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
+<style>
+body {text-align: justify}
+</style>
 <table class="table">
 <caption>Material original</caption>
 <colgroup>
@@ -301,21 +304,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="el-enfoque-del-conjunto-de-validación" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="el-enfoque-del-conjunto-de-validación"><span class="header-section-number">5.1</span> El enfoque del conjunto de validación</h2>
 <p>Exploramos el uso del enfoque del conjunto de datos de validación/test/prueba para estimar las tasas de error de validación/test/prueba que resultan del ajuste de varios modelos lineales en el conjunto de datos <code>Auto</code>.</p>
-<p>Es <em>importante</em> mencionar el uso de la función <code>set.seed()</code> para establecer un generador de números aleatorios en <code>R</code>, de modo que el lector pueda obtener exactamente los mismos resultados que los que se muestran a continuación: <strong>reproducibilidad</strong> (véase el anexo <strong>Herramientas</strong>).</p>
-<p>Empezamos usando la función <code>sample()</code> (véase el anexo <strong>Herramientas</strong>) para dividir el conjunto de observaciones en dos mitades, seleccionando un subconjunto aleatorio de <code>196</code> observaciones de las <code>392</code> observaciones originales de <code>Auto</code>. Nos referimos a estas observaciones como el conjunto de <em>entrenamiento</em>.</p>
+<p>Es <em>importante</em> mencionar el uso de la función <code>set.seed()</code> para establecer un generador de números aleatorios en <code>R</code>, de modo que el lector pueda obtener exactamente los mismos resultados que los que se muestran a continuación: <strong>reproducibilidad</strong> (véase el Anexo <strong>Herramientas</strong>).</p>
+<p>Empezamos usando la función <code>sample()</code> (véase el Anexo <strong>Herramientas</strong>) para dividir el conjunto de observaciones en dos mitades, seleccionando un subconjunto aleatorio de <code>196</code> observaciones de las <code>392</code> observaciones originales de <code>Auto</code>. Nos referimos a estas observaciones como el conjunto de <em>entrenamiento</em>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR2)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">392</span>, <span class="dv">196</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <blockquote class="blockquote">
-<p><strong>Nota Víctor</strong>: La función <code>sample()</code> admite como primer valor un entero positivo, en cuyo caso genera 1:<em>valor</em>. Aquí al poner 392 ha generado el vector 1:392. Y de ese vector ha seleccionado <em>aleatoriamente</em> (sin reemplazamiento) 196 valores.</p>
+<p><strong>Nota Víctor</strong>: La función <code>sample()</code> admite como primer valor un entero positivo, que genera el vector 1:<em>valor</em> (aquí al poner 392 ha generado el vector 1:392). Y de ese vector selecciona <em>aleatoriamente</em> (sin reemplazamiento) tantos valores como se le indiquen en el segundo argumento (aquí selecciona 196 valores).</p>
 </blockquote>
 <p>Aplicamos <code>lm()</code> para ajustar una regresión lineal tomando solo las observaciones correspondientes al conjunto de entrenamiento, utilizando el argumento <code>subset</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>lm.fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> horsepower, <span class="at">data =</span> Auto, <span class="at">subset =</span> train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>lm.fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> horsepower, </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> Auto, </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">subset =</span> train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Con la función <code>predict()</code> estimamos la respuesta para todas las observaciones, las <code>392</code>, y con <code>mean()</code> calculamos el MSE de las <code>196</code> observaciones del conjunto de validación (obtenido utilizando el índice <code>-train</code> que selecciona solo las observaciones que no están en el conjunto de entrenamiento).</p>
+<p>Con la función <code>predict()</code> estimamos la respuesta para todas las observaciones, las <code>392</code>, y con <code>mean()</code> calculamos el MSE de las <code>196</code> observaciones del conjunto de validación (obtenido utilizando el indicador <code>-train</code> que selecciona solo las observaciones que no están en el conjunto de entrenamiento).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((Auto<span class="sc">$</span>mpg <span class="sc">-</span> <span class="fu">predict</span>(lm.fit, Auto))[<span class="sc">-</span>train]<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -323,7 +328,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>Por lo tanto, el MSE estimado con el conjunto de validación para el ajuste de regresión lineal es de <code>23.27</code>.</p>
-<p>Podemos usar la función <code>poly()</code> (véase el anexo <strong>Herramientas</strong>) para estimar el error de validación para las regresiones cuadrática y cúbica.</p>
+<p>Podemos usar la función <code>poly()</code> (véase el Anexo <strong>Herramientas</strong>) para estimar el error de validación para las regresiones cuadrática y cúbica.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>lm.fit2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> <span class="fu">poly</span>(horsepower, <span class="dv">2</span>), <span class="at">data =</span> Auto,</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">subset =</span> train)</span>
@@ -369,7 +374,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="leave-one-out-cv" class="level3" data-number="5.2.1">
 <h3 data-number="5.2.1" class="anchored" data-anchor-id="leave-one-out-cv"><span class="header-section-number">5.2.1</span> Leave-One-Out CV</h3>
 <p>La estimación LOOCV (validación cruzada dejando uno fuera) se puede calcular automáticamente para cualquier modelo lineal generalizado utilizando las funciones <code>glm()</code> y <code>cv.glm()</code>.</p>
-<p>En la práctica del Capítulo 4, usamos la función <code>glm()</code> para realizar una regresión logística pasando el argumento <code>family = "binomial"</code>. Si a <code>glm()</code> no se le pasa el argumento <code>family</code>, entonces realiza una <em>regresión lineal</em>, al igual que la función <code>lm()</code>:</p>
+<p>En el Lab4, usamos la función <code>glm()</code> para realizar una regresión logística pasando el argumento <code>family = "binomial"</code>. Si a <code>glm()</code> no se le pasa el argumento <code>family</code>, entonces realiza una <em>regresión lineal</em>, al igual que la función <code>lm()</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>glm.fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(mpg <span class="sc">~</span> horsepower, <span class="at">data =</span> Auto)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>lm.fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> horsepower, <span class="at">data =</span> Auto)</span>
@@ -423,7 +428,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </blockquote>
 <p><img src="img/k-fold-CV-idea.png" class="img-fluid"></p>
 <p>A continuación usamos <span class="math inline">\(k=10\)</span>, que es una opción común para <span class="math inline">\(k\)</span>, en el conjunto de datos <code>Auto</code>.</p>
-<p>Una vez más establecemos una semilla aleatoria e inicializamos un vector en el que almacenaremos los errores de CV correspondientes a los ajustes polinómicos de los órdenes uno a diez.</p>
+<p>Una vez más establecemos una semilla aleatoria e inicializamos un vector en el que almacenaremos los errores de CV correspondientes a los ajustes polinómicos de los órdenes 1 a 10.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">17</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>cv.error<span class="fl">.10</span> <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">10</span>)</span>
@@ -448,10 +453,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="bootstrap" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="bootstrap"><span class="header-section-number">5.3</span> Bootstrap</h2>
-<p>Ilustramos el uso de <em>bootstrap</em> en 1 ejemplo que involucra la estimación de la precisión del modelo de regresión lineal en el conjunto de datos <code>Auto</code>. (En el material original hay otro ejemplo relacionado con la Sección 5.2, que aquí se omite por la falta de tiempo)</p>
+<p>Ilustramos el uso de <em>bootstrap</em> en un ejemplo que involucra la estimación de la precisión del modelo de regresión lineal en el conjunto de datos <code>Auto</code>. (En el material original hay otro ejemplo relacionado con la Sección 5.2, que aquí se omite por la falta de tiempo)</p>
 <p>Una de las grandes ventajas del enfoque <em>bootstrap</em> es que se puede aplicar en casi todas las situaciones. No se requieren cálculos matemáticos complicados. Realizar un análisis <em>bootstrap</em> en <code>R</code> implica solo dos pasos.</p>
 <ul>
-<li>Primero, debemos crear una función que calcule el estadístico de interés (véase el anexo <strong>Herramientas</strong> para la creación de funciones)</li>
+<li>Primero, debemos crear una función que calcule el estadístico de interés (véase el Anexo <strong>Herramientas</strong> para la creación de funciones)</li>
 <li>En segundo lugar, usamos la función <code>boot()</code>, del paquete <code>boot</code>, para realizar el <em>bootstrap</em> mediante el muestreo aleatorio repetido con reemplazamiento de observaciones del conjunto de datos.</li>
 </ul>
 <section id="estimación-de-la-precisión-de-un-estadístico-de-interés-omitido" class="level3" data-number="5.3.1">
@@ -470,7 +475,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  39.9358610  -0.1578447 </code></pre>
 </div>
 </div>
-<p>La función <code>boot.fn()</code> también se puede usar para crear estimaciones bootstrap para los términos de intersección y pendiente mediante muestreo aleatorio repetido con reemplazo de entre las observaciones. Aquí damos dos ejemplos.</p>
+<p>La función <code>boot.fn()</code> se va a usar para crear estimaciones bootstrap para los términos de intersección y pendiente mediante muestreo aleatorio repetido con reemplazo de entre las observaciones. Aquí damos dos ejemplos.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boot.fn</span>(Auto, <span class="fu">sample</span>(<span class="dv">392</span>, <span class="dv">392</span>, <span class="at">replace =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -512,7 +517,7 @@ t2* -0.1578447 -0.0006170901 0.007343073</code></pre>
 horsepower  -0.1578447 0.006445501 -24.48914  7.031989e-81</code></pre>
 </div>
 </div>
-<p>Éstas son <code>0.717</code> para la intersección y <code>0.0064</code> para la pendiente. Curiosamente, estas son algo diferentes de las estimaciones obtenidas utilizando el bootstrap. ¿Esto indica un problema con el bootstrap? No, ¡De hecho, sugiere lo contrario! Las fórmulas dadas en la Ecuación 3.8 se basan en ciertas suposiciones. Por ejemplo, dependen del parámetro desconocido <span class="math inline">\(\sigma^2\)</span>, la varianza del error. Entonces estimamos <span class="math inline">\(\sigma^2\)</span> usando el RSS. Ahora bien, aunque las fórmulas para los errores estándar no dependen de que el modelo lineal sea correcto, la estimación de <span class="math inline">\(\sigma^2\)</span> sí lo hace. Vemos en la Figura 3.8 en la página 91 que existe una relación no lineal en los datos, por lo que los residuos de un ajuste lineal se inflarán, al igual que <span class="math inline">\(\hat{\sigma}^2\)</span>. En segundo lugar, las fórmulas estándar asumen (algo poco realista) que los <span class="math inline">\(x_i\)</span> son fijos, y toda la variabilidad proviene de la variación en los errores <span class="math inline">\(\epsilon_i\)</span>. El enfoque bootstrap no se basa en ninguna de estas suposiciones, por lo que es probable que brinde una estimación más precisa de los errores estándar de <span class="math inline">\(\hat{\beta}_0\)</span> y <span class="math inline">\(\hat{\beta}_1\)</span> que la función <code>summary()</code>.</p>
+<p>Éstas son <code>0.717</code> para la intersección y <code>0.0064</code> para la pendiente. Curiosamente, estas son algo diferentes de las estimaciones obtenidas utilizando el bootstrap. ¿Esto indica un problema con el bootstrap? No, ¡De hecho, sugiere lo contrario! Las fórmulas dadas en la Ecuación 3.8 se basan en ciertas suposiciones. Por ejemplo, dependen del parámetro desconocido <span class="math inline">\(\sigma^2\)</span>, la varianza del error. Entonces estimamos <span class="math inline">\(\sigma^2\)</span> usando el RSS. Ahora bien, aunque las fórmulas para los errores estándar no dependen de que el modelo lineal sea correcto, la estimación de <span class="math inline">\(\sigma^2\)</span> sí lo hace. En la Figura 3.8 de la página 91 del libro se puede ver que existe una relación no lineal en los datos, por lo que los residuos de un ajuste lineal se inflarán, al igual que <span class="math inline">\(\hat{\sigma}^2\)</span>. En segundo lugar, las fórmulas estándar asumen que los <span class="math inline">\(x_i\)</span> son fijos (algo poco realista), y toda la variabilidad proviene de la variación en los errores <span class="math inline">\(\epsilon_i\)</span>. El enfoque bootstrap no se basa en ninguna de estas suposiciones, por lo que es probable que brinde una estimación más precisa de los errores estándar de <span class="math inline">\(\hat{\beta}_0\)</span> y <span class="math inline">\(\hat{\beta}_1\)</span> que la función <code>summary()</code>.</p>
 <p>A continuación, calculamos las estimaciones del error estándar de bootstrap y las estimaciones de regresión lineal estándar que resultan de ajustar el modelo cuadrático a los datos. Dado que este modelo proporciona un buen ajuste a los datos (Figura 3.8), ahora existe una mejor correspondencia entre las estimaciones bootstrap y las estimaciones estándar de <span class="math inline">\(\textrm{SE}(\hat{\beta}_0)\)</span>, <span class="math inline">\(\textrm{SE}(\hat{\beta}_1)\)</span> y <span class="math inline">\(\textrm{SE} (\hat{\beta}_2)\)</span>.</p>
 <p>ES necesario redefinir la función <code>boot.fn()</code>:</p>
 <div class="cell">
