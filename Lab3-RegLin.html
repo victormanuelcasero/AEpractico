@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Aprendizaje Estadístico: un enfoque práctico con R - 3&nbsp; Lab3 Regresión lineal</title>
+<title>3&nbsp; Lab3 Regresión lineal – Aprendizaje Estadístico: un enfoque práctico con R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -17,9 +17,11 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -46,43 +48,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -95,22 +67,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta name="quarto:offset" content="./">
 <link href="./Lab4-Clasif.html" rel="next">
 <link href="./Lab2-AE.html" rel="prev">
-<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -119,24 +98,59 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lab3 Regresión lineal</span></h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Lab3-RegLin.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lab3 Regresión lineal</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav>
@@ -144,80 +158,92 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Aprendizaje Estadístico: un enfoque práctico con R</a> 
     </div>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Prefacio</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prefacio</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab1-intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></a>
+  <a href="./Lab1-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab2-AE.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Aprendizaje Estadístico</span></a>
+  <a href="./Lab2-AE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Aprendizaje Estadístico</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab3-RegLin.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lab3 Regresión lineal</span></a>
+  <a href="./Lab3-RegLin.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lab3 Regresión lineal</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab4-Clasif.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lab4 Clasificación</span></a>
+  <a href="./Lab4-Clasif.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lab4 Clasificación</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab5-Remuestreo.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lab5 Remuestreo</span></a>
+  <a href="./Lab5-Remuestreo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lab5 Remuestreo</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab6-Seleccion-Var.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lab6 Selección de Variables (modelos lineales)</span></a>
+  <a href="./Lab6-Seleccion-Var.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lab6 Selección de Variables (modelos lineales)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab7-NoLineal.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lab7 Modelización no lineal</span></a>
+  <a href="./Lab7-NoLineal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lab7 Modelización no lineal</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab8-Arboles.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lab8 Árboles de decisión</span></a>
+  <a href="./Lab8-Arboles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lab8 Árboles de decisión</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab9-SVM.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lab9 Support Vector Machines</span></a>
+  <a href="./Lab9-SVM.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lab9 Support Vector Machines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ZA_Herram.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Herramientas</span></a>
+  <a href="./ZA_Herram.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Herramientas</span></span></a>
   </div>
 </li>
       </ul>
@@ -225,33 +251,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#regresión-lineal-simple" id="toc-regresión-lineal-simple" class="nav-link active" data-scroll-target="#regresión-lineal-simple"><span class="toc-section-number">3.1</span>  Regresión lineal simple</a>
+  <li><a href="#regresión-lineal-simple" id="toc-regresión-lineal-simple" class="nav-link active" data-scroll-target="#regresión-lineal-simple"><span class="header-section-number">3.1</span> Regresión lineal simple</a>
   <ul class="collapse">
-  <li><a href="#lm-ajustar-modelos" id="toc-lm-ajustar-modelos" class="nav-link" data-scroll-target="#lm-ajustar-modelos"><span class="toc-section-number">3.1.1</span>  <code>lm()</code> (ajustar modelos)</a></li>
-  <li><a href="#predicciones" id="toc-predicciones" class="nav-link" data-scroll-target="#predicciones"><span class="toc-section-number">3.1.2</span>  Predicciones</a></li>
-  <li><a href="#diagrama-de-dispersión" id="toc-diagrama-de-dispersión" class="nav-link" data-scroll-target="#diagrama-de-dispersión"><span class="toc-section-number">3.1.3</span>  Diagrama de dispersión</a></li>
-  <li><a href="#diagnóstico" id="toc-diagnóstico" class="nav-link" data-scroll-target="#diagnóstico"><span class="toc-section-number">3.1.4</span>  Diagnóstico</a></li>
+  <li><a href="#lm-ajustar-modelos" id="toc-lm-ajustar-modelos" class="nav-link" data-scroll-target="#lm-ajustar-modelos"><span class="header-section-number">3.1.1</span> <code>lm()</code> (ajustar modelos)</a></li>
+  <li><a href="#predicciones" id="toc-predicciones" class="nav-link" data-scroll-target="#predicciones"><span class="header-section-number">3.1.2</span> Predicciones</a></li>
+  <li><a href="#diagrama-de-dispersión" id="toc-diagrama-de-dispersión" class="nav-link" data-scroll-target="#diagrama-de-dispersión"><span class="header-section-number">3.1.3</span> Diagrama de dispersión</a></li>
+  <li><a href="#diagnóstico" id="toc-diagnóstico" class="nav-link" data-scroll-target="#diagnóstico"><span class="header-section-number">3.1.4</span> Diagnóstico</a></li>
   </ul></li>
-  <li><a href="#regresión-lineal-múltiple" id="toc-regresión-lineal-múltiple" class="nav-link" data-scroll-target="#regresión-lineal-múltiple"><span class="toc-section-number">3.2</span>  Regresión lineal múltiple</a>
+  <li><a href="#regresión-lineal-múltiple" id="toc-regresión-lineal-múltiple" class="nav-link" data-scroll-target="#regresión-lineal-múltiple"><span class="header-section-number">3.2</span> Regresión lineal múltiple</a>
   <ul class="collapse">
-  <li><a href="#modelo-con-todos-los-predictores" id="toc-modelo-con-todos-los-predictores" class="nav-link" data-scroll-target="#modelo-con-todos-los-predictores"><span class="toc-section-number">3.2.1</span>  Modelo con todos los predictores</a></li>
-  <li><a href="#vif" id="toc-vif" class="nav-link" data-scroll-target="#vif"><span class="toc-section-number">3.2.2</span>  <code>vif()</code></a></li>
-  <li><a href="#quitando-predictores" id="toc-quitando-predictores" class="nav-link" data-scroll-target="#quitando-predictores"><span class="toc-section-number">3.2.3</span>  Quitando predictores</a></li>
+  <li><a href="#modelo-con-todos-los-predictores" id="toc-modelo-con-todos-los-predictores" class="nav-link" data-scroll-target="#modelo-con-todos-los-predictores"><span class="header-section-number">3.2.1</span> Modelo con todos los predictores</a></li>
+  <li><a href="#vif" id="toc-vif" class="nav-link" data-scroll-target="#vif"><span class="header-section-number">3.2.2</span> <code>vif()</code></a></li>
+  <li><a href="#quitando-predictores" id="toc-quitando-predictores" class="nav-link" data-scroll-target="#quitando-predictores"><span class="header-section-number">3.2.3</span> Quitando predictores</a></li>
   </ul></li>
-  <li><a href="#términos-de-interacción" id="toc-términos-de-interacción" class="nav-link" data-scroll-target="#términos-de-interacción"><span class="toc-section-number">3.3</span>  Términos de interacción</a></li>
-  <li><a href="#transformaciones-no-lineales-de-los-predictores" id="toc-transformaciones-no-lineales-de-los-predictores" class="nav-link" data-scroll-target="#transformaciones-no-lineales-de-los-predictores"><span class="toc-section-number">3.4</span>  Transformaciones no lineales de los predictores</a>
+  <li><a href="#términos-de-interacción" id="toc-términos-de-interacción" class="nav-link" data-scroll-target="#términos-de-interacción"><span class="header-section-number">3.3</span> Términos de interacción</a></li>
+  <li><a href="#transformaciones-no-lineales-de-los-predictores" id="toc-transformaciones-no-lineales-de-los-predictores" class="nav-link" data-scroll-target="#transformaciones-no-lineales-de-los-predictores"><span class="header-section-number">3.4</span> Transformaciones no lineales de los predictores</a>
   <ul class="collapse">
-  <li><a href="#anova" id="toc-anova" class="nav-link" data-scroll-target="#anova"><span class="toc-section-number">3.4.1</span>  <code>anova()</code></a></li>
-  <li><a href="#ajuste-polinomial" id="toc-ajuste-polinomial" class="nav-link" data-scroll-target="#ajuste-polinomial"><span class="toc-section-number">3.4.2</span>  Ajuste polinomial</a></li>
-  <li><a href="#transformación-logarítmica" id="toc-transformación-logarítmica" class="nav-link" data-scroll-target="#transformación-logarítmica"><span class="toc-section-number">3.4.3</span>  Transformación logarítmica</a></li>
+  <li><a href="#anova" id="toc-anova" class="nav-link" data-scroll-target="#anova"><span class="header-section-number">3.4.1</span> <code>anova()</code></a></li>
+  <li><a href="#ajuste-polinomial" id="toc-ajuste-polinomial" class="nav-link" data-scroll-target="#ajuste-polinomial"><span class="header-section-number">3.4.2</span> Ajuste polinomial</a></li>
+  <li><a href="#transformación-logarítmica" id="toc-transformación-logarítmica" class="nav-link" data-scroll-target="#transformación-logarítmica"><span class="header-section-number">3.4.3</span> Transformación logarítmica</a></li>
   </ul></li>
-  <li><a href="#predictores-cualitativos" id="toc-predictores-cualitativos" class="nav-link" data-scroll-target="#predictores-cualitativos"><span class="toc-section-number">3.5</span>  Predictores cualitativos</a></li>
+  <li><a href="#predictores-cualitativos" id="toc-predictores-cualitativos" class="nav-link" data-scroll-target="#predictores-cualitativos"><span class="header-section-number">3.5</span> Predictores cualitativos</a></li>
   <li><a href="#escritura-de-funciones-movido" id="toc-escritura-de-funciones-movido" class="nav-link" data-scroll-target="#escritura-de-funciones-movido">Escritura de funciones (movido)</a></li>
   </ul>
 </nav>
@@ -261,7 +288,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lab3 Regresión lineal</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lab3 Regresión lineal</span></h1>
 </div>
 
 
@@ -274,12 +301,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
+
 </header>
+
 
 <style>
 body {text-align: justify}
 </style>
-<table class="table">
+<table class="caption-top table">
 <caption>Material original</caption>
 <colgroup>
 <col style="width: 15%">
@@ -333,7 +362,7 @@ Adjuntando el paquete: 'ISLR2'</code></pre>
 </div>
 <section id="regresión-lineal-simple" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="regresión-lineal-simple"><span class="header-section-number">3.1</span> Regresión lineal simple</h2>
-<p>El paquete <code>ISLR2</code> contiene el conjunto de datos <code>Boston</code>, que registra <code>medv</code> (“median value”: valor mediano de las casas ocupadas por sus propietarios, en $1000s) para <code>506</code> distritos censales de Boston. Buscaremos predecir <code>medv</code> utilizando 12 predictores como <code>rm</code> (“room mean”: número promedio de habitaciones por casa), <code>age</code> (“casas construidas antes de 1940, en %”!!) y <code>lstat</code> (“lower status”: población de menor estatus -nivel socioeconómico bajo-, en %).</p>
+<p>El paquete <code>ISLR2</code> contiene el conjunto de datos <code>Boston</code>, que registra <code>medv</code> (“median value”: valor mediano de las casas ocupadas por sus propietarios, en $1000s) para <code>506</code> distritos censales de Boston. Buscaremos predecir <code>medv</code> utilizando 12 predictores como <code>rm</code> (“room mean”: número promedio de habitaciones por casa), <code>age</code> (“casas construidas antes de 1940, en %”¡!) y <code>lstat</code> (“lower status”: población de menor estatus -nivel socioeconómico bajo-, en %).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Boston)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -355,7 +384,7 @@ Adjuntando el paquete: 'ISLR2'</code></pre>
 </div>
 <p><strong>Nota</strong>: Al proporcionar <code>data = Boston</code>, se le dice a <code>R</code> que las variables <code>medv</code> y <code>lstat</code> están en <code>Boston</code>. Si no se le proporciona el valor de <code>data</code> <code>R</code> busca en el <em>Environment</em>, y si allí no están las variables muestra un error.</p>
 <p>Si escribimos <code>lm.fit</code>, se muestra información básica sobre el modelo: <em>coeficientes</em>.<br>
-Para obtener información más detallada: <code>summary(lm.fit)</code> que nos devuelve <em>p-valores</em> y <em>errores estándar</em> para los coeficientes, así como el estadístico <span class="math inline">\(R^2\)</span> y el estadístico <span class="math inline">\(F\)</span> para el modelo.</p>
+Para obtener información más detallada: <code>summary(lm.fit)</code>, que devuelve <em>p-valores</em> y <em>errores estándar</em> para los coeficientes, así como el estadístico <span class="math inline">\(R^2\)</span> y el estadístico <span class="math inline">\(F\)</span> para el modelo.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>lm.fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -451,7 +480,11 @@ lstat       -1.026148 -0.8739505</code></pre>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Boston<span class="sc">$</span>lstat, Boston<span class="sc">$</span>medv)</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(lm.fit, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"red"</span>) <span class="co"># a=intercept, b=slope</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Lab3-RegLin_files/figure-html/chunk9-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Lab3-RegLin_files/figure-html/chunk9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Hay alguna evidencia de no linealidad en la relación entre <code>lstat</code> y <code>medv</code>. Exploraremos este problema más adelante en esta práctica.</p>
@@ -463,14 +496,18 @@ lstat       -1.026148 -0.8739505</code></pre>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">#plot(Boston$lstat, Boston$medv, pch = "+")</span></span>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, <span class="at">pch =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Lab3-RegLin_files/figure-html/chunk10-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Lab3-RegLin_files/figure-html/chunk10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
 <section id="diagnóstico" class="level3" data-number="3.1.4">
 <h3 data-number="3.1.4" class="anchored" data-anchor-id="diagnóstico"><span class="header-section-number">3.1.4</span> Diagnóstico</h3>
-<p>A continuación examinamos algunos diagramas de diagnóstico, varios de los cuales se discuten en la Sección 3.3.3 del libro. Al aplicar la función <code>plot()</code> a la salida de <code>lm()</code> se producen automáticamente 4 gráficos de diagnóstico.</p>
-<p><strong>Nota técnica</strong>: En la consola esta función producirá un gráfico, y al presionar <code>ENTER</code> se generará el siguiente gráfico, etc. Sin embargo, a menudo es conveniente ver los cuatro gráficos juntos. Podemos lograr esto usando las funciones <code>par()</code> y <code>mfrow()</code>, que le dicen a <code>R</code> que divida la pantalla de visualización en paneles separados para que se puedan ver múltiples gráficos simultáneamente. Por ejemplo, <code>par(mfrow = c(2, 2))</code> divide la ventana de gráficos en una cuadrícula de paneles de <em>2x2</em>.</p>
+<p>A continuación examinamos algunos diagramas de diagnóstico, varios de los cuales se discuten en la Sección 3.3.3 del libro. Al aplicar la función <code>plot()</code> al objeto generado con <code>lm()</code> se producen automáticamente 4 gráficos de diagnóstico.</p>
+<p><strong>Nota técnica</strong>: En la consola esta función producirá un gráfico, y al presionar <code>ENTER</code> se generará el siguiente gráfico, etc. Sin embargo, puede ser conveniente ver los cuatro gráficos juntos. Podemos lograr esto usando las funciones <code>par()</code> y <code>mfrow()</code>, que permiten dividir la pantalla de visualización en paneles separados para que se puedan ver múltiples gráficos simultáneamente. Por ejemplo, <code>par(mfrow = c(2, 2))</code> divide la ventana de gráficos en una cuadrícula de paneles de <em>2x2</em>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">pty =</span> <span class="st">"s"</span>,</span>
@@ -478,7 +515,11 @@ lstat       -1.026148 -0.8739505</code></pre>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex =</span> <span class="fl">0.75</span>)</span>
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lm.fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Lab3-RegLin_files/figure-html/chunk11-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Lab3-RegLin_files/figure-html/chunk11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Alternativamente, podemos calcular los residuos de un ajuste de regresión lineal usando la función <code>residuals()</code>. La función <code>rstudent()</code> devolverá los residuos <em>studentizados</em>, y podemos usar esta función para dibujar los residuos contra los valores ajustados.</p>
@@ -490,7 +531,11 @@ lstat       -1.026148 -0.8739505</code></pre>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">predict</span>(lm.fit), <span class="fu">residuals</span>(lm.fit))</span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">predict</span>(lm.fit), <span class="fu">rstudent</span>(lm.fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Lab3-RegLin_files/figure-html/chunk12-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Lab3-RegLin_files/figure-html/chunk12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Sobre la base de las gráficas residuales, existe alguna evidencia de no linealidad. Los estadísticos de apalancamiento (<em>Leverage</em>) se pueden calcular para cualquier número de predictores usando la función <code>hatvalues()</code>.</p>
@@ -498,7 +543,11 @@ lstat       -1.026148 -0.8739505</code></pre>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="at">pty =</span> <span class="st">"s"</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">hatvalues</span>(lm.fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Lab3-RegLin_files/figure-html/chunk13-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Lab3-RegLin_files/figure-html/chunk13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which.max</span>(<span class="fu">hatvalues</span>(lm.fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -539,7 +588,7 @@ F-statistic:   309 on 2 and 503 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <section id="modelo-con-todos-los-predictores" class="level3" data-number="3.2.1">
 <h3 data-number="3.2.1" class="anchored" data-anchor-id="modelo-con-todos-los-predictores"><span class="header-section-number">3.2.1</span> Modelo con todos los predictores</h3>
-<p>El conjunto de datos <code>Boston</code> contiene 12 variables, por lo que sería engorroso tener que escribirlas todas para realizar una regresión usando todos los predictores. En su lugar, podemos usar la siguiente abreviatura:</p>
+<p>El conjunto de datos <code>Boston</code> contiene 13 variables, por lo que sería engorroso tener que escribirlas todas para realizar una regresión usando todos los predictores. En su lugar, podemos usar la siguiente abreviatura:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>lm.fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(medv <span class="sc">~</span> ., <span class="at">data =</span> Boston)</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm.fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -586,8 +635,7 @@ F-statistic: 113.5 on 12 and 493 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="vif" class="level3" data-number="3.2.2">
 <h3 data-number="3.2.2" class="anchored" data-anchor-id="vif"><span class="header-section-number">3.2.2</span> <code>vif()</code></h3>
-<p>La función <code>vif()</code>, del paquete <code>car</code>, se puede utilizar para calcular los <em>factores de inflación de la varianza</em>. El paquete <code>car</code> no forma parte de la instalación básica de <code>R</code>, por lo que debe instalarse para poder usarlo (véase el Anexo <strong>Herramientas</strong>).</p>
-<p>Para estos datos, la mayoría de los VIF son bajos o moderados.</p>
+<p>La función <code>vif()</code>, del paquete <code>car</code>, se puede utilizar para calcular los <em>factores de inflación de la varianza</em>. El paquete <code>car</code> no forma parte de la instalación básica de <code>R</code>, por lo que debe instalarse para poder usarlo (véase cómo en <a href="ZA_Herram.html#sec-paquetes" class="quarto-xref"><span>Section A.1</span></a>).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -601,6 +649,7 @@ F-statistic: 113.5 on 12 and 493 DF,  p-value: &lt; 2.2e-16</code></pre>
 7.445301 9.002158 1.797060 2.870777 </code></pre>
 </div>
 </div>
+<p>Para estos datos, la mayoría de los VIF son bajos o moderados.</p>
 <blockquote class="blockquote">
 <p><strong>Nota Víctor</strong>: Regla de decisión: No preocuparse de la multicolinealidad si <code>vif &lt; 5</code>, incluso <code>vif &lt; 10</code>.</p>
 </blockquote>
@@ -682,7 +731,7 @@ F-statistic: 209.3 on 3 and 502 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="transformaciones-no-lineales-de-los-predictores" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="transformaciones-no-lineales-de-los-predictores"><span class="header-section-number">3.4</span> Transformaciones no lineales de los predictores</h2>
-<p>La función <code>lm()</code> también admite transformaciones no lineales de los predictores. Por ejemplo, dado un predictor <code>X</code>, podemos crear un predictor <code>X^2</code> usando <code>I(X^2)</code> (véase el Anexo <strong>Herramientas</strong>). Realizamos la regresión de <code>medv</code> sobre <code>lstat</code> y <code>lstat^2</code>.</p>
+<p>La función <code>lm()</code> también admite transformaciones no lineales de los predictores. Por ejemplo, dado un predictor <code>X</code>, podemos crear un predictor <code>X^2</code> usando <code>I(X^2)</code> (véase <a href="ZA_Herram.html#sec-I-envoltorio" class="quarto-xref"><span>Section A.6.3</span></a>). Realizamos la regresión de <code>medv</code> sobre <code>lstat</code> y <code>lstat^2</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>lm.fit2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(medv <span class="sc">~</span> lstat <span class="sc">+</span> <span class="fu">I</span>(lstat<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> Boston)</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm.fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -711,7 +760,7 @@ F-statistic: 448.5 on 2 and 503 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>El p-valor cercano a cero asociado con el término cuadrático sugiere que, su inclusión, conduce a un modelo mejorado.</p>
 <section id="anova" class="level3" data-number="3.4.1">
 <h3 data-number="3.4.1" class="anchored" data-anchor-id="anova"><span class="header-section-number">3.4.1</span> <code>anova()</code></h3>
-<p>Usamos la función <code>anova()</code> (véase el Anexo <strong>Herramientas</strong>) para cuantificar aún más hasta qué punto el ajuste cuadrático es superior al ajuste lineal.</p>
+<p>Usamos la función <code>anova()</code> (véase <a href="ZA_Herram.html#sec-anova" class="quarto-xref"><span>Section A.6.1</span></a>) para cuantificar hasta qué punto el ajuste cuadrático es superior al ajuste lineal.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>lm.fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(medv <span class="sc">~</span> lstat, <span class="at">data =</span> Boston)</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(lm.fit, lm.fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -735,7 +784,11 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">cex =</span> <span class="fl">0.75</span>)</span>
 <span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lm.fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Lab3-RegLin_files/figure-html/chunk22-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Lab3-RegLin_files/figure-html/chunk22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>vemos que cuando el término <code>lstat^2</code> se incluye en el modelo, hay un patrón poco perceptible en los residuos.</p>
@@ -745,7 +798,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </section>
 <section id="ajuste-polinomial" class="level3" data-number="3.4.2">
 <h3 data-number="3.4.2" class="anchored" data-anchor-id="ajuste-polinomial"><span class="header-section-number">3.4.2</span> Ajuste polinomial</h3>
-<p>Para crear un ajuste cúbico, podemos incluir un predictor de la forma <code>I(X^3)</code>. Sin embargo, existe un mejor enfoque consistente en usar la función <code>poly()</code> para crear el polinomio dentro de <code>lm()</code> (véase el Anexo <strong>Herramientas</strong>). Por ejemplo, la siguiente sentencia produce un ajuste polinomial de quinto orden:</p>
+<p>Para crear un ajuste cúbico, podemos incluir un predictor de la forma <code>I(X^3)</code>. Sin embargo, existe un mejor enfoque consistente en usar la función <code>poly()</code> para crear el polinomio dentro de <code>lm()</code> (véase <a href="ZA_Herram.html#sec-poly" class="quarto-xref"><span>Section A.6.4</span></a>). Por ejemplo, la siguiente sentencia produce un ajuste polinomial de quinto orden:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>lm.fit5 <span class="ot">&lt;-</span> <span class="fu">lm</span>(medv <span class="sc">~</span> <span class="fu">poly</span>(lstat, <span class="dv">5</span>), <span class="at">data =</span> Boston)</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm.fit5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -774,8 +827,8 @@ Multiple R-squared:  0.6817,    Adjusted R-squared:  0.6785
 F-statistic: 214.2 on 5 and 500 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p>Esto sugiere que la inclusión de términos polinómicos adicionales, hasta el quinto orden, ¡conduce a una mejora en el ajuste del modelo! Sin embargo, una investigación más profunda de los datos revela que ningún término polinomial más allá del quinto orden tiene p-valores significativos en un ajuste de regresión.</p>
-<p><strong>Nota técnica</strong>: en el Anexo <strong>Herramientas</strong> se menciona que la función <code>ploy()</code> ortogonaliza los predictores por defecto. Sin embargo un modelo lineal aplicado a la salida de la función <code>poly()</code> tendrá los mismos valores ajustados que un modelo lineal aplicado a los polinomios sin procesar (al incluir en poly el argumento <code>raw = TRUE</code>), aunque las estimaciones de los coeficientes, los errores estándar y los p-valores serán diferentes.</p>
+<p>Esto sugiere que la inclusión de términos polinómicos adicionales, hasta el quinto orden, ¡conduce a una mejora en el ajuste del modelo! Una investigación más profunda de los datos revela que ningún término polinomial más allá del quinto orden tiene p-valores significativos en un ajuste de regresión.</p>
+<p><strong>Nota técnica</strong>: en el Anexo <strong>Herramientas</strong> se menciona que la función <code>poly()</code> ortogonaliza los predictores por defecto. Sin embargo un modelo lineal aplicado a la salida de la función <code>poly()</code> tendrá los mismos valores ajustados que un modelo lineal aplicado a los polinomios sin procesar (al incluir en poly el argumento <code>raw = TRUE</code>), aunque las estimaciones de los coeficientes, los errores estándar y los p-valores serán diferentes.</p>
 </section>
 <section id="transformación-logarítmica" class="level3" data-number="3.4.3">
 <h3 data-number="3.4.3" class="anchored" data-anchor-id="transformación-logarítmica"><span class="header-section-number">3.4.3</span> Transformación logarítmica</h3>
@@ -827,7 +880,7 @@ F-statistic: 389.3 on 1 and 504 DF,  p-value: &lt; 2.2e-16</code></pre>
 6    No Yes</code></pre>
 </div>
 </div>
-<p>El conjunto de datos <code>Carseats</code> incluye predictores cualitativos como <code>ShelveLoc</code>, un indicador de la calidad de la ubicación de las estanterías, es decir, el espacio dentro de una tienda en el que se muestra el asiento para el automóvil. El predictor <code>ShelveLoc</code> toma tres valores posibles: <em>Mala</em>, <em>Media</em> y <em>Buena</em> (ubicación). Dada una variable cualitativa como <code>ShelveLoc</code>, <code>R</code> genera automáticamente variables ficticias, <em>variables dummys</em>. La función <code>contrasts()</code> devuelve la codificación que <code>R</code> usa para las variables ficticias (véase el Anexo <strong>Herramientas</strong>).</p>
+<p>El conjunto de datos <code>Carseats</code> incluye predictores cualitativos como <code>ShelveLoc</code>, un indicador de la calidad de la ubicación de las estanterías, es decir, el espacio dentro de una tienda en el que se muestra el asiento para el automóvil. El predictor <code>ShelveLoc</code> toma tres valores posibles: <em>Bad</em>, <em>Medium</em> y <em>Good</em> (ubicación). Dada una variable cualitativa como <code>ShelveLoc</code>, <code>R</code> genera automáticamente variables ficticias, <em>variables dummys</em>. La función <code>contrasts()</code> devuelve la codificación que <code>R</code> usa para las variables ficticias (véase <a href="ZA_Herram.html#sec-contrasts" class="quarto-xref"><span>Section A.6.2</span></a>).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(Carseats<span class="sc">$</span>ShelveLoc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -875,166 +928,433 @@ Multiple R-squared:  0.8761,    Adjusted R-squared:  0.8719
 F-statistic:   210 on 13 and 386 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p>El hecho de que el coeficiente de <code>ShelveLocGood</code> en el resultado de la regresión sea positivo indica que una <em>buena</em> ubicación de las estanterías está asociada con ventas altas (en comparación con una <em>mala</em> ubicación).</p>
+<p>El hecho de que el coeficiente de <code>ShelveLocGood</code> en el resultado de la regresión sea positivo indica que una ubicación <em>Good</em> de las estanterías está asociada con ventas altas (en comparación con una ubicación <em>Bad</em>).</p>
 <blockquote class="blockquote">
 <p><strong>Nota Víctor</strong>: el comentario coincide con la lógica, pero, además, a) se cuantifica la magnitud del “aumento”, y b) lo que es mejor, el “cambio” es significativo.</p>
 </blockquote>
-<p>Y <code>ShelveLocMedium</code> tiene un coeficiente positivo más pequeño, lo que indica que una ubicación de estantería <em>media</em> está asociada con ventas más altas que una ubicación de estantería <em>mala</em>, pero ventas más bajas que una ubicación de estantería <em>buena</em>.</p>
+<p>Y <code>ShelveLocMedium</code> tiene un coeficiente positivo más pequeño, lo que indica que una ubicación de estantería <em>Medium</em> está asociada con ventas más altas que una ubicación de estantería <em>Bad</em>, pero ventas más bajas que una ubicación de estantería <em>Good</em>.</p>
 </section>
 <section id="escritura-de-funciones-movido" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="escritura-de-funciones-movido">Escritura de funciones (movido)</h2>
-<p>En el <em>Lab3</em> original se dedica este último apartado (pequeño) a la creación/escritura de funciones. Como su contenido es transversal se ha movido al Anexo <strong>Herramientas</strong>.</p>
+<p>En el <em>Lab3</em> original se dedica este último apartado (pequeño) a la creación/escritura de funciones. Como su contenido es transversal se ha movido al Anexo <strong>Herramientas</strong>: <a href="ZA_Herram.html#sec-escritura-funciones" class="quarto-xref"><span>Section A.2</span></a>.</p>
 
 
 </section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
-    }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
     };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
-    });
-  }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
-    } else {
-      return undefined;
+      return false;
     }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
           }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
       });
     }
-  }
-});
-</script>
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./Lab2-AE.html" class="pagination-link">
+      <a href="./Lab2-AE.html" class="pagination-link" aria-label="Aprendizaje Estadístico">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Aprendizaje Estadístico</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./Lab4-Clasif.html" class="pagination-link">
+      <a href="./Lab4-Clasif.html" class="pagination-link" aria-label="Lab4 Clasificación">
         <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lab4 Clasificación</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+
 
 
 

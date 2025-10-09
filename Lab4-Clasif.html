@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Aprendizaje Estadístico: un enfoque práctico con R - 4&nbsp; Lab4 Clasificación</title>
+<title>4&nbsp; Lab4 Clasificación – Aprendizaje Estadístico: un enfoque práctico con R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -17,9 +17,11 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -46,43 +48,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -95,22 +67,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta name="quarto:offset" content="./">
 <link href="./Lab5-Remuestreo.html" rel="next">
 <link href="./Lab3-RegLin.html" rel="prev">
-<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -119,24 +98,59 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lab4 Clasificación</span></h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Lab4-Clasif.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lab4 Clasificación</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav>
@@ -144,80 +158,92 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Aprendizaje Estadístico: un enfoque práctico con R</a> 
     </div>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Prefacio</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prefacio</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab1-intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></a>
+  <a href="./Lab1-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab2-AE.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Aprendizaje Estadístico</span></a>
+  <a href="./Lab2-AE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Aprendizaje Estadístico</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab3-RegLin.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lab3 Regresión lineal</span></a>
+  <a href="./Lab3-RegLin.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lab3 Regresión lineal</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab4-Clasif.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lab4 Clasificación</span></a>
+  <a href="./Lab4-Clasif.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lab4 Clasificación</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab5-Remuestreo.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lab5 Remuestreo</span></a>
+  <a href="./Lab5-Remuestreo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lab5 Remuestreo</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab6-Seleccion-Var.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lab6 Selección de Variables (modelos lineales)</span></a>
+  <a href="./Lab6-Seleccion-Var.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Lab6 Selección de Variables (modelos lineales)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab7-NoLineal.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lab7 Modelización no lineal</span></a>
+  <a href="./Lab7-NoLineal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Lab7 Modelización no lineal</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab8-Arboles.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lab8 Árboles de decisión</span></a>
+  <a href="./Lab8-Arboles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lab8 Árboles de decisión</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Lab9-SVM.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lab9 Support Vector Machines</span></a>
+  <a href="./Lab9-SVM.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Lab9 Support Vector Machines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ZA_Herram.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Herramientas</span></a>
+  <a href="./ZA_Herram.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Herramientas</span></span></a>
   </div>
 </li>
       </ul>
@@ -225,6 +251,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -232,18 +259,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
    
   <ul>
   <li><a href="#datos-smarket-mercado-de-valores" id="toc-datos-smarket-mercado-de-valores" class="nav-link active" data-scroll-target="#datos-smarket-mercado-de-valores">Datos: <code>Smarket</code>, mercado de valores</a></li>
-  <li><a href="#regresión-logística" id="toc-regresión-logística" class="nav-link" data-scroll-target="#regresión-logística"><span class="toc-section-number">4.1</span>  Regresión logística</a>
+  <li><a href="#regresión-logística" id="toc-regresión-logística" class="nav-link" data-scroll-target="#regresión-logística"><span class="header-section-number">4.1</span> Regresión logística</a>
   <ul class="collapse">
-  <li><a href="#predicción" id="toc-predicción" class="nav-link" data-scroll-target="#predicción"><span class="toc-section-number">4.1.1</span>  Predicción</a></li>
-  <li><a href="#matriz-de-confusión" id="toc-matriz-de-confusión" class="nav-link" data-scroll-target="#matriz-de-confusión"><span class="toc-section-number">4.1.2</span>  Matriz de confusión</a></li>
-  <li><a href="#datos-de-entrenamiento-y-testprueba" id="toc-datos-de-entrenamiento-y-testprueba" class="nav-link" data-scroll-target="#datos-de-entrenamiento-y-testprueba"><span class="toc-section-number">4.1.3</span>  Datos de entrenamiento y test/prueba</a></li>
+  <li><a href="#predicción" id="toc-predicción" class="nav-link" data-scroll-target="#predicción"><span class="header-section-number">4.1.1</span> Predicción</a></li>
+  <li><a href="#matriz-de-confusión" id="toc-matriz-de-confusión" class="nav-link" data-scroll-target="#matriz-de-confusión"><span class="header-section-number">4.1.2</span> Matriz de confusión</a></li>
+  <li><a href="#datos-de-entrenamiento-y-testvalidación" id="toc-datos-de-entrenamiento-y-testvalidación" class="nav-link" data-scroll-target="#datos-de-entrenamiento-y-testvalidación"><span class="header-section-number">4.1.3</span> Datos de entrenamiento y test/validación</a></li>
   </ul></li>
-  <li><a href="#otros-métodos-de-clasificación" id="toc-otros-métodos-de-clasificación" class="nav-link" data-scroll-target="#otros-métodos-de-clasificación"><span class="toc-section-number">4.2</span>  Otros métodos de clasificación</a>
+  <li><a href="#otros-métodos-de-clasificación" id="toc-otros-métodos-de-clasificación" class="nav-link" data-scroll-target="#otros-métodos-de-clasificación"><span class="header-section-number">4.2</span> Otros métodos de clasificación</a>
   <ul class="collapse">
-  <li><a href="#análisis-discriminante-lineal" id="toc-análisis-discriminante-lineal" class="nav-link" data-scroll-target="#análisis-discriminante-lineal"><span class="toc-section-number">4.2.1</span>  Análisis Discriminante Lineal</a></li>
-  <li><a href="#análisis-discriminante-cuadrático" id="toc-análisis-discriminante-cuadrático" class="nav-link" data-scroll-target="#análisis-discriminante-cuadrático"><span class="toc-section-number">4.2.2</span>  Análisis Discriminante Cuadrático</a></li>
-  <li><a href="#naive-bayes" id="toc-naive-bayes" class="nav-link" data-scroll-target="#naive-bayes"><span class="toc-section-number">4.2.3</span>  Naive Bayes</a></li>
-  <li><a href="#k-nearest-neighbors" id="toc-k-nearest-neighbors" class="nav-link" data-scroll-target="#k-nearest-neighbors"><span class="toc-section-number">4.2.4</span>  <span class="math inline">\(K\)</span>-Nearest Neighbors</a></li>
+  <li><a href="#análisis-discriminante-lineal" id="toc-análisis-discriminante-lineal" class="nav-link" data-scroll-target="#análisis-discriminante-lineal"><span class="header-section-number">4.2.1</span> Análisis Discriminante Lineal</a></li>
+  <li><a href="#análisis-discriminante-cuadrático" id="toc-análisis-discriminante-cuadrático" class="nav-link" data-scroll-target="#análisis-discriminante-cuadrático"><span class="header-section-number">4.2.2</span> Análisis Discriminante Cuadrático</a></li>
+  <li><a href="#naive-bayes" id="toc-naive-bayes" class="nav-link" data-scroll-target="#naive-bayes"><span class="header-section-number">4.2.3</span> Naive Bayes</a></li>
+  <li><a href="#k-nearest-neighbors" id="toc-k-nearest-neighbors" class="nav-link" data-scroll-target="#k-nearest-neighbors"><span class="header-section-number">4.2.4</span> <span class="math inline">\(K\)</span>-Nearest Neighbors</a></li>
   </ul></li>
   <li><a href="#regresión-de-poisson-omitido" id="toc-regresión-de-poisson-omitido" class="nav-link" data-scroll-target="#regresión-de-poisson-omitido">Regresión de Poisson (omitido)</a></li>
   </ul>
@@ -254,7 +281,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lab4 Clasificación</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Lab4 Clasificación</span></h1>
 </div>
 
 
@@ -267,12 +294,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
+
 </header>
+
 
 <style>
 body {text-align: justify}
 </style>
-<table class="table">
+<table class="caption-top table">
 <caption>Material original</caption>
 <colgroup>
 <col style="width: 15%">
@@ -304,13 +333,13 @@ body {text-align: justify}
 </tbody>
 </table>
 <blockquote class="blockquote">
-<p><strong>Nota Víctor</strong>: En este apartado se van a mostrar varios métodos estadísticos para el problema de <em>clasificación supervisada</em>. El más conocido es la regresión logística, cuyos resultados poseen una interpretabilidad que el resto de métodos que vamos a ver: Análisis Discriminante, Naive Bayes y <span class="math inline">\(K\)</span>-vecinos más próximos (KNN), no poseen, como se ve en la imagen del Capítulo 2.<br>
+<p><strong>Nota Víctor</strong>: En este apartado se van a mostrar varios métodos estadísticos para el problema de <em>clasificación supervisada</em>. El más conocido es la regresión logística, cuyos resultados poseen una interpretabilidad que el resto de métodos que vamos a ver: Análisis Discriminante, Naive Bayes y <span class="math inline">\(K\)</span>-vecinos más próximos (KNN), no poseen, como se ve en la imagen del Capítulo 2: <a href="Lab2-AE.html#sec-tecnicasAE" class="quarto-xref"><span>Section 2.2</span></a>.<br>
 En el material original también se incluye en el Lab Regresión de Poisson que para mí no encaja en “métodos de clasificación”, por ello he decidido omitirla aquí (pongo sólo unos comentarios).<br>
-Por último, hecho en falta en el material original mostrar en este apartado el tema de curvas ROC. Aparece más adelante en el Lab de SVM (apartado 9.3).</p>
+Por último, hecho en falta en el material original mostrar en este apartado el tema de curvas ROC. Aparece más adelante en el Lab de SVM (<a href="Lab9-SVM.html#sec-roc" class="quarto-xref"><span>Section 9.3</span></a>).</p>
 </blockquote>
 <section id="datos-smarket-mercado-de-valores" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="datos-smarket-mercado-de-valores">Datos: <code>Smarket</code>, mercado de valores</h2>
-<p>Examinamos algunos resúmenes numéricos y gráficos de los datos <code>Smarket</code> del paquete <code>ISLR2</code>. Este conjunto de datos consiste en rendimientos porcentuales para el índice bursátil S&amp;P 500 durante 1.250 días, desde comienzos de 2001 hasta finales de 2005. Para cada fecha, se han registrado los rendimientos porcentuales de cada uno de los cinco días de negociación anteriores, desde <code>lagone</code> hasta <code>lagfive</code>. También se han registrado <code>volume</code> (el número de acciones negociadas el día anterior, en miles de millones), <code>Today</code> (el rendimiento porcentual en la fecha en cuestión) y <code>direction</code> (si el mercado estaba <code>Up</code> o <code>Down</code> en esta fecha). Nuestro objetivo es predecir <code>direction</code> (una variable respuesta cualitativa) usando las otras características.</p>
+<p>Examinamos algunos resúmenes numéricos y gráficos de los datos <code>Smarket</code> del paquete <code>ISLR2</code>. Este conjunto de datos consiste en rendimientos porcentuales para el índice bursátil S&amp;P 500 durante 1.250 días, desde comienzos de 2001 hasta finales de 2005. Para cada fecha, se han registrado los rendimientos porcentuales de cada uno de los cinco días de negociación anteriores, desde <code>Lag1</code> hasta <code>Lag5</code>. También se han registrado <code>volume</code> (el número de acciones negociadas el día anterior, en miles de millones), <code>Today</code> (el rendimiento porcentual en la fecha en cuestión) y <code>direction</code> (si el mercado estaba <code>Up</code> o <code>Down</code> en esta fecha). Nuestro objetivo es predecir <code>direction</code> (una variable respuesta cualitativa) usando las otras características.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR2)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(Smarket)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -347,9 +376,13 @@ Por último, hecho en falta en el material original mostrar en este apartado el 
            </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">pty=</span><span class="st">"s"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(Smarket)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(Smarket, <span class="at">upper.panel =</span> <span class="cn">NULL</span>) <span class="co"># añadido el "upper.panel"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Lab4-Clasif_files/figure-html/chunk1-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Lab4-Clasif_files/figure-html/chunk1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>La función <code>cor()</code> produce una matriz que contiene todas las correlaciones por pares entre los predictores en un conjunto de datos. El primer comando a continuación da un mensaje de error porque la variable <code>direction</code> es cualitativa.</p>
@@ -380,23 +413,26 @@ Volume -0.022002315  1.00000000  0.014591823
 Today  -0.034860083  0.01459182  1.000000000</code></pre>
 </div>
 </div>
-<p>Como era de esperar, las correlaciones entre las variables <code>lag...</code> y los rendimientos de hoy (<code>Today</code>) son cercanas a 0. En otras palabras, parece haber poca correlación entre los rendimientos de hoy y los rendimientos de días anteriores. La única correlación sustancial es entre <code>Year</code> y <code>volume</code>. Al dibujar los datos, que están ordenados cronológicamente, vemos que <code>volume</code> aumenta con el tiempo. En otras palabras, el número promedio de acciones negociadas diariamente aumentó de 2001 a 2005.</p>
+<p>Como era de esperar, las correlaciones entre las variables <code>lag...</code> y los rendimientos de hoy (<code>Today</code>) son cercanas a 0. En otras palabras, parece haber poca correlación entre los rendimientos de hoy y los rendimientos de días anteriores (<em>Nota Víctor: “rendimientos pasados no aseguran …”</em>). La única correlación sustancial es entre <code>Year</code> y <code>volume</code>. Al dibujar los datos, que están ordenados cronológicamente, vemos que <code>volume</code> aumenta con el tiempo. En otras palabras, el número promedio de acciones negociadas diariamente aumentó de 2001 a 2005.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Smarket<span class="sc">$</span>Volume, <span class="at">type =</span> <span class="st">"l"</span>) <span class="co"># añadido el "type"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Lab4-Clasif_files/figure-html/chunk3-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Lab4-Clasif_files/figure-html/chunk3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
 <section id="regresión-logística" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="regresión-logística"><span class="header-section-number">4.1</span> Regresión logística</h2>
-<p>Vamos a ajustar un modelo de <em>regresión logística</em> para predecir la <code>direction</code> utilizando desde <code>lagone</code> hasta <code>lagfive</code> y <code>volume</code>. La función <code>glm()</code> se puede utilizar para ajustar muchos tipos de <em>modelos lineales generalizados</em>, incluida la regresión logística. La sintaxis de la función <code>glm()</code> es similar a la de <code>lm()</code>, pero ahora debemos pasar el argumento <code>family = binomial</code> para decirle a <code>R</code> que ejecute una regresión logística en lugar de otro tipo de modelo lineal generalizado.</p>
+<p>Vamos a ajustar un modelo de <em>regresión logística</em> para predecir <code>direction</code> utilizando desde <code>Lag1</code> hasta <code>Lag5</code> y <code>volume</code>. La función <code>glm()</code> se puede utilizar para ajustar muchos tipos de <em>modelos lineales <strong>generalizados</strong> (GLM)</em>, incluida la regresión logística. La sintaxis de la función <code>glm()</code> es similar a la de <code>lm()</code>, pero ahora debemos pasar el argumento <code>family = binomial</code> para decirle a <code>R</code> que ejecute una regresión logística en lugar de otro tipo de modelo lineal generalizado.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>glm.fits <span class="ot">&lt;-</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glm</span>(Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2 <span class="sc">+</span> Lag3 <span class="sc">+</span> Lag4 <span class="sc">+</span> Lag5 <span class="sc">+</span> Volume,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> Smarket,</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> binomial)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(glm.fits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>glm.fits <span class="ot">&lt;-</span> <span class="fu">glm</span>(Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2 <span class="sc">+</span> Lag3 <span class="sc">+</span> Lag4 <span class="sc">+</span> Lag5 <span class="sc">+</span> Volume,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> Smarket,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">family =</span> binomial)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(glm.fits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -422,7 +458,7 @@ AIC: 1741.6
 Number of Fisher Scoring iterations: 3</code></pre>
 </div>
 </div>
-<p>Ningún p-valor es significativo. El más pequeño aquí está asociado con <code>lagone</code>. El coeficiente negativo de este predictor sugiere que si el mercado tuvo un rendimiento positivo ayer, es menos probable que suba hoy. Sin embargo, con ese p-valor de 0.15, no hay una clara evidencia de asociación real entre <code>lagone</code> y <code>direction</code>.</p>
+<p>Ningún p-valor es significativo. El más pequeño aquí está asociado con <code>Lag1</code>. El coeficiente negativo de este predictor sugiere que si el mercado tuvo un rendimiento positivo ayer, es menos probable que suba hoy. Sin embargo, con ese p-valor de 0.15, no hay una clara evidencia de asociación real entre <code>Lag1</code> y <code>direction</code>.</p>
 <p>Se puede usar la función <code>coef()</code> para acceder solo a los coeficientes de este modelo ajustado. La función <code>summary()</code> permite acceder a aspectos particulares del modelo ajustado, como los p-valores para los coeficientes:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(glm.fits)</span>
@@ -434,7 +470,7 @@ Number of Fisher Scoring iterations: 3</code></pre>
 </blockquote>
 <section id="predicción" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="predicción"><span class="header-section-number">4.1.1</span> Predicción</h3>
-<p>La función <code>predict()</code> se puede utilizar para predecir la probabilidad de que el mercado suba, dados los valores de los predictores. La opción <code>type = "response"</code> le dice a <code>R</code> que genere probabilidades de la forma <span class="math inline">\(P(Y=1|X)\)</span>, en lugar de generar el <em>logit</em> (<em>log odds</em>, por defecto, <code>type = "link"</code>). Si no se proporciona ningún conjunto de datos a la función <code>predict()</code>, entonces se calculan las probabilidades para los datos de entrenamiento que se usaron para ajustar el modelo de regresión logística. A continuación se muestran sólo las primeras diez probabilidades (¡Ojo! con el modelo ajustado previamente -“que no merece la pena”-).</p>
+<p>La función <code>predict()</code> se puede utilizar para predecir la probabilidad de que el mercado suba, dados los valores de los predictores. La opción <code>type = "response"</code> le dice a <code>R</code> que genere probabilidades de la forma <span class="math inline">\(P(Y=1|X)\)</span>. Por defecto <code>type = "link"</code>, es decir genera el <em>logit</em> (<em>log-odds</em>). Si no se proporciona ningún conjunto de datos a la función <code>predict()</code>, entonces se calculan las probabilidades para los datos de entrenamiento que se usaron para ajustar el modelo de regresión logística. A continuación se muestran sólo las primeras diez probabilidades (¡Ojo! con el modelo ajustado previamente -“que no merece la pena”-).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>glm.probs <span class="ot">&lt;-</span> <span class="fu">predict</span>(glm.fits, <span class="at">type =</span> <span class="st">"response"</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>glm.probs[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -451,7 +487,7 @@ Down  0
 Up    1</code></pre>
 </div>
 </div>
-<p><strong>Nota</strong>: Sabemos que estos valores corresponden a la probabilidad de que el mercado suba, en lugar de que baje, porque con la función <code>contrasts()</code> (véase el Anexo <strong>Herramientas</strong>) se ve que <code>R</code> ha creado una variable <em>dummy</em> con un 1 para <code>Up</code>.</p>
+<p><strong>Nota</strong>: Sabemos que estos valores corresponden a la probabilidad de que el mercado suba, en lugar de que baje, porque con la función <code>contrasts()</code> se observa que <code>R</code> ha creado una variable <em>dummy</em> con un 1 para <code>Up</code> (véase <a href="ZA_Herram.html#sec-contrasts" class="quarto-xref"><span>Section A.6.2</span></a>).</p>
 <p>Para hacer una predicción sobre si el mercado subirá o bajará en un día en particular, debemos convertir estas probabilidades pronosticadas en etiquetas de clase, <code>Up</code> o <code>Down</code>. Los siguientes dos comandos crean un vector de predicciones de clase basado en si la probabilidad prevista de un aumento del mercado es mayor o menor que un determinado valor denominado <em>punto de corte</em>, en este caso <code>0.5</code> (elegido arbitrariamente)</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>glm.pred <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">"Down"</span>, <span class="dv">1250</span>)</span>
@@ -462,7 +498,7 @@ Up    1</code></pre>
 </section>
 <section id="matriz-de-confusión" class="level3" data-number="4.1.2">
 <h3 data-number="4.1.2" class="anchored" data-anchor-id="matriz-de-confusión"><span class="header-section-number">4.1.2</span> Matriz de confusión</h3>
-<p>Dadas estas predicciones, la función <code>table()</code> se puede usar para producir una <strong>matriz de confusión</strong> para determinar cuántas observaciones se clasificaron correcta o incorrectamente. Al ingresar en <code>table()</code> dos vectores cualitativos, R creará una tabla <em>2x2</em> con recuentos del número de veces que ocurrió cada combinación, p.ej. pronosticó <code>Up</code> y el mercado aumentó, predijo <code>Up</code> y el mercado disminuyó, etc.</p>
+<p>Dadas estas predicciones, la función <code>table()</code> se puede usar para producir una <strong>matriz de confusión</strong> para determinar cuántas observaciones se clasificaron correcta o incorrectamente. Al ingresar en <code>table()</code> dos vectores cualitativos, <code>R</code> creará una tabla <em>2x2</em> con recuentos del número de veces que ocurrió cada combinación, p.ej. pronosticó <code>Up</code> y el mercado aumentó, predijo <code>Up</code> y el mercado disminuyó, etc.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(glm.pred, Smarket<span class="sc">$</span>Direction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -480,36 +516,34 @@ glm.pred Down  Up
 <pre><code>[1] 0.5216</code></pre>
 </div>
 </div>
-<p>Los elementos diagonales de la matriz de confusión indican predicciones correctas, mientras que los que están fuera de la diagonal representan predicciones incorrectas. Por lo tanto, nuestro modelo predijo correctamente que el mercado subiría en <code>507</code> días y que bajaría en <code>145</code> días, para un total de <code>507+145 = 652</code> predicciones correctas. La función <code>mean()</code> se puede utilizar para calcular la fracción de días en los que la predicción fue correcta. En este caso, la regresión logística predijo correctamente el movimiento del mercado el <code>52.2</code>% de las veces.</p>
+<p>Los elementos de la diagonal principal de la matriz de confusión indican predicciones correctas, mientras que los que están fuera de la diagonal representan predicciones incorrectas. Por lo tanto, nuestro modelo predijo correctamente que el mercado subiría en <code>507</code> días y que bajaría en <code>145</code> días, para un total de <code>507+145 = 652</code> predicciones correctas. La función <code>mean()</code> se puede utilizar para calcular la proporción de días en los que la predicción fue correcta. En este caso, la regresión logística predijo correctamente el movimiento del mercado el <code>52.2</code>% de las veces.</p>
 <p>A primera vista, parece que el modelo de regresión logística funciona un poco mejor que las conjeturas aleatorias (<em>“lanzar una moneda”</em>). Sin embargo, este resultado es engañoso porque entrenamos y probamos el modelo en el mismo conjunto de <code>1250</code> observaciones En otras palabras, <code>100%-52.2%=47.8%</code>, es la tasa de error de <em>entrenamiento</em>.</p>
 <blockquote class="blockquote">
 <p><strong>Nota Víctor</strong>: Es un muy buen ejercicio cambiar el valor del punto de corte y ver cómo cambian las prediccciones, la matriz de confusión y, por tanto, la tasa de error.</p>
 </blockquote>
 </section>
-<section id="datos-de-entrenamiento-y-testprueba" class="level3" data-number="4.1.3">
-<h3 data-number="4.1.3" class="anchored" data-anchor-id="datos-de-entrenamiento-y-testprueba"><span class="header-section-number">4.1.3</span> Datos de entrenamiento y test/prueba</h3>
-<p>Como se ha mencionado en el Capítulo de Aprendizaje Estadístico, la tasa de error de entrenamiento suele ser demasiado optimista: tiende a subestimar la tasa de error de test. Por ello se acude al enfoque de dividir los datos en los subconjuntos de entrenamiento y test/validación, que se ve en detalle en el siguiente Capítulo (Remuestreo).</p>
+<section id="datos-de-entrenamiento-y-testvalidación" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="datos-de-entrenamiento-y-testvalidación"><span class="header-section-number">4.1.3</span> Datos de entrenamiento y test/validación</h3>
+<p>Como se ha mencionado en el <span class="quarto-unresolved-ref">?sec-AE</span>, la tasa de error de entrenamiento suele ser demasiado optimista: tiende a subestimar la tasa de error de test. Por ello se acude al enfoque de dividir los datos en los subconjuntos de entrenamiento y test/validación, que se ve en detalle en el siguiente Capítulo (<a href="Lab5-Remuestreo.html" class="quarto-xref"><span>Chapter 5</span></a>).</p>
 <p>Para implementar esta estrategia, primero crearemos un vector correspondiente a las observaciones de 2001 a 2004 (datos de entrenamiento). Luego usaremos este vector para crear un conjunto de datos retenidos de observaciones de 2005, que constituyen el conjunto de datos de test/validación.</p>
 <blockquote class="blockquote">
-<p><strong>Nota Víctor</strong>: Al tratarse de datos de serie temporal, no tiene sentido que los datos de entrenamiento y test se escojan aleatoriamente, como es habitual.</p>
+<p><strong>Nota Víctor</strong>: Al tratarse de datos de serie temporal, no tiene sentido que los datos de entrenamiento y test se escojan aleatoriamente, como se hace habitualmente.</p>
 </blockquote>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> (Smarket<span class="sc">$</span>Year <span class="sc">&lt;</span> <span class="dv">2005</span>)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>Smarket<span class="fl">.2005</span> <span class="ot">&lt;-</span> Smarket[<span class="sc">!</span>train, ]</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>Direction<span class="fl">.2005</span> <span class="ot">&lt;-</span> Smarket<span class="sc">$</span>Direction[<span class="sc">!</span>train]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Los elementos del vector <code>train</code> que corresponden a observaciones que ocurrieron antes de 2005 se establecen en <code>TRUE</code>, mientras que los que corresponden a observaciones en 2005 se establecen en <code>FALSE</code>. La notación <code>!=</code> significa que <em>no es igual a</em>, por lo tanto, <code>Smarket[!train, ]</code> produce una submatriz de los datos del mercado de valores que contiene solo las observaciones para las cuales <code>train</code> es <code>FALSE</code>—es decir, las observaciones con fechas en 2005. (véanse más detalles en el Anexo <strong>Herramientas</strong>)</p>
-<p>Ajustamos un modelo de regresión logística usando solo el subconjunto de las observaciones que corresponden a fechas anteriores a 2005, usando el argumento <code>subset</code>. Posteriormente obtenemos las probabilidades pronosticadas de que el mercado de valores suba para cada uno de los días de nuestro conjunto de test, es decir, para los días de 2005.</p>
+<p>Los elementos del vector <code>train</code> que corresponden a observaciones que ocurrieron antes de 2005 se establecen en <code>TRUE</code>, mientras que los que corresponden a observaciones en 2005 se establecen en <code>FALSE</code>. La notación <code>!=</code> significa que <em>no es igual a</em>, por lo tanto, <code>Smarket[!train, ]</code> produce una submatriz de los datos del mercado de valores que contiene solo las observaciones para las cuales <code>train</code> es <code>FALSE</code>, es decir, las observaciones con fechas en 2005. (véanse más detalles en <a href="ZA_Herram.html#sec-train-test" class="quarto-xref"><span>Section A.4</span></a>)</p>
+<p>Ajustamos un modelo de regresión logística usando sólo el subconjunto de las observaciones que corresponden a fechas anteriores a 2005, usando el argumento <code>subset</code>. Posteriormente obtenemos las probabilidades pronosticadas de que el mercado de valores suba para cada uno de los días de nuestro conjunto de test, es decir, para los días de 2005.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>glm.fits <span class="ot">&lt;-</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glm</span>(</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2 <span class="sc">+</span> Lag3 <span class="sc">+</span> Lag4 <span class="sc">+</span> Lag5 <span class="sc">+</span> Volume,</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> Smarket,</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">family =</span> binomial,</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">subset =</span> train</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>glm.probs <span class="ot">&lt;-</span> <span class="fu">predict</span>(glm.fits, Smarket<span class="fl">.2005</span>,</span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>glm.fits <span class="ot">&lt;-</span> <span class="fu">glm</span>(Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2 <span class="sc">+</span> Lag3 <span class="sc">+</span> Lag4 <span class="sc">+</span> Lag5 <span class="sc">+</span> Volume,</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> Smarket,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">family =</span> binomial,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">subset =</span> train)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>glm.probs <span class="ot">&lt;-</span> <span class="fu">predict</span>(glm.fits, </span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>                     Smarket<span class="fl">.2005</span>,</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Tenga en cuenta que hemos entrenado y probado nuestro modelo en dos conjuntos de datos completamente separados: el entrenamiento se realizó solo con las fechas anteriores a 2005 y el test se realizó solo con las fechas de 2005. Finalmente, calculamos las predicciones para 2005, <code>glm.pred</code> y las comparamos con los movimientos reales del mercado durante ese período de tiempo, recogidos en <code>Direction.2005</code>. Se obtiene así la <em>matriz de confusión</em>.</p>
 <div class="cell">
@@ -532,20 +566,19 @@ glm.pred Down Up
 </div>
 </div>
 <p><strong>Nota</strong>: Como la notación <code>!=</code> significa que <em>no es igual a</em>, el último comando calcula la tasa de error del conjunto de test.</p>
-<p>Los resultados son bastante decepcionantes: la tasa de error del conjunto de datos de test es de 52%, ¡peor que seleccionar al azar! Por supuesto, este resultado no es tan sorprendente, dado que, en general, no se esperaría poder utilizar los rendimientos de días anteriores para predecir el rendimiento futuro del mercado. (Después de todo, si fuera posible hacerlo, los autores se harían ricos en lugar de escribir un libro de texto de estadística).</p>
-<p>Recordemos que el modelo de regresión logística tenía p-valores muy decepcionantes asociados con todos los predictores, y que el p-valor más pequeño, pero no significativo, correspondía a <code>lagone</code>. Quizá eliminando las variables que parecen no ser útiles para predecir <code>direction</code>, podemos obtener un modelo más efectivo. Después de todo, el uso de predictores que no tienen relación con la respuesta tiende a causar un deterioro en la tasa de error del conjunto de datos de test (dado que dichos predictores provocan un aumento en la varianza sin una disminución correspondiente en el sesgo), por lo que eliminar dichos predictores puede, a su vez, generar una mejora. A continuación, reajustamos la regresión logística usando solo <code>lagone</code> y <code>lagtwo</code>, que parecían tener el mayor poder predictivo en el modelo de regresión logística original.</p>
+<p>Los resultados son bastante decepcionantes: la tasa de error del conjunto de datos de test es de 52%, ¡peor que seleccionar al azar! Por supuesto, este resultado no es tan sorprendente, dado que, en general, no se esperaría poder utilizar los rendimientos de días anteriores para predecir el rendimiento futuro del mercado. (Dicen los autores del libro ISLR2 que, si fuera posible hacerlo, se estarían haciendo ricos, en lugar de escribir un libro de texto de estadística).</p>
+<p>Recordemos que el modelo de regresión logística tenía p-valores muy decepcionantes asociados con todos los predictores, y que el p-valor más pequeño, pero no significativo, correspondía a <code>Lag1</code>. Quizá eliminando las variables que parecen no ser útiles para predecir <code>direction</code>, podemos obtener un modelo más efectivo. Después de todo, el uso de predictores que no tienen relación con la respuesta tiende a causar un deterioro en la tasa de error del conjunto de datos de test (dado que dichos predictores provocan un aumento en la varianza sin una disminución correspondiente en el sesgo), por lo que eliminar dichos predictores puede, a su vez, generar una mejora. A continuación, reajustamos la regresión logística usando solo <code>Lag1</code> y <code>Lag2</code>, que parecían tener el mayor poder predictivo en el modelo de regresión logística original.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>glm.fits <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2,</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> Smarket,</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> binomial,</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">subset =</span> train</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>glm.probs <span class="ot">&lt;-</span> <span class="fu">predict</span>(glm.fits, Smarket<span class="fl">.2005</span>,</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">type =</span> <span class="st">"response"</span>)</span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>glm.pred <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">"Down"</span>, <span class="dv">252</span>)</span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>glm.pred[glm.probs <span class="sc">&gt;</span> .<span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="st">"Up"</span></span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(glm.pred, Direction<span class="fl">.2005</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>glm.fits <span class="ot">&lt;-</span> <span class="fu">glm</span>(Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2,</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> Smarket,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">family =</span> binomial,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">subset =</span> train)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>glm.probs <span class="ot">&lt;-</span> <span class="fu">predict</span>(glm.fits, </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>                     Smarket<span class="fl">.2005</span>,</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>glm.pred <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">"Down"</span>, <span class="dv">252</span>)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>glm.pred[glm.probs <span class="sc">&gt;</span> .<span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="st">"Up"</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(glm.pred, Direction<span class="fl">.2005</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        Direction.2005
 glm.pred Down  Up
@@ -561,12 +594,13 @@ glm.pred Down  Up
 <pre><code>[1] 0.5824176</code></pre>
 </div>
 </div>
-<p>Ahora los resultados parecen ser un poco mejores: 56% de los movimientos diarios se han pronosticado correctamente. Vale la pena señalar que, en este caso, una estrategia mucho más simple: predecir que el mercado aumentará cada día, también será correcta el 56% de las veces. Por lo tanto, en términos de tasa de error general, el método de regresión logística no es mejor que el enfoque <em>naive</em>. Sin embargo, la matriz de confusión muestra que en los días en que la regresión logística predice un aumento en el mercado, tiene una tasa de precisión de <code>58</code>%. Esto sugiere una posible estrategia comercial de comprar en los días en que el modelo predice un mercado en aumento y evitar transacciones en los días en que se pronostica una disminución. Por supuesto, habría que investigar más detenidamente si esta pequeña mejora era real o simplemente se debía a una casualidad.</p>
-<p>Supongamos que queremos predecir los rendimientos asociados con valores particulares de <code>lagone</code> y <code>lagtwo</code>. En particular, queremos predecir <code>direction</code> en un día en que <code>lagone</code> y <code>lagtwo</code> sean iguales a 1.2 y 1.1, respectivamente, y en un día en que sean iguales a 1.5 y -0.8. Hacemos esto usando la función <code>predict()</code>.</p>
+<p>Ahora los resultados parecen ser un poco mejores: <code>55.95%</code> de los movimientos diarios se han pronosticado correctamente. Vale la pena señalar que, en este caso, una estrategia mucho más simple: predecir que el mercado aumentará cada día, es correcta el <code>55.95%</code> de las veces. Por lo tanto, en términos de tasa de error general, el método de regresión logística no es mejor que el enfoque <em>naive</em>. Sin embargo, la matriz de confusión muestra que en los días en que la regresión logística predice un aumento en el mercado, tiene una tasa de precisión de <code>58.24%</code>. Esto sugiere una posible estrategia comercial de comprar en los días en que el modelo predice un mercado en aumento y evitar transacciones en los días en que se pronostica una disminución. Por supuesto, habría que investigar más detenidamente si esta pequeña mejora era real o simplemente se debía a una casualidad.</p>
+<p>Supongamos que queremos predecir los rendimientos asociados con valores particulares de <code>Lag1</code> y <code>Lag2</code>. En particular, queremos predecir <code>direction</code> en un día en que <code>Lag1</code> y <code>Lag2</code> sean iguales a 1.2 y 1.1, respectivamente, y en un día en que sean iguales a 1.5 y -0.8. Hacemos esto usando la función <code>predict()</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(glm.fits,</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">Lag1 =</span> <span class="fu">c</span>(<span class="fl">1.2</span>, <span class="fl">1.5</span>), <span class="at">Lag2 =</span> <span class="fu">c</span>(<span class="fl">1.1</span>, <span class="sc">-</span><span class="fl">0.8</span>)),</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">Lag1 =</span> <span class="fu">c</span>(<span class="fl">1.2</span>, <span class="fl">1.5</span>), </span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">Lag2 =</span> <span class="fu">c</span>(<span class="fl">1.1</span>, <span class="sc">-</span><span class="fl">0.8</span>)),</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        1         2 
 0.4791462 0.4960939 </code></pre>
@@ -614,12 +648,16 @@ Lag2 -0.5135293</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lda.fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Lab4-Clasif_files/figure-html/chunk14-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="Lab4-Clasif_files/figure-html/chunk14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
-<p>La salida de LDA indica que <span class="math inline">\(\hat\pi_1=\)</span><code>0.492</code> y <span class="math inline">\(\hat\pi_2=\)</span><code>0.508</code> (en la salida anterior: Prior probabilities of groups<code>); es decir, el</code>49.2`% de las observaciones de entrenamiento corresponden a días en los que el mercado bajó. También proporciona las medias del grupo; estos son el promedio de cada predictor dentro de cada clase, y LDA los utiliza como estimaciones de <span class="math inline">\(\mu_k\)</span> (véase el libro). Esto sugiere que existe una tendencia a que los rendimientos de los 2 días anteriores sean negativos en los días en que el mercado aumenta, y una tendencia a que los rendimientos de los días anteriores sean positivos en los días en que el mercado cae.</p>
-<p>La salida <em>coefficients of linear discriminants</em> (<em>coeficientes de discriminantes lineales</em>) proporciona la combinación lineal de <code>lagone</code> y <code>lagtwo</code> que se utilizan para formar la regla de decisión LDA. En otras palabras, estos son los multiplicadores de los elementos de <span class="math inline">\(X=x\)</span> en (4.24) (Véase la ecuación en el libro). Si <span class="math inline">\(-0.642\times\)</span> <code>lagone</code> <span class="math inline">\(- 0.514 \times\)</span> <code>lagtwo</code> es grande, entonces el clasificador LDA pronosticará un aumento del mercado, y si es pequeño, entonces el clasificador LDA pronosticará una caída del mercado.</p>
-<p>La función <code>plot()</code> produce gráficos de los <em>discriminantes lineales</em>, obtenidos al calcular <span class="math inline">\(-0.642\times\)</span> <code>lagone</code> <span class="math inline">\(- 0.514 \times\)</span> <code>lagtwo</code> para cada una de las observaciones de entrenamiento. Las observaciones <code>Up</code> y <code>Down</code> se muestran por separado.</p>
+</div>
+<p>La salida de LDA indica que <span class="math inline">\(\hat\pi_1=\)</span><code>0.492</code> y <span class="math inline">\(\hat\pi_2=\)</span><code>0.508</code> (en la salida anterior: Prior probabilities of groups); es decir, el <code>49.2</code>% de las observaciones de entrenamiento corresponden a días en los que el mercado bajó. También proporciona las medias del grupo; estos son el promedio de cada predictor dentro de cada clase, y LDA los utiliza como estimaciones de <span class="math inline">\(\mu_k\)</span> (véase el libro). Esto sugiere que existe una tendencia a que los rendimientos de los 2 días anteriores sean negativos en los días en que el mercado aumenta, y una tendencia a que los rendimientos de los días anteriores sean positivos en los días en que el mercado cae.</p>
+<p>La salida <em>coefficients of linear discriminants</em> (<em>coeficientes de discriminantes lineales</em>) proporciona la combinación lineal de <code>Lag1</code> y <code>Lag2</code> que se utilizan para formar la regla de decisión LDA. En otras palabras, estos son los multiplicadores de los elementos de <span class="math inline">\(X=x\)</span> en (4.24) (Véase la ecuación en el libro). Si <span class="math inline">\(-0.642\times\)</span> <code>Lag1</code> <span class="math inline">\(- 0.514 \times\)</span> <code>Lag2</code> es grande, entonces el clasificador LDA pronosticará un aumento del mercado, y si es pequeño, entonces el clasificador LDA pronosticará una caída del mercado.</p>
+<p>La función <code>plot()</code> produce gráficos de los <em>discriminantes lineales</em>, obtenidos al calcular <span class="math inline">\(-0.642\times\)</span> <code>Lag1</code> <span class="math inline">\(- 0.514 \times\)</span> <code>Lag2</code> para cada una de las observaciones de entrenamiento. Las observaciones <code>Up</code> y <code>Down</code> se muestran por separado.</p>
 <p>La función <code>predict()</code> devuelve una lista con tres elementos. El primer elemento, <code>class</code>, contiene las predicciones de LDA sobre el movimiento del mercado. El segundo elemento, <code>posterior</code>, es una matriz cuya <span class="math inline">\(k\)</span>-ésima columna contiene la probabilidad posterior de que la observación correspondiente pertenezca a la <span class="math inline">\(k\)</span>-ésima clase, calculada a partir de (4.15). Finalmente, <code>x</code> contiene los discriminantes lineales, descritos anteriormente.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>lda.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lda.fit, Smarket<span class="fl">.2005</span>)</span>
@@ -724,10 +762,10 @@ qda.class Down  Up
 <p>El modelo Naive Bayes se implementa en <code>R</code> mediante la función <code>naiveBayes()</code>, del paquete <code>e1071</code>. La sintaxis es idéntica a la de <code>lda()</code> y <code>qda()</code>. Por defecto, esta implementación del clasificador naive Bayes modela cada característica cuantitativa mediante una distribución gaussiana. Sin embargo, también se puede utilizar un método de densidad kernel para estimar las distribuciones.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(e1071)</span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>nb.fit <span class="ot">&lt;-</span> <span class="fu">naiveBayes</span>(Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2, </span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>nB.fit <span class="ot">&lt;-</span> <span class="fu">naiveBayes</span>(Direction <span class="sc">~</span> Lag1 <span class="sc">+</span> Lag2, </span>
 <span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> Smarket,</span>
 <span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">subset =</span> train)</span>
-<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>nb.fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>nB.fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Naive Bayes Classifier for Discrete Predictors
@@ -752,7 +790,7 @@ Y             [,1]     [,2]
   Up   -0.03132544 1.220765</code></pre>
 </div>
 </div>
-<p>La salida contiene la media estimada (<code>[,1]</code>) y la desviación estándar (<code>[,2]</code>) para cada variable en cada clase. Por ejemplo, la media de <code>lagone</code> es <code>0.0428</code> para <code>Direction = Down</code> y la desviación estándar es <code>1.2274</code>. Podemos comprobarlo fácilmente:</p>
+<p>La salida contiene la media estimada (<code>[,1]</code>) y la desviación estándar (<code>[,2]</code>) para cada variable en cada clase. Por ejemplo, la media de <code>Lag1</code> es <code>0.0428</code> para <code>Direction = Down</code> y la desviación estándar es <code>1.2274</code>. Podemos comprobarlo fácilmente:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Smarket<span class="sc">$</span>Lag1[train][Smarket<span class="sc">$</span>Direction[train] <span class="sc">==</span> <span class="st">"Down"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -765,15 +803,15 @@ Y             [,1]     [,2]
 </div>
 <p>La función <code>predict()</code> es sencilla.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>nb.class <span class="ot">&lt;-</span> <span class="fu">predict</span>(nb.fit, Smarket<span class="fl">.2005</span>)</span>
-<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(nb.class, Direction<span class="fl">.2005</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>nB.class <span class="ot">&lt;-</span> <span class="fu">predict</span>(nB.fit, Smarket<span class="fl">.2005</span>)</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(nB.class, Direction<span class="fl">.2005</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        Direction.2005
-nb.class Down  Up
+nB.class Down  Up
     Down   28  20
     Up     83 121</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(nb.class <span class="sc">==</span> Direction<span class="fl">.2005</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(nB.class <span class="sc">==</span> Direction<span class="fl">.2005</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.5912698</code></pre>
 </div>
@@ -781,8 +819,8 @@ nb.class Down  Up
 <p>Naive Bayes funciona muy bien con estos datos, con predicciones precisas más del <code>59</code>% de las veces. Esto es ligeramente peor que QDA, pero mucho mejor que LDA.</p>
 <p>La función <code>predict()</code> también puede generar estimaciones de la probabilidad de que cada observación pertenezca a una clase en particular.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>nb.preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(nb.fit, Smarket<span class="fl">.2005</span>, <span class="at">type =</span> <span class="st">"raw"</span>)</span>
-<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>nb.preds[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>nB.preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(nB.fit, Smarket<span class="fl">.2005</span>, <span class="at">type =</span> <span class="st">"raw"</span>)</span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>nB.preds[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          Down        Up
 [1,] 0.4873164 0.5126836
@@ -797,12 +835,12 @@ nb.class Down  Up
 <h3 data-number="4.2.4" class="anchored" data-anchor-id="k-nearest-neighbors"><span class="header-section-number">4.2.4</span> <span class="math inline">\(K\)</span>-Nearest Neighbors</h3>
 <p>Realizaremos KNN (<em>K vecinos más próximos</em>) usando la función <code>knn()</code>, del paquete <code>class</code>. Esta función es bastante diferente a las otras funciones de ajuste de modelos que hemos encontrado hasta ahora. En lugar de un enfoque de dos pasos en el que primero ajustamos el modelo y luego usamos el modelo para hacer predicciones, <code>knn()</code> forma predicciones usando un solo comando. La función requiere cuatro entradas.</p>
 <ul>
-<li>Una matriz que contiene los predictores asociados con los datos de entrenamiento, denominada <code>train.X</code> a continuación.</li>
-<li>Una matriz que contiene los predictores asociados con los datos para los que deseamos hacer predicciones, denominada <code>test.X</code> a continuación.</li>
-<li>Un vector que contiene las etiquetas de clase para las observaciones de entrenamiento, denominado <code>train.Direction</code> a continuación.</li>
+<li>Una matriz con los predictores asociados con los datos de entrenamiento: <code>train.X</code>,</li>
+<li>Una matriz con los predictores asociados con los datos para los que deseamos hacer predicciones: <code>test.X</code>.</li>
+<li>Un vector que contiene las etiquetas de clase para las observaciones de entrenamiento: <code>train.Direction</code>.</li>
 <li>Un valor para <span class="math inline">\(K\)</span>, el número de vecinos más próximos que utilizará el clasificador.</li>
 </ul>
-<p>Usamos la función <code>cbind()</code>, abreviatura de <em>column bind</em>, para unir las variables <code>lagone</code> y <code>lagtwo</code> en dos matrices, una para el conjunto de entrenamiento y la otra para el conjunto de validación.</p>
+<p>Usamos la función <code>cbind()</code>, abreviatura de <em>column bind</em>, para unir las variables <code>Lag1</code> y <code>Lag2</code> en dos matrices, una para el conjunto de entrenamiento y la otra para el conjunto de validación.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(class)</span>
 <span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>train.X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(Smarket<span class="sc">$</span>Lag1, Smarket<span class="sc">$</span>Lag2)[train, ]</span>
@@ -864,7 +902,7 @@ knn.pred Down Up
 <section id="escalado-de-variables" class="level4" data-number="4.2.4.2">
 <h4 data-number="4.2.4.2" class="anchored" data-anchor-id="escalado-de-variables"><span class="header-section-number">4.2.4.2</span> Escalado de variables</h4>
 <p>Debido a que el clasificador KNN predice la clase de una observación dada del conjunto de validación al identificar las observaciones más próximas a ella, la escala de las variables es importante. Las variables con una escala grande tendrán un efecto mucho mayor en la <em>distancia</em> entre las observaciones, y por lo tanto en el clasificador KNN, que las variables con una escala pequeña.</p>
-<p>Una buena forma de manejar este problema es ajustar los datos de modo que todas las variables tengan media 0 y desviación estándar 1. Entonces todas las variables estarán en una escala comparable. La función <code>scale()</code> hace precisamente esto (véase el Anexo <strong>Herramientas</strong>).</p>
+<p>Una buena forma de manejar este problema es ajustar los datos de modo que todas las variables tengan media 0 y desviación estándar 1. Entonces todas las variables estarán en una escala comparable. La función <code>scale()</code> hace precisamente esto (véase <a href="ZA_Herram.html#sec-scale" class="quarto-xref"><span>Section A.6.5</span></a>).</p>
 <p>Estandarizamos las variables de <code>Caravan</code>, excepto la columna <code>86</code>, porque esa es la variable cualitativa <code>Purchase</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>standardized.X <span class="ot">&lt;-</span> <span class="fu">scale</span>(Caravan[, <span class="sc">-</span><span class="dv">86</span>])</span>
@@ -886,7 +924,7 @@ knn.pred Down Up
 </div>
 </div>
 <p>Ahora cada columna de <code>standardized.X</code> tiene desviación estándar 1 y media 0.</p>
-<p>Pasamos a dividir las observaciones en un conjunto de test, que contiene las primeras 1000 observaciones, y un conjunto de entrenamiento, que contiene las observaciones restantes. Es decir, seleccionamos los conjuntos usando su <em>índice</em> no hay aquí una selección aleatoria (véase el Anexo <strong>Herramientas</strong>)</p>
+<p>Pasamos a dividir las observaciones en un conjunto de test, que contiene las primeras 1000 observaciones, y un conjunto de entrenamiento, que contiene las observaciones restantes. Es decir, seleccionamos los conjuntos usando su <em>índice</em> no hay aquí una selección aleatoria (véase <a href="ZA_Herram.html#sec-indices" class="quarto-xref"><span>Section A.4.3</span></a>).</p>
 <p>Ajustamos un modelo KNN en los datos de entrenamiento usando <span class="math inline">\(K=1\)</span> y evaluamos su desempeño en los datos de test.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span></span>
@@ -905,8 +943,8 @@ knn.pred Down Up
 <pre><code>[1] 0.059</code></pre>
 </div>
 </div>
-<p>La tasa de error de KNN en las 1000 observaciones para test es un poco menos de <code>12</code>%. A primera vista, esto puede parecer bastante bueno. Sin embargo, dado que solo <code>6</code>% de los clientes compraron un seguro, podríamos reducir la tasa de error a <code>6</code>% prediciendo siempre <code>No</code> (última línea del <em>chunk</em> anterior) ¡independientemente de los valores de los predictores!</p>
-<p>Suponga que hay algún costo no trivial al tratar de vender un seguro a un individuo determinado. Por ejemplo, tal vez un vendedor deba visitar a cada cliente potencial. Si la empresa trata de vender seguros a una selección aleatoria de clientes, entonces la tasa de éxito será de solo <code>6</code>%, lo que puede ser demasiado bajo dados los costos involucrados. En cambio, a la compañía le gustaría tratar de vender seguros solo a los clientes que probablemente lo compren. Por lo tanto, <em>la tasa de error general no es de interés</em>. En cambio, <em>la fracción de individuos que se predice correctamente que comprará un seguro es de interés</em>.</p>
+<p>La tasa de error de KNN en las 1000 observaciones para test es un poco menos de <code>12</code>%. A primera vista, esto puede parecer bastante bueno. Sin embargo, dado que solo <code>6</code>% de los clientes compraron un seguro, podríamos reducir la tasa de error a <code>6</code>% prediciendo siempre <code>No</code> (última línea del <em>chunk</em> anterior) ¡Independientemente de los valores de los predictores!</p>
+<p>Suponga que hay algún costo no trivial al tratar de vender un seguro a un individuo determinado. Por ejemplo, tal vez un vendedor deba visitar a cada cliente potencial. Si la empresa trata de vender seguros a una selección aleatoria de clientes, entonces la tasa de éxito será de solo <code>6</code>%, lo que puede ser demasiado bajo dados los costos involucrados. En cambio, a la compañía le gustaría tratar de vender seguros solo a los clientes que probablemente lo compren. Por lo tanto, <em>la tasa de error general no es de interés</em>. En cambio, <em>la proporción de individuos que se predice correctamente que comprará un seguro es de interés</em>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(knn.pred, test.Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -953,7 +991,7 @@ knn.pred  No Yes
 </section>
 <section id="knn-vs.-reg.log" class="level4" data-number="4.2.4.3">
 <h4 data-number="4.2.4.3" class="anchored" data-anchor-id="knn-vs.-reg.log"><span class="header-section-number">4.2.4.3</span> KNN vs.&nbsp;reg.log</h4>
-<p>Como comparación, también podemos ajustar un modelo de regresión logística a los datos. Si usamos <code>0.5</code> como el límite de probabilidad pronosticado para el clasificador, entonces tenemos un problema: se predice que solo siete de las observaciones para validación comprarán un seguro, pero es peor, ¡nos equivocamos totalmente! Porque ninguno compra.</p>
+<p>Como comparación, también podemos ajustar un modelo de regresión logística a los datos. Usamos <code>0.5</code> como el umbral de probabilidad pronosticada para el clasificador.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a>glm.fits <span class="ot">&lt;-</span> <span class="fu">glm</span>(Purchase <span class="sc">~</span> .,</span>
 <span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> Caravan,</span>
@@ -974,7 +1012,8 @@ glm.pred  No Yes
      Yes   7   0</code></pre>
 </div>
 </div>
-<p>Sin embargo, no estamos obligados a utilizar un corte de <code>0.5</code>. Si, en cambio, predecimos una compra cada vez que la probabilidad de compra predicha supere los <code>0.25</code>, obtenemos resultados mucho mejores: predecimos que 33 personas comprarán un seguro y estamos en lo correcto para aproximadamente un <code>33</code>% de estas personas. ¡Esto es más de cinco veces mejor que seleccionar al azar!</p>
+<p>Tenemos un problema: se predice que solo siete de las observaciones para validación comprarán un seguro, pero es peor, ¡nos equivocamos totalmente! Porque ninguno compra.</p>
+<p>Sin embargo, no estamos obligados a utilizar un punto de corte de <code>0.5</code>. Si, en cambio, predecimos una compra cada vez que la probabilidad de compra predicha supere los <code>0.25</code>, obtenemos resultados mucho mejores: predecimos que 33 personas comprarán un seguro y estamos en lo correcto para aproximadamente un <code>33</code>% de estas personas. ¡Esto es más de cinco veces mejor que seleccionar al azar!</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb124"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a>glm.pred <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">"No"</span>, <span class="dv">1000</span>)</span>
 <span id="cb124-2"><a href="#cb124-2" aria-hidden="true" tabindex="-1"></a>glm.pred[glm.probs <span class="sc">&gt;</span> .<span class="dv">25</span>] <span class="ot">&lt;-</span> <span class="st">"Yes"</span></span>
@@ -996,165 +1035,434 @@ glm.pred  No Yes
 <section id="regresión-de-poisson-omitido" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="regresión-de-poisson-omitido">Regresión de Poisson (omitido)</h2>
 <blockquote class="blockquote">
-<p><strong>Nota Víctor</strong>: Como se ha comentado al principio, en el material original también se incluye en este Lab Regresión de Poisson que para mí no encaja en “métodos de clasificación”. Además el enfoque que se da, utilizando primero la función <code>lm()</code> es enrevesado (opinión personal). Por ambas cosas se omiten aquí los detalles, pero se mantienen las ideas generales de este tipo de regresión (también habitual en la práctica).</p>
+<p><strong>Nota Víctor</strong>: Como se ha comentado al principio, en el material original también se incluye en este Lab Regresión de Poisson, que no encaja en “métodos de clasificación” (opinión personal). Además el enfoque que se da, utilizando primero la función <code>lm()</code> es enrevesado (opinión personal). Por ello omito aquí los detalles, pero se indican las ideas generales de este tipo de regresión (también habitual en la práctica).</p>
 </blockquote>
 <ul>
-<li><p><code>Bikeshare</code> (en el paquete <code>ISLR2</code>) es el conjunto de datos elegido para ajustar un modelo de regresión de Poisson. Mide el número de alquileres de bicicletas (<code>bikers</code>) por hora en Washington, DC.</p></li>
+<li><p><code>Bikeshare</code> (en el paquete <code>ISLR2</code>) es el conjunto de datos elegido para ajustar un modelo de regresión de Poisson. La variable respuesta, de interés, es <code>bikers</code>, que contiene el número de alquileres de bicicletas por hora en Washington, DC (es una variable de tipo <em>conteo</em>).</p></li>
 <li><p>Para ajustar un modelo de regresión de Poisson se usa la función <code>glm()</code> con el argumento <code>family = poisson</code></p></li>
 <li><p>Una vez más podemos usar la función <code>predict()</code> para obtener los valores ajustados (predicciones) del modelo de regresión de Poisson. Sin embargo, debemos usar el argumento <code>type = "response"</code> para especificar que queremos que <code>R</code> genere <span class="math inline">\(\exp(\hat\beta_0 + \hat\beta_1 X_1 + \ldots +\hat\beta_p X_p)\)</span> en lugar de que <span class="math inline">\(\hat\beta_0 + \hat\beta_1 X_1+ \ldots + \hat\beta_p X_p\)</span>, que generará de forma predeterminada.</p></li>
-<li><p>En esta sección, se menciona el uso de la función <code>glm()</code> con el argumento <code>family = poisson</code> para realizar la regresión de Poisson. Anteriormente en esta práctica, usamos la función <code>glm()</code> con <code>family = binomial</code> para realizar una regresión logística. Se pueden usar otras opciones para el argumento <code>family</code> para ajustar otros tipos de GLM. Por ejemplo, <code>family = Gamma</code> ajusta un modelo de regresión gamma.</p></li>
 </ul>
+<blockquote class="blockquote">
+<p>En esta capítulo, se ha utilizado la función <code>glm()</code> para ajustar <em>modelos lineales generalizados</em>: - con el argumento <code>family = binomial</code> se realizan regresiones logísticas. - con <code>family = poisson</code> se realizan regresiones de Poisson. - hay más opciones, por ejemplo, <code>family = Gamma</code> ajusta modelos de regresión gamma.</p>
+</blockquote>
 
 
 </section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
-    }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
     };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
-    });
-  }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
-    } else {
-      return undefined;
+      return false;
     }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
           }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
       });
     }
-  }
-});
-</script>
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./Lab3-RegLin.html" class="pagination-link">
+      <a href="./Lab3-RegLin.html" class="pagination-link" aria-label="Lab3 Regresión lineal">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lab3 Regresión lineal</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./Lab5-Remuestreo.html" class="pagination-link">
+      <a href="./Lab5-Remuestreo.html" class="pagination-link" aria-label="Lab5 Remuestreo">
         <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Lab5 Remuestreo</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+
 
 
 
