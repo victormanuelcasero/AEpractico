@@ -335,7 +335,7 @@ body {text-align: justify}
 <blockquote class="blockquote">
 <p><strong>Nota Víctor</strong>: En este apartado se van a mostrar varios métodos estadísticos para el problema de <em>clasificación supervisada</em>. El más conocido es la regresión logística, cuyos resultados poseen una interpretabilidad que el resto de métodos que vamos a ver: Análisis Discriminante, Naive Bayes y <span class="math inline">\(K\)</span>-vecinos más próximos (KNN), no poseen, como se ve en la imagen del Capítulo 2: <a href="Lab2-AE.html#sec-tecnicasAE" class="quarto-xref"><span>Section 2.2</span></a>.<br>
 En el material original también se incluye en el Lab Regresión de Poisson que para mí no encaja en “métodos de clasificación”, por ello he decidido omitirla aquí (pongo sólo unos comentarios).<br>
-Por último, hecho en falta en el material original mostrar en este apartado el tema de curvas ROC. Aparece más adelante en el Lab de SVM (<a href="Lab9-SVM.html#sec-roc" class="quarto-xref"><span>Section 9.3</span></a>).</p>
+Por último, echo en falta en el material original mostrar en este apartado el tema de curvas ROC. Aparece más adelante en el Lab de SVM (<a href="Lab9-SVM.html#sec-roc" class="quarto-xref"><span>Section 9.3</span></a>).</p>
 </blockquote>
 <section id="datos-smarket-mercado-de-valores" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="datos-smarket-mercado-de-valores">Datos: <code>Smarket</code>, mercado de valores</h2>
@@ -466,11 +466,11 @@ Number of Fisher Scoring iterations: 3</code></pre>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(glm.fits)<span class="sc">$</span>coef[, <span class="dv">4</span>] <span class="co"># sólo p-valores</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <blockquote class="blockquote">
-<p><strong>Nota Víctor</strong>: No se muestran los resultados ni se dan más detalles… Por “no perder tiempo” con un modelo ajustado que “no merece la pena”.</p>
+<p><strong>Nota Víctor</strong>: No se muestran los resultados ni se dan más detalles… Por no dedicar tiempo a un modelo ajustado que “no merece la pena”.</p>
 </blockquote>
 <section id="predicción" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="predicción"><span class="header-section-number">4.1.1</span> Predicción</h3>
-<p>La función <code>predict()</code> se puede utilizar para predecir la probabilidad de que el mercado suba, dados los valores de los predictores. La opción <code>type = "response"</code> le dice a <code>R</code> que genere probabilidades de la forma <span class="math inline">\(P(Y=1|X)\)</span>. Por defecto <code>type = "link"</code>, es decir genera el <em>logit</em> (<em>log-odds</em>). Si no se proporciona ningún conjunto de datos a la función <code>predict()</code>, entonces se calculan las probabilidades para los datos de entrenamiento que se usaron para ajustar el modelo de regresión logística. A continuación se muestran sólo las primeras diez probabilidades (¡Ojo! con el modelo ajustado previamente -“que no merece la pena”-).</p>
+<p>La función <code>predict()</code> se puede utilizar para predecir la probabilidad de que el mercado suba, dados los valores de los predictores. La opción <code>type = "response"</code> le dice a <code>R</code> que genere probabilidades de la forma <span class="math inline">\(P(Y=1|X)\)</span>. Por defecto <code>type = "link"</code>, es decir genera el <em>logit</em> (<em>log-odds</em>). Si no se proporciona ningún conjunto de datos a la función <code>predict()</code>, entonces se calculan las probabilidades para los datos de entrenamiento que se usaron para ajustar el modelo de regresión logística. A continuación se muestran sólo las primeras diez probabilidades (¡Ojo! con el modelo ajustado previamente, que “no merece la pena”).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>glm.probs <span class="ot">&lt;-</span> <span class="fu">predict</span>(glm.fits, <span class="at">type =</span> <span class="st">"response"</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>glm.probs[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -986,7 +986,7 @@ knn.pred  No Yes
 <pre><code>[1] 0.2666667</code></pre>
 </div>
 </div>
-<p>Usando <span class="math inline">\(K=3\)</span>, la tasa de éxito aumenta a <code>19</code>%, y con <span class="math inline">\(K=5\)</span> la tasa es de <code>26,7</code>%. Esto es más de cuatro veces la tasa que resulta de seleccionar al azar. ¡Parece que KNN está encontrando algunos patrones reales en un conjunto de datos difícil!</p>
+<p>Usando <span class="math inline">\(K=3\)</span>, la tasa de éxito aumenta a <code>19</code>%, y con <span class="math inline">\(K=5\)</span> la tasa es de <code>26,7</code>%. Esto es más de cuatro veces la tasa que resulta de seleccionar al azar. Esto sugiere que KNN podría estar capturando patrones relevantes en un conjunto de datos difícil.</p>
 <p>Sin embargo, aunque esta estrategia es rentable, vale la pena señalar que se prevé que solo 15 clientes comprarán un seguro usando KNN con <span class="math inline">\(K=5\)</span>. En la práctica, la compañía de seguros puede desear gastar recursos para convencer a más de 15 clientes potenciales para que compren un seguro.</p>
 </section>
 <section id="knn-vs.-reg.log" class="level4" data-number="4.2.4.3">

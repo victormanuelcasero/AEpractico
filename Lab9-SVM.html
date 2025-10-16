@@ -356,17 +356,16 @@ body {text-align: justify}
 </div>
 <p>No lo son. A continuación, ajustamos el clasificador de vectores soporte. Para que la función <code>svm()</code> realice la clasificación (a diferencia de la regresión basada en SVM), debemos codificar la respuesta como una variable factor. Ahora creamos un data.frame con la respuesta codificada como un factor.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x, <span class="at">y =</span> <span class="fu">as.factor</span>(y))</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(e1071)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>svmfit <span class="ot">&lt;-</span> <span class="fu">svm</span>(</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  y <span class="sc">~</span> .,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dat,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">kernel =</span> <span class="st">"linear"</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cost =</span> <span class="dv">10</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">scale =</span> <span class="cn">FALSE</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x, </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">y =</span> <span class="fu">as.factor</span>(y))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(e1071)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>svmfit <span class="ot">&lt;-</span> <span class="fu">svm</span>(y <span class="sc">~</span> .,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> dat,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">kernel =</span> <span class="st">"linear"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">cost =</span> <span class="dv">10</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">scale =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>El argumento <code>scale = FALSE</code> le dice a la función <code>svm()</code> que no <em>escale</em> cada característica (para que tenga media cero y desviación estándar uno, véase el Anexo <strong>Herramientas</strong>); dependiendo de la aplicación, podría preferirse <code>scale = TRUE</code>.</p>
+<p>El argumento <code>scale = FALSE</code> le dice a la función <code>svm()</code> que no <em>escale</em> cada característica (para que tenga media cero y desviación estándar uno, véase <a href="ZA_Herram.html#sec-scale" class="quarto-xref"><span>Section A.6.5</span></a>); dependiendo de la aplicación, podría preferirse <code>scale = TRUE</code>.</p>
 <p>Ahora podemos dibujar el clasificador de vectores soporte obtenido:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">pty =</span> <span class="st">"s"</span>) <span class="co"># añadido no está en el código original</span></span>
@@ -430,14 +429,12 @@ Levels:
 <p>Esto nos dice, por ejemplo, que se usó un kernel lineal con <code>cost = 10</code>, y que había 7 vectores soporte, 4 en una clase y 3 en la otra.</p>
 <p>¿Qué pasa si usamos un valor más pequeño del parámetro de coste?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>svmfit <span class="ot">&lt;-</span> <span class="fu">svm</span>(</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  y <span class="sc">~</span> .,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dat,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">kernel =</span> <span class="st">"linear"</span>,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cost =</span> <span class="fl">0.1</span>,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">scale =</span> <span class="cn">FALSE</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(svmfit, dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>svmfit <span class="ot">&lt;-</span> <span class="fu">svm</span>(y <span class="sc">~</span> .,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> dat,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">kernel =</span> <span class="st">"linear"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">cost =</span> <span class="fl">0.1</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">scale =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(svmfit, dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -518,14 +515,14 @@ Levels:
 </section>
 <section id="predicciones" class="level3" data-number="9.1.2">
 <h3 data-number="9.1.2" class="anchored" data-anchor-id="predicciones"><span class="header-section-number">9.1.2</span> Predicciones</h3>
-<p>La función <code>predict()</code> se puede utilizar para predecir la etiqueta de clase en un conjunto de observaciones de prueba/validación, en cualquier valor dado del parámetro de coste. Empezamos generando un conjunto de datos de prueba/test.</p>
+<p>La función <code>predict()</code> se puede utilizar para predecir la etiqueta de clase en un conjunto de observaciones de validación, para cualquier valor dado del parámetro de coste. Empezamos generando un conjunto de datos de test.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>xtest <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">20</span> <span class="sc">*</span> <span class="dv">2</span>), <span class="at">ncol =</span> <span class="dv">2</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>ytest <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="dv">20</span>, <span class="at">rep =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>xtest[ytest <span class="sc">==</span> <span class="dv">1</span>,] <span class="ot">&lt;-</span> xtest[ytest <span class="sc">==</span> <span class="dv">1</span>,] <span class="sc">+</span> <span class="dv">1</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>testdat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> xtest, <span class="at">y =</span> <span class="fu">as.factor</span>(ytest))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Ahora predecimos las etiquetas de clase de estas observaciones de prueba utilizando el mejor modelo obtenido a través de la validación cruzada.</p>
+<p>Ahora predecimos las etiquetas de clase de estas observaciones de validación utilizando el mejor modelo obtenido a través de la validación cruzada.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ypred <span class="ot">&lt;-</span> <span class="fu">predict</span>(bestmod, testdat)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="at">predict =</span> ypred, <span class="at">truth =</span> testdat<span class="sc">$</span>y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -536,17 +533,15 @@ predict -1 1
      1   2 8</code></pre>
 </div>
 </div>
-<p>Así, con este valor de <code>cost</code>, 17 de las observaciones de prueba se clasifican correctamente y 3 están mal clasificadas. ¿Qué pasaría si hubiéramos usado <code>cost = 0.01</code>?</p>
+<p>Así, con este valor de <code>cost</code>, 17 de las observaciones de validación se clasifican correctamente y 3 están mal clasificadas. ¿Qué pasaría si hubiéramos usado <code>cost = 0.01</code>?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>svmfit <span class="ot">&lt;-</span> <span class="fu">svm</span>(</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  y <span class="sc">~</span> .,</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dat,</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">kernel =</span> <span class="st">"linear"</span>,</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cost =</span> .<span class="dv">01</span>,</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">scale =</span> <span class="cn">FALSE</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>ypred <span class="ot">&lt;-</span> <span class="fu">predict</span>(svmfit, testdat)</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="at">predict =</span> ypred, <span class="at">truth =</span> testdat<span class="sc">$</span>y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>svmfit <span class="ot">&lt;-</span> <span class="fu">svm</span>(y <span class="sc">~</span> .,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> dat,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">kernel =</span> <span class="st">"linear"</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">cost =</span> .<span class="dv">01</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">scale =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>ypred <span class="ot">&lt;-</span> <span class="fu">predict</span>(svmfit, testdat)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="at">predict =</span> ypred, <span class="at">truth =</span> testdat<span class="sc">$</span>y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       truth
 predict -1  1
@@ -558,7 +553,7 @@ predict -1  1
 </section>
 <section id="clases-linealmente-separables" class="level3" data-number="9.1.3">
 <h3 data-number="9.1.3" class="anchored" data-anchor-id="clases-linealmente-separables"><span class="header-section-number">9.1.3</span> Clases linealmente separables</h3>
-<p>Ahora considere una situación en la que las dos clases son linealmente separables. Entonces podemos encontrar un hiperplano separador usando la función <code>svm()</code>. Primero separamos aún más las dos clases en nuestros datos simulados para que sean linealmente separables:</p>
+<p>Ahora se considera una situación en la que las dos clases son linealmente separables. Entonces podemos encontrar un hiperplano separador usando la función <code>svm()</code>. Primero separamos aún más las dos clases en nuestros datos simulados para que sean linealmente separables:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>x[y <span class="sc">==</span> <span class="dv">1</span>,] <span class="ot">&lt;-</span> x[y <span class="sc">==</span> <span class="dv">1</span>,] <span class="sc">+</span> <span class="fl">0.5</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x[,<span class="dv">2</span>], x[,<span class="dv">1</span>], <span class="at">col =</span> (y <span class="sc">+</span> <span class="dv">5</span>) <span class="sc">/</span> <span class="dv">2</span>, <span class="at">pch =</span> <span class="dv">19</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -608,7 +603,7 @@ Levels:
 </div>
 </div>
 </div>
-<p>No se cometieron errores de entrenamiento y solo se utilizaron 3 vectores soporte. Sin embargo, podemos ver en la figura que el margen es muy estrecho (porque las observaciones que no son vectores soporte, indicadas como círculos, están muy cerca del límite de decisión). Parece probable que este modelo funcione mal en los datos de prueba/validación. Ahora probamos un valor más pequeño de <code>cost</code>:</p>
+<p>No se cometieron errores de entrenamiento y solo se utilizaron 3 vectores soporte. Sin embargo, podemos ver en la figura que el margen es muy estrecho (porque las observaciones que no son vectores soporte, indicadas como círculos, están muy cerca del límite de decisión). Parece probable que este modelo funcione mal en los datos de validación. Ahora probamos un valor más pequeño de <code>cost</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>svmfit <span class="ot">&lt;-</span> <span class="fu">svm</span>(y <span class="sc">~</span> .,</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> dat,</span>
@@ -645,12 +640,12 @@ Levels:
 </div>
 </div>
 </div>
-<p>Usando <code>cost = 1</code>, clasificamos erróneamente una observación de entrenamiento, pero también obtenemos un margen mucho más amplio y hacemos uso de 7 vectores soporte. Parece probable que este modelo funcione mejor en los datos de prueba que el modelo con <code>cost = 1e5</code>.</p>
+<p>Usando <code>cost = 1</code>, clasificamos erróneamente una observación de entrenamiento, pero también obtenemos un margen mucho más amplio y hacemos uso de 7 vectores soporte. Parece probable que este modelo funcione mejor en los datos de validación que el modelo con <code>cost = 1e5</code>.</p>
 </section>
 </section>
 <section id="support-vector-machine" class="level2" data-number="9.2">
 <h2 data-number="9.2" class="anchored" data-anchor-id="support-vector-machine"><span class="header-section-number">9.2</span> Support Vector Machine</h2>
-<p>Para adaptar una SVM usando un kernel <em>no lineal</em>, usamos una vez más la función <code>svm()</code>, con un valor diferente del parámetro <code>kernel</code>: <code>"polinomial"</code> o <code>"radial"</code>. En el primer caso también usamos el argumento <code>degree</code> para especificar un grado para el kernel polinomial (esto es <span class="math inline">\(d\)</span> en (9.22)), y en el último caso usamos <code>gamma</code> para especificar un valor de <span class="math inline">\(\gamma\)</span> para el kernel de base radial (9.24).</p>
+<p>Para adaptar una SVM usando un kernel <em>no lineal</em>, usamos una vez más la función <code>svm()</code>, con un valor diferente del parámetro <code>kernel</code>: <code>"polinomial"</code> o <code>"radial"</code>. En el primer caso también usamos el argumento <code>degree</code> para especificar un grado para el kernel polinomial (esto es <span class="math inline">\(d\)</span> en (9.22)), y en el segundo caso usamos <code>gamma</code> para especificar un valor de <span class="math inline">\(\gamma\)</span> para el kernel de base radial (9.24).</p>
 <p>Primero generamos algunos datos con un límite de clase no lineal, de la siguiente manera:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
@@ -671,17 +666,15 @@ Levels:
 </div>
 </div>
 </div>
-<p>Los datos se dividen aleatoriamente en grupos de entrenamiento y prueba/validación. Luego ajustamos los datos de entrenamiento usando la función <code>svm()</code> con un kernel radial y <span class="math inline">\(\gamma=1\)</span>:</p>
+<p>Los datos se dividen aleatoriamente en grupos de entrenamiento y validación. Luego ajustamos los datos de entrenamiento usando la función <code>svm()</code> con un kernel radial y <span class="math inline">\(\gamma=1\)</span>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">200</span>, <span class="dv">100</span>)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>svmfit <span class="ot">&lt;-</span> <span class="fu">svm</span>(</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  y <span class="sc">~</span> .,</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dat[train,],</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma =</span> <span class="dv">1</span>,</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cost =</span> <span class="dv">1</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(svmfit, dat[train,])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>svmfit <span class="ot">&lt;-</span> <span class="fu">svm</span>(y <span class="sc">~</span> .,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> dat[train,],</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">gamma =</span> <span class="dv">1</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">cost =</span> <span class="dv">1</span>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(svmfit, dat[train,])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -718,14 +711,12 @@ Levels:
 </div>
 <p>Podemos ver en la figura que hay una buena cantidad de errores de entrenamiento en este ajuste SVM. Si aumentamos el valor de <code>cost</code>, podemos reducir el número de errores de entrenamiento. Sin embargo, esto tiene el precio de un límite de decisión más irregular, que parece correr el riesgo de sobreajustar los datos.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>svmfit <span class="ot">&lt;-</span> <span class="fu">svm</span>(</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  y <span class="sc">~</span> .,</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dat[train,],</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma =</span> <span class="dv">1</span>,</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cost =</span> <span class="fl">1e5</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(svmfit, dat[train,])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>svmfit <span class="ot">&lt;-</span> <span class="fu">svm</span>(y <span class="sc">~</span> .,</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> dat[train,],</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">gamma =</span> <span class="dv">1</span>,</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">cost =</span> <span class="fl">1e5</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(svmfit, dat[train,])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -739,18 +730,13 @@ Levels:
 <p>Podemos realizar una validación cruzada usando de nuevo <code>tune()</code>, para seleccionar la mejor opción de <span class="math inline">\(\gamma\)</span> y <code>cost</code> para una SVM con kernel radial:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>tune.out <span class="ot">&lt;-</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune</span>(</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    svm,</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    y <span class="sc">~</span> .,</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> dat[train,],</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">ranges =</span> <span class="fu">list</span>(</span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">cost =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>),</span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">gamma =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)</span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tune.out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>tune.out <span class="ot">&lt;-</span> <span class="fu">tune</span>(svm,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                 y <span class="sc">~</span> .,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> dat[train,],</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">ranges =</span> <span class="fu">list</span>(<span class="at">cost =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>),</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>                               <span class="at">gamma =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)))</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tune.out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Parameter tuning of 'svm':
@@ -792,7 +778,7 @@ Parameter tuning of 'svm':
 25 1e+03   4.0  0.15 0.13540064</code></pre>
 </div>
 </div>
-<p>Por lo tanto, la mejor elección de parámetros implica <code>cost = 1</code> y <code>gamma = 0,5</code>. Podemos ver las predicciones del conjunto de prueba/validación para este modelo aplicando la función <code>predict()</code> a los datos. Tenga en cuenta que para hacer esto creamos un subconjunto del data.frame <code>dat</code> usando <code>-train</code> como un conjunto de índices.</p>
+<p>Por lo tanto, la mejor elección de parámetros implica <code>cost = 1</code> y <code>gamma = 0,5</code>. Podemos ver las predicciones del conjunto de validación para este modelo aplicando la función <code>predict()</code> a los datos. Tenga en cuenta que, para hacer esto, creamos un subconjunto del data.frame <code>dat</code>, usando <code>-train</code> como conjunto de índices.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="at">true =</span> dat[<span class="sc">-</span>train, <span class="st">"y"</span>],</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>      <span class="at">pred =</span> <span class="fu">predict</span>(tune.out<span class="sc">$</span>best.model, <span class="at">newdata =</span> dat[<span class="sc">-</span>train,]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -803,12 +789,12 @@ true  1  2
    2  2 21</code></pre>
 </div>
 </div>
-<p>El 12% de las observaciones de prueba están mal clasificadas por este SVM.</p>
+<p>El 12% de las observaciones de validación están mal clasificadas por este SVM.</p>
 </section>
 </section>
 <section id="sec-roc" class="level2" data-number="9.3">
 <h2 data-number="9.3" class="anchored" data-anchor-id="sec-roc"><span class="header-section-number">9.3</span> Curvas ROC</h2>
-<p>El paquete <code>ROCR</code> se puede utilizar para producir curvas ROC como las de las Figuras 9.10 y 9.11. Primero creamos una función (véase el Anexo <strong>Herramientas</strong>) para dibujar una curva ROC dado un vector que contiene una puntuación numérica para cada observación, <code>pred</code>, y un vector que contiene la etiqueta de clase para cada observación, <code>truth</code>.</p>
+<p>El paquete <code>ROCR</code> se puede utilizar para producir curvas ROC como las de las Figuras 9.10 y 9.11. Primero creamos una función (véase <a href="ZA_Herram.html#sec-escritura-funciones" class="quarto-xref"><span>Section A.2</span></a>), para dibujar una curva ROC dados, un vector que contiene una puntuación numérica para cada observación, <code>pred</code>, y un vector que contiene la etiqueta de clase para cada observación, <code>truth</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>rocplot <span class="ot">&lt;-</span> <span class="cf">function</span>(pred, truth, ...) {</span>
@@ -819,33 +805,35 @@ true  1  2
 </div>
 <p>Las SVM y los clasificadores de vectores soporte generan etiquetas de clase para cada observación. Sin embargo, también es posible obtener <em>valores ajustados</em> para cada observación, que son las puntuaciones numéricas utilizadas para obtener las etiquetas de clase. Por ejemplo, en el caso de un clasificador de vectores soporte, el valor ajustado para una observación <span class="math inline">\(X= (X_1, X_2, \ldots, X_p)^T\)</span> toma la forma <span class="math inline">\(\hat{\beta}_0 + \hat{\beta}_1 X_1 + \hat{\beta}_2 X_2 + \cdots + \hat{\beta}_p X_p\)</span>. Para una SVM con un kernel no lineal, la ecuación que produce el valor ajustado se da en (9.23). En esencia, el signo del valor ajustado determina en qué lado del límite de decisión se encuentra la observación. Por lo tanto, la relación entre el valor ajustado y la predicción de clase para una observación dada es simple: si el valor ajustado excede <code>0</code>, la observación se asigna a una clase, y si es menor que <code>0</code>, se asigna a la otra. Para obtener los valores ajustados para un modelo SVM dado, usamos <code>decision.values = TRUE</code> al ajustar <code>svm()</code>. Luego, la función <code>predict()</code> generará los valores ajustados.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>svmfit.opt <span class="ot">&lt;-</span> <span class="fu">svm</span>(</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  y <span class="sc">~</span> .,</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dat[train, ],</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma =</span> <span class="dv">2</span>,</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cost =</span> <span class="dv">1</span>,</span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">decision.values =</span> T</span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>fitted <span class="ot">&lt;-</span></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">attributes</span>(<span class="fu">predict</span>(svmfit.opt, dat[train, ], </span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">decision.values =</span> <span class="cn">TRUE</span>))<span class="sc">$</span>decision.values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>svmfit.opt <span class="ot">&lt;-</span> <span class="fu">svm</span>(y <span class="sc">~</span> .,</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> dat[train, ],</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">gamma =</span> <span class="dv">2</span>,</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cost =</span> <span class="dv">1</span>,</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">decision.values =</span> T</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>fitted <span class="ot">&lt;-</span> <span class="fu">attributes</span>(<span class="fu">predict</span>(svmfit.opt, </span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>                             dat[train, ], </span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>                             <span class="at">decision.values =</span> <span class="cn">TRUE</span>))<span class="sc">$</span>decision.values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Ahora podemos producir la curva ROC. Tenga en cuenta que usamos el negativo de los valores ajustados para que los valores negativos correspondan a la clase 1 y los valores positivos a la clase 2.</p>
 <p>SVM parece estar produciendo predicciones precisas. Al aumentar <span class="math inline">\(\gamma\)</span> podemos producir un ajuste más flexible y generar mejoras en la precisión.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rocplot</span>(<span class="sc">-</span>fitted, dat[train, <span class="st">"y"</span>], <span class="at">main =</span> <span class="st">"Training Data"</span>)</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>svmfit.flex <span class="ot">&lt;-</span> <span class="fu">svm</span>(</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  y <span class="sc">~</span> .,</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dat[train,],</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma =</span> <span class="dv">50</span>,</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cost =</span> <span class="dv">1</span>,</span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">decision.values =</span> T</span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>fitted <span class="ot">&lt;-</span> <span class="fu">attributes</span>(<span class="fu">predict</span>(svmfit.flex, dat[train,], </span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">decision.values =</span> T))<span class="sc">$</span>decision.values</span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="fu">rocplot</span>(<span class="sc">-</span>fitted, dat[train, <span class="st">"y"</span>], <span class="at">add =</span> T, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rocplot</span>(<span class="sc">-</span>fitted, </span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>        dat[train, <span class="st">"y"</span>], </span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Training Data"</span>)</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>svmfit.flex <span class="ot">&lt;-</span> <span class="fu">svm</span>(y <span class="sc">~</span> .,</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> dat[train,],</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">gamma =</span> <span class="dv">50</span>,</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cost =</span> <span class="dv">1</span>,</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">decision.values =</span> T)</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>fitted <span class="ot">&lt;-</span> <span class="fu">attributes</span>(<span class="fu">predict</span>(svmfit.flex, </span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>                             dat[train,], </span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>                             <span class="at">decision.values =</span> T))<span class="sc">$</span>decision.values</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a><span class="fu">rocplot</span>(<span class="sc">-</span>fitted, </span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>        dat[train, <span class="st">"y"</span>], </span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">add =</span> T, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -854,14 +842,20 @@ true  1  2
 </div>
 </div>
 </div>
-<p>Sin embargo, estas curvas ROC son de los datos de entrenamiento. Estamos realmente más interesados en el nivel de precisión de la predicción en los datos de prueba/validación. Cuando calculamos las curvas ROC en los datos de prueba, el modelo con <span class="math inline">\(\gamma=2\)</span> parece proporcionar los resultados más precisos.</p>
+<p>Sin embargo, estas curvas ROC son de los datos de entrenamiento. Estamos realmente más interesados en el nivel de precisión de la predicción en los datos de validación. Cuando calculamos las curvas ROC en los datos de validación, el modelo con <span class="math inline">\(\gamma=2\)</span> parece proporcionar los resultados más precisos.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>fitted <span class="ot">&lt;-</span> <span class="fu">attributes</span>(<span class="fu">predict</span>(svmfit.opt, dat[<span class="sc">-</span>train,], </span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">decision.values =</span> T))<span class="sc">$</span>decision.values</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rocplot</span>(<span class="sc">-</span>fitted, dat[<span class="sc">-</span>train, <span class="st">"y"</span>], <span class="at">main =</span> <span class="st">"Test Data"</span>)</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>fitted <span class="ot">&lt;-</span> <span class="fu">attributes</span>(<span class="fu">predict</span>(svmfit.flex, dat[<span class="sc">-</span>train,], </span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">decision.values =</span> T))<span class="sc">$</span>decision.values</span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rocplot</span>(<span class="sc">-</span>fitted, dat[<span class="sc">-</span>train, <span class="st">"y"</span>], <span class="at">add =</span> T, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>fitted <span class="ot">&lt;-</span> <span class="fu">attributes</span>(<span class="fu">predict</span>(svmfit.opt, </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>                             dat[<span class="sc">-</span>train,], </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">decision.values =</span> T))<span class="sc">$</span>decision.values</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rocplot</span>(<span class="sc">-</span>fitted, </span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>        dat[<span class="sc">-</span>train, <span class="st">"y"</span>], </span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Test Data"</span>)</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>fitted <span class="ot">&lt;-</span> <span class="fu">attributes</span>(<span class="fu">predict</span>(svmfit.flex, </span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>                             dat[<span class="sc">-</span>train,], </span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>                             <span class="at">decision.values =</span> T))<span class="sc">$</span>decision.values</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="fu">rocplot</span>(<span class="sc">-</span>fitted, </span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>        dat[<span class="sc">-</span>train, <span class="st">"y"</span>], </span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">add =</span> T, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -892,14 +886,12 @@ true  1  2
 </div>
 <p>Ahora ajustamos una SVM a los datos:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>svmfit <span class="ot">&lt;-</span> <span class="fu">svm</span>(</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  y <span class="sc">~</span> .,</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dat,</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cost =</span> <span class="dv">10</span>,</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma =</span> <span class="dv">1</span></span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(svmfit, dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>svmfit <span class="ot">&lt;-</span> <span class="fu">svm</span>(y <span class="sc">~</span> .,</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> dat,</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">kernel =</span> <span class="st">"radial"</span>,</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">cost =</span> <span class="dv">10</span>,</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">gamma =</span> <span class="dv">1</span>)</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(svmfit, dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -913,10 +905,10 @@ true  1  2
 <section id="aplicación-a-datos-de-expresión-génica-omitido" class="level2" data-number="9.5">
 <h2 data-number="9.5" class="anchored" data-anchor-id="aplicación-a-datos-de-expresión-génica-omitido"><span class="header-section-number">9.5</span> Aplicación a datos de expresión génica (omitido)</h2>
 <blockquote class="blockquote">
-<p><strong>Nota Víctor</strong>: La aplicación descrita en este apartado en el material original es un claro ejemplo de material muy específico, que requiere de ayuda de expertos en el tema (expresión génica) para entender la problemática, el contexto de los datos. Por ello se omite aquí y, de nuevo, se pueden consultar los detalles en el material original.</p>
+<p><strong>Nota Víctor</strong>: La aplicación descrita en este apartado en el material original es un claro ejemplo de material en un contexto muy específico, que requiere de ayuda de expertos en el tema (expresión génica) para entender la problemática, el contexto de los datos. Por ello se omite aquí y, de nuevo, se pueden consultar los detalles en el material original.</p>
 </blockquote>
 <blockquote class="blockquote">
-<p>Sólo añadir aquí que, al mirar las dimensiones del conjunto de datos (<code>Khan</code>) se encuentra que tiene 63 observaciones de entrenamiento y 20 de prueba/validación, y 2308 variables (mediciones de la expresión génica, es decir mediciones de 2308 genes! Muchos más que observaciones!)</p>
+<p>Sólo añadir aquí que, al mirar las dimensiones del conjunto de datos (<code>Khan</code>) se encuentra que tiene 63 observaciones de entrenamiento y 20 de validación, y 2308 variables (mediciones de la expresión génica, es decir mediciones de 2308 genes! Muchos más que observaciones!)</p>
 </blockquote>
 
 

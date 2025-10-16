@@ -259,14 +259,14 @@ window.Quarto = {
   <ul>
   <li><a href="#sec-paquetes" id="toc-sec-paquetes" class="nav-link active" data-scroll-target="#sec-paquetes"><span class="header-section-number">A.1</span> Paquetes</a></li>
   <li><a href="#sec-escritura-funciones" id="toc-sec-escritura-funciones" class="nav-link" data-scroll-target="#sec-escritura-funciones"><span class="header-section-number">A.2</span> Escritura de funciones</a></li>
-  <li><a href="#bucle-usando-for" id="toc-bucle-usando-for" class="nav-link" data-scroll-target="#bucle-usando-for"><span class="header-section-number">A.3</span> Bucle usando <code>for()</code></a></li>
+  <li><a href="#sec-bucle-for" id="toc-sec-bucle-for" class="nav-link" data-scroll-target="#sec-bucle-for"><span class="header-section-number">A.3</span> Bucle usando <code>for()</code></a></li>
   <li><a href="#sec-train-test" id="toc-sec-train-test" class="nav-link" data-scroll-target="#sec-train-test"><span class="header-section-number">A.4</span> Datos de entrenamiento y test</a>
   <ul class="collapse">
-  <li><a href="#con-vector-booleano" id="toc-con-vector-booleano" class="nav-link" data-scroll-target="#con-vector-booleano"><span class="header-section-number">A.4.1</span> con vector <em>booleano</em></a></li>
+  <li><a href="#sec-booleano" id="toc-sec-booleano" class="nav-link" data-scroll-target="#sec-booleano"><span class="header-section-number">A.4.1</span> con vector <em>booleano</em></a></li>
   <li><a href="#sec-sample" id="toc-sec-sample" class="nav-link" data-scroll-target="#sec-sample"><span class="header-section-number">A.4.2</span> con <code>sample()</code></a></li>
   <li><a href="#sec-indices" id="toc-sec-indices" class="nav-link" data-scroll-target="#sec-indices"><span class="header-section-number">A.4.3</span> Con índices</a></li>
   </ul></li>
-  <li><a href="#na-valores-faltantes" id="toc-na-valores-faltantes" class="nav-link" data-scroll-target="#na-valores-faltantes"><span class="header-section-number">A.5</span> <code>NA</code> valores faltantes</a></li>
+  <li><a href="#sec-na" id="toc-sec-na" class="nav-link" data-scroll-target="#sec-na"><span class="header-section-number">A.5</span> <code>NA</code> valores faltantes</a></li>
   <li><a href="#funciones-interesantes-utilizadas" id="toc-funciones-interesantes-utilizadas" class="nav-link" data-scroll-target="#funciones-interesantes-utilizadas"><span class="header-section-number">A.6</span> Funciones interesantes utilizadas</a>
   <ul class="collapse">
   <li><a href="#sec-anova" id="toc-sec-anova" class="nav-link" data-scroll-target="#sec-anova"><span class="header-section-number">A.6.1</span> <code>anova()</code></a></li>
@@ -358,8 +358,8 @@ Adjuntando el paquete: 'MASS'</code></pre>
 <p><code>boot.fn &lt;- function(data, index) ...</code></p>
 <p>Como se ve se define con 2 argumentos: <code>data</code> e <code>index</code>, que después se utilizan en la expresión (se omite por ser específica del tema, no tener aquí el contexto suficiente). Ahora bien, cabe mencionar que al ser una sola expresión la que se va a ejecutar se define sin llaves (véanse más detalles en el <em>Lab5 Remuestreo</em>).</p>
 </section>
-<section id="bucle-usando-for" class="level2" data-number="A.3">
-<h2 data-number="A.3" class="anchored" data-anchor-id="bucle-usando-for"><span class="header-section-number">A.3</span> Bucle usando <code>for()</code></h2>
+<section id="sec-bucle-for" class="level2" data-number="A.3">
+<h2 data-number="A.3" class="anchored" data-anchor-id="sec-bucle-for"><span class="header-section-number">A.3</span> Bucle usando <code>for()</code></h2>
 <p>En el material original se definen varios <em>bucles</em> usando esta función <code>for()</code>:</p>
 <ul>
 <li>en el <em>Lab5 Remuestreo</em></li>
@@ -441,8 +441,8 @@ Adjuntando el paquete: 'MASS'</code></pre>
 <li>utilizando el argumento <code>subset</code>: <code>subset = train</code> (aparece en el <em>Lab6 Selección de variables</em>),</li>
 <li>utilizando expresiones del tipo: <code>Hitters[train, ]</code>, (aparece en el <em>Lab6 Selección de variables</em>)</li>
 </ul>
-<section id="con-vector-booleano" class="level3" data-number="A.4.1">
-<h3 data-number="A.4.1" class="anchored" data-anchor-id="con-vector-booleano"><span class="header-section-number">A.4.1</span> con vector <em>booleano</em></h3>
+<section id="sec-booleano" class="level3" data-number="A.4.1">
+<h3 data-number="A.4.1" class="anchored" data-anchor-id="sec-booleano"><span class="header-section-number">A.4.1</span> con vector <em>booleano</em></h3>
 <p>Se implementa esta estrategia utilizando inteligentemente alguna de las variables del conjunto de datos.</p>
 <p>Por ejemplo, en el <em>Lab4 Clasificación</em>, se dispone de los datos <code>Smarket</code> que contienen la variable <code>Year</code> que toma valores de 2001 a 2005 (en total 1250 valores). Se pueden tomar los datos de los años 2001 a 2004 como de entrenamiento y los de 2005 como de test. ¿Cómo se puede hacer esta división con R?… Usando esta estrategia de vector booleano: creando primero un vector correspondiente a las observaciones de 2001 a 2004, y usándolo después para crear el subconjunto de datos de observaciones de 2005.</p>
 <div class="cell">
@@ -554,8 +554,8 @@ Adjuntando el paquete: 'MASS'</code></pre>
 <p>El vector <code>test</code> se crea con valores desde <code>1</code> hasta <code>1000</code>. Al escribir <code>Caravan[test, ]</code> se obtiene la submatriz de los datos que contienen las observaciones cuyos índices varían entre <code>1</code> y <code>1000</code>, mientras que al escribir <code>Caravan[-test, ]</code> produce la submatriz que contiene las observaciones restantes, las que sus índices no están en ese rango. Para completitud, utilizando la función <code>head()</code> se muestran, para la primera variable, los primeros valores de ambos conjuntos y se comparan con los valores originales de <code>Caravan</code>.</p>
 </section>
 </section>
-<section id="na-valores-faltantes" class="level2" data-number="A.5">
-<h2 data-number="A.5" class="anchored" data-anchor-id="na-valores-faltantes"><span class="header-section-number">A.5</span> <code>NA</code> valores faltantes</h2>
+<section id="sec-na" class="level2" data-number="A.5">
+<h2 data-number="A.5" class="anchored" data-anchor-id="sec-na"><span class="header-section-number">A.5</span> <code>NA</code> valores faltantes</h2>
 <p>Aparece sólo en el <em>Lab6 Selección de variables</em>, pero es un tema que puede afectar a otros <em>Labs</em>.</p>
 <p>Para algunos métodos estadísticos que el vector o el <em>data.frame</em> contenga <code>NA</code>s produce resultados no deseados. De una manera muy ilustrativa se explica la problemática de los valores faltantes en el libro <em>R for Data Science</em>, en este apartado: <a href="https://es.r4ds.hadley.nz/05-transform.html#valores-faltantes" class="uri">https://es.r4ds.hadley.nz/05-transform.html#valores-faltantes</a>… Se dice que los <code>NA</code> ¡son “contagiosos”!</p>
 <p>¿Cómo manejar/trabajar con datos/valores faltantes?</p>

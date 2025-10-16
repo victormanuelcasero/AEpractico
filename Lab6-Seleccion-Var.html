@@ -339,9 +339,9 @@ body {text-align: justify}
 <h3 data-number="6.1.1" class="anchored" data-anchor-id="selección-del-mejor-subconjunto-de-variables"><span class="header-section-number">6.1.1</span> Selección del mejor subconjunto (de variables)</h3>
 <p>Aplicamos el enfoque/método de selección del mejor subconjunto (de variables) a los datos de <code>Hitters</code>.</p>
 <p>Nos interesa predecir el <code>Salary</code> de un jugador de béisbol a partir de varias estadísticas asociadas con el rendimiento del año anterior.</p>
-<section id="na-valores-faltantes" class="level4" data-number="6.1.1.1">
-<h4 data-number="6.1.1.1" class="anchored" data-anchor-id="na-valores-faltantes"><span class="header-section-number">6.1.1.1</span> <code>NA</code> valores faltantes</h4>
-<p>En primer lugar, notamos que falta la variable <code>Salary</code> contiene <code>NA</code>s para algunos de los jugadores (59, concretamente). Con la función <code>na.omit()</code> se eliminan las filas que tienen valores faltantes en cualquier variable del conjunto de datos (véase el Anexo <strong>Herramientas</strong> para más detalles).</p>
+<section id="sec-Lab6NA" class="level4" data-number="6.1.1.1">
+<h4 data-number="6.1.1.1" class="anchored" data-anchor-id="sec-Lab6NA"><span class="header-section-number">6.1.1.1</span> <code>NA</code> valores faltantes</h4>
+<p>En primer lugar, hay que hacer notar que falta la variable <code>Salary</code>, contiene <code>NA</code>s, para algunos de los jugadores (59, concretamente).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR2)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Hitters)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -352,6 +352,9 @@ body {text-align: justify}
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 59</code></pre>
 </div>
+</div>
+<p>Con la función <code>na.omit()</code> se eliminan las filas que tienen valores faltantes en cualquier variable del conjunto de datos (véase <a href="ZA_Herram.html#sec-na" class="quarto-xref"><span>Section A.5</span></a>).</p>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Hitters <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(Hitters)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Hitters)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -368,8 +371,9 @@ body {text-align: justify}
 <p>La función <code>regsubsets()</code> (del paquete <code>leaps</code>) realiza la selección del mejor subconjunto de variables al identificar el mejor modelo que contiene un número dado de predictores, donde <em>mejor</em> se cuantifica usando RSS (<em>Residual sum of squares</em>). La sintaxis es la misma que para <code>lm()</code>. Por defecto, <code>regsubsets()</code> solo reporta resultados hasta el mejor modelo de 8 variables. Pero se puede usar la opción <code>nvmax</code> para devolver tantas variables como se desee. La función <code>summary()</code> muestra el mejor conjunto de variables para cada tamaño de modelo.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaps)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>regfit.full <span class="ot">&lt;-</span> <span class="fu">regsubsets</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(regfit.full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>regfit.full <span class="ot">&lt;-</span> <span class="fu">regsubsets</span>(Salary <span class="sc">~</span> ., </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> Hitters)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(regfit.full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Subset selection object
 Call: regsubsets.formula(Salary ~ ., data = Hitters)
@@ -419,8 +423,10 @@ Selection Algorithm: exhaustive
 <p>Un asterisco indica que una determinada variable está incluida en el modelo correspondiente. Por ejemplo, la salida anterior indica que el mejor modelo de 2 variables es el que contiene <code>Hits</code> y <code>CRBI</code>.</p>
 <p>Ajustamos ahora un modelo de hasta 19 variables (todas).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>regfit.full <span class="ot">&lt;-</span> <span class="fu">regsubsets</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters, <span class="at">nvmax =</span> <span class="dv">19</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>reg.summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(regfit.full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>regfit.full <span class="ot">&lt;-</span> <span class="fu">regsubsets</span>(Salary <span class="sc">~</span> ., </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data =</span> Hitters, </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">nvmax =</span> <span class="dv">19</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>reg.summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(regfit.full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="selección-del-mejor-modelo" class="level4" data-number="6.1.1.3">
@@ -432,7 +438,7 @@ Selection Algorithm: exhaustive
 <pre><code>[1] "which"  "rsq"    "rss"    "adjr2"  "cp"     "bic"    "outmat" "obj"   </code></pre>
 </div>
 </div>
-<p>Podemos examinarlos para tratar de seleccionar el <em>mejor</em> modelo general atendiendo a dichos estadísticos.</p>
+<p>Podemos examinarlos para tratar de seleccionar el <em>mejor</em> modelo atendiendo a dichos estadísticos.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>reg.summary<span class="sc">$</span>rsq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -444,7 +450,7 @@ Selection Algorithm: exhaustive
 <p>Vemos que el estadístico <span class="math inline">\(R^2\)</span> pasa del 32%, cuando solo se incluye una variable en el modelo, a casi el 55%, cuando se incluyen todas las variables. Como era de esperar, el estadístico <span class="math inline">\(R^2\)</span> aumenta monótonamente a medida que se incluyen más variables.</p>
 <p>Dibujar los valores de RSS, <span class="math inline">\(R^2\)</span> ajustado, <span class="math inline">\(C_p\)</span> y BIC para todos los modelos a la vez nos ayudará a decidir qué modelo seleccionar.</p>
 <blockquote class="blockquote">
-<p><strong>Nota técnica</strong>: Se utiliza el argumento <code>type = "o"</code> para conectar los puntos dibujados con líneas. Con la función <code>which.max()</code> se identifica la ubicación del punto máximo de un vector. La función <code>points()</code> coloca puntos en un gráfico que ya se ha creado, en lugar de crear un gráfico nuevo como <code>plot()</code>. Al punto máximo le asignamos el color rojo para indicar el modelo con el estadístico <span class="math inline">\(R^2\)</span> ajustado más grande.</p>
+<p><strong>Nota técnica</strong>: Se utiliza el argumento <code>type = "o"</code> para conectar los puntos dibujados con líneas. Con la función <code>which.max()</code> se identifica la ubicación del punto máximo de un vector. La función <code>points()</code> coloca puntos en un gráfico que ya se ha creado (a diferencia de la función <code>plot()</code> que siempre crea un gráfico nuevo). Al punto máximo le asignamos el color rojo para indicar el modelo con el estadístico <span class="math inline">\(R^2\)</span> ajustado más grande.</p>
 </blockquote>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
@@ -457,13 +463,10 @@ Selection Algorithm: exhaustive
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Variables"</span>,</span>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Adjusted RSq"</span>,</span>
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"o"</span>)</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  max.adjr2,</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  reg.summary<span class="sc">$</span>adjr2[max.adjr2],</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"red"</span>,</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="dv">2</span>,</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">20</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(max.adjr2,</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>       reg.summary<span class="sc">$</span>adjr2[max.adjr2], </span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"red"</span>, </span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex =</span> <span class="dv">2</span>, <span class="at">pch =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -481,24 +484,18 @@ Selection Algorithm: exhaustive
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Variables"</span>,</span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Cp"</span>,</span>
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"o"</span>)</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  min.Cp,</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  reg.summary<span class="sc">$</span>cp[min.Cp],</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"red"</span>,</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="dv">2</span>,</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">20</span></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(reg.summary<span class="sc">$</span>bic,</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Variables"</span>,</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"BIC"</span>,</span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"o"</span>)</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(</span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  min.BIC,</span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>  reg.summary<span class="sc">$</span>bic[min.BIC],</span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">"red"</span>,</span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="dv">2</span>,</span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">20</span></span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(min.Cp,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>       reg.summary<span class="sc">$</span>cp[min.Cp],</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"red"</span>,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex =</span> <span class="dv">2</span>, <span class="at">pch =</span> <span class="dv">20</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(reg.summary<span class="sc">$</span>bic,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Variables"</span>,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"BIC"</span>,</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"o"</span>)</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(min.BIC,</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>       reg.summary<span class="sc">$</span>bic[min.BIC],</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"red"</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex =</span> <span class="dv">2</span>, <span class="at">pch =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -507,7 +504,7 @@ Selection Algorithm: exhaustive
 </div>
 </div>
 </div>
-<p>La función <code>regsubsets()</code> tiene una función <code>plot()</code> incorporada que se puede usar para mostrar las variables seleccionadas para el mejor modelo con un número determinado de predictores, clasificados según el <span class="math inline">\(BIC\)</span>, <span class="math inline">\(C_p\)</span>, <span class="math inline">\(R^2\)</span> ajustado, o <span class="math inline">\(AIC\)</span>. Para obtener más información ejecute (en la consola) <code>?plot.regsubsets</code>.</p>
+<p>La función <code>regsubsets()</code> tiene una función <code>plot()</code> incorporada que se puede usar para mostrar las variables seleccionadas para el mejor modelo con un número determinado de predictores, clasificados según el <span class="math inline">\(BIC\)</span>, <span class="math inline">\(C_p\)</span>, <span class="math inline">\(R^2\)</span> ajustado, o <span class="math inline">\(AIC\)</span>. Para obtener más información sobre esta función ejecute (en la consola) <code>?plot.regsubsets</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(regfit.full, <span class="at">scale =</span> <span class="st">"adjr2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -536,7 +533,7 @@ Selection Algorithm: exhaustive
 </div>
 <p>La fila superior de cada gráfico contiene un cuadrado negro para cada variable seleccionada según el modelo óptimo asociado con ese estadístico/criterio.</p>
 <blockquote class="blockquote">
-<p><strong>Nota Víctor</strong>: ¿Porque varios estadísticos/criterios?, ¿Cuál es el mejor?…</p>
+<p><strong>Nota Víctor</strong>: ¿Por qué varios estadísticos/criterios?, ¿Cuál es el mejor?…</p>
 </blockquote>
 <p>Por ejemplo, vemos que varios modelos comparten un <span class="math inline">\(BIC\)</span> cercano a <span class="math inline">\(-150\)</span>. Sin embargo, el modelo con el <span class="math inline">\(BIC\)</span> más bajo es el modelo de seis variables que contiene solo <code>AtBat</code>, <code>Hits</code>, <code>Walks</code>, <code>CRBI</code>, <code>DivisionW</code> y <code>PutOuts</code>. Podemos usar la función <code>coef()</code> para ver las estimaciones de coeficiente asociadas con este modelo.</p>
 <div class="cell">
@@ -734,23 +731,21 @@ Selection Algorithm: backward
 </section>
 <section id="elección-de-modelos-mediante-validación-y-validación-cruzada" class="level3" data-number="6.1.3">
 <h3 data-number="6.1.3" class="anchored" data-anchor-id="elección-de-modelos-mediante-validación-y-validación-cruzada"><span class="header-section-number">6.1.3</span> Elección de modelos mediante validación y validación cruzada</h3>
-<p>Acabamos de ver que es posible elegir entre un conjunto de modelos de diferentes tamaños usando <span class="math inline">\(C_p\)</span>, <span class="math inline">\(BIC\)</span> y <span class="math inline">\(R^2\)</span> ajustado. Ahora consideraremos cómo hacer esto usando un conjunto de observaciones de validación y usando validación cruzada.</p>
+<p>Acabamos de ver que es posible elegir entre un conjunto de modelos de diferentes tamaños usando <span class="math inline">\(C_p\)</span>, <span class="math inline">\(BIC\)</span> y <span class="math inline">\(R^2\)</span> ajustado. Ahora consideraremos cómo hacer esto usando un conjunto de observaciones de validación, y usando validación cruzada.</p>
 <section id="train-y-test" class="level4" data-number="6.1.3.1">
 <h4 data-number="6.1.3.1" class="anchored" data-anchor-id="train-y-test"><span class="header-section-number">6.1.3.1</span> <code>train</code> y <code>test</code></h4>
-<p>Como ya se ha mencionado en apartados anteriores (véase, por ejemplo, el Capítulo 2 Aprendizaje Estadístico), para que este enfoque produzcan estimaciones precisas del error en el conjunto de observaciones de validación (<em>test</em>), debemos usar <em>sólo las observaciones de entrenamiento</em> (<em>train</em>) para realizar todos los aspectos del ajuste del modelo, incluida la selección de variables. Por lo tanto, la determinación de qué modelo (de un tamaño dado) es mejor debe hacerse usando <em>sólo las observaciones de entrenamiento</em>. Este punto es sutil pero importante.</p>
-<p>Para utilizar el enfoque del conjunto de validación, comenzamos dividiendo las observaciones en un conjunto de entrenamiento (<em>train</em>) y un conjunto de validación (<em>test</em>). Hacemos esto creando un vector aleatorio, <code>train</code>, cuyos elementos serán <code>TRUE</code> si la observación correspondiente está en el conjunto de entrenamiento, y <code>FALSE</code> en caso contrario (véase el Anexo <strong>Herramientas</strong>).</p>
-<p>También, para que el usuario obtenga la misma división de conjunto de entrenamiento/conjunto de test (esto es, para <em>reproducibilidad de resultados</em>), establecemos una semilla aleatoria con <code>set.seed()</code>.</p>
+<p>Como ya se ha mencionado (véase, por ejemplo, el <span class="quarto-unresolved-ref">?sec-AE</span>), para que este enfoque produzca estimaciones precisas del error en el conjunto de observaciones de validación (<em>test</em>), para realizar todos los aspectos del ajuste del modelo debemos usar <em>sólo las observaciones de entrenamiento</em> (<em>train</em>), incluida la selección de variables. Por lo tanto, la elección de qué modelo (de un tamaño dado) es mejor, debe hacerse usando <em>sólo las observaciones de entrenamiento</em>. Este punto es sutil pero importante.</p>
+<p>Para utilizar el enfoque del conjunto de validación, comenzamos dividiendo las observaciones en un conjunto de entrenamiento (<em>train</em>) y un conjunto de validación (<em>test</em>). Hacemos esto creando un vector aleatorio, <code>train</code>, cuyos elementos serán <code>TRUE</code> si la observación correspondiente está en el conjunto de entrenamiento, y <code>FALSE</code> en caso contrario (véase <a href="ZA_Herram.html#sec-booleano" class="quarto-xref"><span>Section A.4.1</span></a>).</p>
+<p>También establecemos una semilla aleatoria con <code>set.seed()</code>, para que el usuario obtenga la misma división de conjunto de entrenamiento/conjunto de test (esto es, para <em>reproducibilidad de resultados</em>).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>), <span class="fu">nrow</span>(Hitters), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> (<span class="sc">!</span>train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Aplicamos <code>regsubsets()</code> al conjunto de entrenamiento para realizar la selección del mejor subconjunto de variables.</p>
+<p>Aplicamos <code>regsubsets()</code> al subconjunto de entrenamiento, <code>Hitters[train, ]</code>, para realizar la selección del mejor subconjunto de variables.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>regfit.best <span class="ot">&lt;-</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">regsubsets</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters[train,], <span class="at">nvmax =</span> <span class="dv">19</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>regfit.best <span class="ot">&lt;-</span> <span class="fu">regsubsets</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters[train,], <span class="at">nvmax =</span> <span class="dv">19</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>En la sentencia anterior accedemos solo al subconjunto de entrenamiento de los datos, usando la expresión <code>Hitters[train, ]</code>.</p>
 </section>
 <section id="validación" class="level4" data-number="6.1.3.2">
 <h4 data-number="6.1.3.2" class="anchored" data-anchor-id="validación"><span class="header-section-number">6.1.3.2</span> Validación</h4>
@@ -758,8 +753,8 @@ Selection Algorithm: backward
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>test.mat <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters[test,])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>La función <code>model.matrix()</code> se usa en muchos paquetes de regresión para construir una matriz <code>X</code> a partir de datos.</p>
-<p>Ahora definimos un <strong>bucle</strong> con la función <code>for()</code> (véase el Anexo <strong>Herramientas</strong>). Para cada tamaño <code>i</code>, extraemos los coeficientes de <code>regfit.best</code> para el mejor modelo de ese tamaño, multiplicándolos en las columnas apropiadas de la <em>matriz del modelo</em> de test para formar las predicciones y calcular el MSE (<em>Mean Square Error</em>) de test/validación.</p>
+<p>La función <code>model.matrix()</code> se usa en muchos paquetes de regresión para construir la matriz de las <code>X</code> a partir de los datos.</p>
+<p>Ahora definimos un <strong>bucle</strong> con la función <code>for()</code> (véase <a href="ZA_Herram.html#sec-bucle-for" class="quarto-xref"><span>Section A.3</span></a>). Para cada tamaño <code>i</code>, extraemos los coeficientes de <code>regfit.best</code> para el mejor modelo de ese tamaño, multiplicándolos en las columnas apropiadas de la <em>matriz del modelo</em> de test para formar las predicciones y calcular el MSE (<em>Mean Square Error</em>) de test/validación.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>val.errors <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">19</span>)</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">19</span>) {</span>
@@ -778,7 +773,7 @@ Selection Algorithm: backward
 <pre><code>[1] 7</code></pre>
 </div>
 </div>
-<p>Encontramos que el mejor modelo (porqué?) es el que contiene siete variables, y mostramos sus coeficientes:</p>
+<p>Encontramos que el mejor modelo (por qué?) es el que contiene siete variables, y mostramos sus coeficientes:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(regfit.best, <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -788,7 +783,7 @@ Selection Algorithm: backward
 -118.4364998    0.2526925 </code></pre>
 </div>
 </div>
-<p>Esto fue un poco tedioso, en parte porque no existe un método <code>predict()</code> para <code>regsubsets()</code>. Dado que usaremos esta función nuevamente, podemos capturar nuestros pasos anteriores y <strong>definir una función</strong> (véase el Anexo <strong>Herramientas</strong>) con nuestro propio método de predicción.</p>
+<p>Este proceso ha sido un poco tedioso, en parte porque no existe un método <code>predict()</code> para <code>regsubsets()</code>. Dado que usaremos esta función nuevamente, podemos capturar nuestros pasos anteriores y <strong>definir una función</strong> (véase <a href="ZA_Herram.html#sec-escritura-funciones" class="quarto-xref"><span>Section A.2</span></a>) con nuestro propio método de predicción.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>predict.regsubsets <span class="ot">&lt;-</span> <span class="cf">function</span>(object, newdata, id, ...) {</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  form <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(object<span class="sc">$</span>call[[<span class="dv">2</span>]])</span>
@@ -814,7 +809,7 @@ Selection Algorithm: backward
 </section>
 <section id="validación-cruzada" class="level4" data-number="6.1.3.3">
 <h4 data-number="6.1.3.3" class="anchored" data-anchor-id="validación-cruzada"><span class="header-section-number">6.1.3.3</span> Validación cruzada</h4>
-<p>Ahora tratamos de elegir el mejor modelo, de entre los modelos de diferentes tamaños, usando <em>validación cruzada</em>. Este enfoque es algo complejo, ya que debemos realizar la selección del mejor subconjunto <em>dentro de cada uno de los</em> <span class="math inline">\(k\)</span> conjuntos de entrenamiento. A pesar de esto, vemos que con su inteligente sintaxis de creación de subconjuntos, <code>R</code> hace que este trabajo sea aparentemente fácil. Primero, creamos un vector que asigna cada observación a uno de los <span class="math inline">\(k=10\)</span> <em>folds</em> (pliegues/dobleces/grupos), y creamos una <em>matriz</em> en la que almacenaremos los resultados, <code>cv.errors</code>.</p>
+<p>Ahora tratamos de elegir el mejor modelo, de entre los modelos de diferentes tamaños, usando <em>validación cruzada</em>. Este enfoque es algo complejo, ya que debemos realizar la selección del mejor subconjunto <em>dentro de cada uno de los</em> <span class="math inline">\(k\)</span> conjuntos de entrenamiento. A pesar de esto, vemos que, con su inteligente sintaxis de creación de subconjuntos, <code>R</code> hace que este trabajo sea aparentemente fácil. Primero, creamos un vector que asigna cada observación a uno de los <span class="math inline">\(k=10\)</span> <em>folds</em> (pliegues/dobleces/grupos), y creamos una <em>matriz</em> en la que almacenaremos los resultados, <code>cv.errors</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">10</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(Hitters)</span>
@@ -834,10 +829,9 @@ Selection Algorithm: backward
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">nvmax =</span> <span class="dv">19</span>)</span>
 <span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">19</span>) {</span>
 <span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>    pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(best.fit, Hitters[folds <span class="sc">==</span> j,], <span class="at">id =</span> i)</span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>    cv.errors[j, i] <span class="ot">&lt;-</span></span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mean</span>((Hitters<span class="sc">$</span>Salary[folds <span class="sc">==</span> j] <span class="sc">-</span> pred)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>    cv.errors[j, i] <span class="ot">&lt;-</span> <span class="fu">mean</span>((Hitters<span class="sc">$</span>Salary[folds <span class="sc">==</span> j] <span class="sc">-</span> pred)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Este código nos devuelve una <em>matriz</em> de 10 <span class="math inline">\(\times\)</span> 19, de la cual el elemento <span class="math inline">\((j,i)\)</span>-ésimo corresponde al MSE de test/validación para el <span class="math inline">\(j\)</span>-ésimo <em>fold</em> de validación cruzada para el mejor modelo de <span class="math inline">\(i\)</span> variables. Usamos la función <code>apply()</code> para promediar las columnas de esta matriz con el fin de obtener un vector para el cual el elemento <span class="math inline">\(i\)</span>-ésimo es el <em>error de validación cruzada</em> para el modelo de <span class="math inline">\(i\)</span> variables.</p>
 <div class="cell">
@@ -877,10 +871,10 @@ Selection Algorithm: backward
 <h2 data-number="6.2" class="anchored" data-anchor-id="regresiones-ridge-y-lasso-regularización"><span class="header-section-number">6.2</span> Regresiones ridge y lasso (regularización)</h2>
 <p>Usaremos el paquete <code>glmnet</code> para realizar las <em>regresiones ridge</em> y <em>lasso</em>.</p>
 <blockquote class="blockquote">
-<p><strong>Nota Víctor</strong>: Estas regresiones forman parte de los métodos <em>shrinkage</em>, que también pretenden reducir el número de variables del modelo, añadiendo una <em>penalización</em>/<em>regularización</em> en el número de coeficientes o su tamaño, en lugar de seleccionar las variables de forma explícita como los métodos anteriores.</p>
+<p><strong>Nota Víctor</strong>: Estas regresiones forman parte de los métodos <em>shrinkage</em>, que también pretenden reducir el número de variables del modelo, añadiendo una <em>penalización</em>/<em>regularización</em> sobre la magnitud de los coeficientes, en lugar de seleccionar las variables de forma explícita como los métodos anteriores.</p>
 </blockquote>
 <p>La función principal de este paquete es <code>glmnet()</code>, que puede usarse para ajustar modelos de regresión ridge, regresión lasso y otros. Esta función tiene una sintaxis ligeramente diferente de otras funciones de ajuste de modelos que hemos encontrado hasta ahora (en el libro). En particular, debemos pasar una matriz <code>x</code> así como un vector <code>y</code>, y no usamos la sintaxis <code>y ~ x</code>.</p>
-<p>Realizaremos las regresiones ridge y lasso para predecir <code>Salary</code> en los datos de <code>Hitters</code>. Antes de continuar, asegúrese de que los valores faltantes se hayan eliminado de los datos, como se ha descrito antes (apartado 6.1.1.1, también puede consultar la Sección 6.5.1. del libro).</p>
+<p>Realizaremos las regresiones ridge y lasso para predecir <code>Salary</code> en los datos de <code>Hitters</code>. Antes de continuar, asegúrese de que los valores faltantes se hayan eliminado de los datos, como se ha descrito antes (<a href="#sec-Lab6NA" class="quarto-xref"><span>Section 6.1.1.1</span></a>, también puede consultar la Sección 6.5.1. del libro).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(Salary <span class="sc">~</span> ., Hitters)[,<span class="sc">-</span><span class="dv">1</span>]</span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> Hitters<span class="sc">$</span>Salary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -888,7 +882,7 @@ Selection Algorithm: backward
 <p>La función <code>model.matrix()</code> es particularmente útil para crear <code>x</code>; no solo produce una matriz correspondiente a los <code>19</code> predictores, sino que también transforma automáticamente cualquier variable cualitativa en variables <em>dummys</em>. La última propiedad es importante porque <code>glmnet()</code> solo puede tomar entradas numéricas y cuantitativas.</p>
 <section id="regresión-ridge" class="level3" data-number="6.2.1">
 <h3 data-number="6.2.1" class="anchored" data-anchor-id="regresión-ridge"><span class="header-section-number">6.2.1</span> Regresión ridge</h3>
-<p>La función <code>glmnet()</code> tiene un argumento <code>alpha</code> que determina qué tipo de modelo se ajusta. Si <code>alpha=0</code> entonces se ajusta un modelo de regresión ridge, y si <code>alpha=1</code> entonces se ajusta un modelo de regresión lasso. Primero ajustamos un modelo de regresión ridge.</p>
+<p>La función <code>glmnet()</code> tiene un argumento <code>alpha</code> que determina qué tipo de modelo se ajusta. Si <code>alpha=0</code> se ajusta un modelo de regresión ridge, si <code>alpha=1</code> se ajusta un modelo de regresión lasso. Primero ajustamos un modelo de regresión ridge.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -898,14 +892,15 @@ Selection Algorithm: backward
 <pre><code>Loaded glmnet 4.1-10</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">^</span><span class="fu">seq</span>(<span class="dv">10</span>,<span class="sc">-</span><span class="dv">2</span>, <span class="at">length =</span> <span class="dv">100</span>)</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>ridge.mod <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x, y, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lambda =</span> grid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>ridge.mod <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x, y, </span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">alpha =</span> <span class="dv">0</span>, </span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">lambda =</span> grid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>De forma predeterminada, la función <code>glmnet()</code> realiza una regresión ridge para un rango de valores <span class="math inline">\(\lambda\)</span> (<code>lambda</code>) seleccionado automáticamente. Sin embargo, aquí hemos optado por implementar la función sobre una <em>malla</em> (<code>grid</code>) de valores.</p>
+<p>De forma predeterminada, la función <code>glmnet()</code> realiza una regresión ridge para un rango de valores <span class="math inline">\(\lambda\)</span> (<code>lambda</code>) seleccionado automáticamente. Sin embargo, aquí hemos optado por proporcionar a la función una <em>malla</em> (<code>grid</code>) de valores de <code>lambda</code>: desde <span class="math inline">\(10^{10}\)</span> a <span class="math inline">\(10^{-2}\)</span>. Se cubre así el rango completo de escenarios desde el modelo nulo que contiene solo la intersección, al ajuste de mínimos cuadrados. Como veremos, también podemos calcular el ajuste del modelo para un valor particular de <span class="math inline">\(\lambda\)</span> que no sea uno de los valores originales de <code>grid</code>.</p>
 <blockquote class="blockquote">
-<p><strong>Nota Víctor</strong>: <span class="math inline">\(\lambda\)</span> es el parámetro de regularización/penalización (de la magnitud de los coeficientes: cuanto más grande es el coeficiente, mayor es la penalización). Se añade a RSS en la expresión a minimizar. Mininizar sólo RSS es el método de <em>mínimos cuadrados</em>.</p>
+<p><strong>Nota Víctor</strong>: <span class="math inline">\(\lambda\)</span> es el parámetro de regularización/penalización (de la magnitud de los coeficientes: cuanto más grande es el coeficiente, mayor es la penalización). Se añade a RSS en la expresión a minimizar. Concretamente, en el caso de regresión ridge la penalización se basa en la magnitud de los coeficientes al cuadrado (es una especie de norma <span class="math inline">\(\ell_2\)</span>). Mininizar sólo RSS es el método de <em>mínimos cuadrados</em>.</p>
 </blockquote>
-<p>Los <span class="math inline">\(\lambda\)</span> seleccionados van desde <span class="math inline">\(10^{10}\)</span> a <span class="math inline">\(10^{-2}\)</span>, cubriendo esencialmente el rango completo de escenarios desde el modelo nulo que contiene solo la intersección, al ajuste de mínimos cuadrados. Como veremos, también podemos calcular el ajuste del modelo para un valor particular de <span class="math inline">\(\lambda\)</span> que no sea uno de los valores originales de <code>grid</code>.</p>
-<p>Por defecto, la función <code>glmnet()</code> estandariza las variables para que estén en la misma escala. Para desactivar esta configuración predeterminada, utilice el argumento <code>standardize = FALSE</code>.</p>
+<p>Por defecto, la función <code>glmnet()</code> estandariza las variables para que estén en la misma escala. Se podría desactivar esta configuración predeterminada, utilice el argumento <code>standardize = FALSE</code> (pero no es nada recomendable).</p>
 <p>Asociado con cada valor de <span class="math inline">\(\lambda\)</span> hay un vector de coeficientes de regresión ridge, almacenados en una matriz a la que se puede acceder mediante <code>coef()</code>. En este caso, es una matriz <span class="math inline">\(20 \times 100\)</span>, con 20 filas (una para cada predictor, más una intersección) y 100 columnas (una para cada valor de <span class="math inline">\(\lambda\)</span>).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">coef</span>(ridge.mod))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -913,11 +908,11 @@ Selection Algorithm: backward
 <pre><code>[1]  20 100</code></pre>
 </div>
 </div>
-<p>Esperamos que las estimaciones del coeficiente sean mucho más pequeñas, en términos de la norma <span class="math inline">\(\ell_2\)</span>, cuando se usa un valor grande de <span class="math inline">\(\lambda\)</span>, en comparación con cuando se usa un valor pequeño de <span class="math inline">\(\lambda\)</span>.</p>
+<p>Esperamos que las estimaciones de los coeficientes sean mucho más pequeñas, en términos de la norma <span class="math inline">\(\ell_2\)</span>, cuando se usa un valor grande de <span class="math inline">\(\lambda\)</span>, en comparación con cuando se usa un valor pequeño de <span class="math inline">\(\lambda\)</span>.</p>
 <blockquote class="blockquote">
 <p><strong>Nota Víctor</strong>: una norma se puede entender como una regla para medir la “magnitud” de un vector, por tanto, permite una fácil comparación entre vectores. La norma <span class="math inline">\(\ell_2\)</span> se calcula como la raíz cuadrada de la suma de los cuadrados de los elementos del vector.</p>
 </blockquote>
-<p>Para el valor <code>50</code> de la malla se tiene <span class="math inline">\(\lambda=\)</span><code>11498</code> y sus coeficientes, junto con su norma <span class="math inline">\(\ell_2\)</span>, son:</p>
+<p>A continuación obtenemos el valor <code>50</code> de la malla (esto es <span class="math inline">\(\lambda=\)</span><code>11498</code>) y sus coeficientes, junto con su norma <span class="math inline">\(\ell_2\)</span>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>ridge.mod<span class="sc">$</span>lambda[<span class="dv">50</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -939,7 +934,7 @@ Selection Algorithm: backward
 <pre><code>[1] 6.360612</code></pre>
 </div>
 </div>
-<p>En contraste, aquí están otros coeficientes junto con su norma <span class="math inline">\(\ell_2\)</span>, cuando el valor de la malla es <code>60</code> y entonces <span class="math inline">\(\lambda=\)</span><code>705</code>. Nótese que la norma de <span class="math inline">\(\ell_2\)</span> es mucho más grande para los coeficientes asociados con este valor más pequeño de <span class="math inline">\(\lambda\)</span>.</p>
+<p>En contraste, aquí están otros coeficientes junto con su norma <span class="math inline">\(\ell_2\)</span>, cuando el valor de la malla es <code>60</code> (que corresponde a <span class="math inline">\(\lambda=\)</span><code>705</code>). Nótese que la norma <span class="math inline">\(\ell_2\)</span> es mucho más grande para los coeficientes asociados con este valor más pequeño de <span class="math inline">\(\lambda\)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>ridge.mod<span class="sc">$</span>lambda[<span class="dv">60</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -961,7 +956,7 @@ Selection Algorithm: backward
 <pre><code>[1] 57.11001</code></pre>
 </div>
 </div>
-<p>Podemos usar la función <code>predict()</code> para varios propósitos. Por ejemplo, podemos obtener los coeficientes de regresión ridge para un nuevo valor de <span class="math inline">\(\lambda\)</span>, digamos <span class="math inline">\(50\)</span>:</p>
+<p>Podemos usar la función <code>predict()</code> para varios propósitos. Por ejemplo, podemos obtener los coeficientes de regresión ridge para un valor de <span class="math inline">\(\lambda\)</span> distinto a los proporcionados en la malla, por ejemplo <span class="math inline">\(\lambda = 50\)</span> (nótese que se le debe especificar en el argumento <code>s</code>):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(ridge.mod, <span class="at">s =</span> <span class="dv">50</span>, <span class="at">type =</span> <span class="st">"coefficients"</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -975,7 +970,8 @@ Selection Algorithm: backward
 -1.182011e+02  2.502322e-01  1.215665e-01 -3.278600e+00 -9.496680e+00 </code></pre>
 </div>
 </div>
-<p>Ahora dividimos las muestras en un conjunto de entrenamiento y un conjunto de test para estimar el error de test de las regresiones ridge y lasso. Elegiremos aleatoriamente un subconjunto de números entre <span class="math inline">\(1\)</span> y <span class="math inline">\(n\)</span>, que se usarán como índices para las observaciones de entrenamiento (véase el Anexo <strong>Herramientas</strong>). Primero establecemos una semilla aleatoria para la <em>reproducibilidad</em> de los resultados obtenidos.</p>
+<p><strong>Enfoque entrenamiento/validación</strong><br>
+Ahora dividimos la muestra en un conjunto de entrenamiento y un conjunto de test para estimar el error de validación de las regresiones ridge y lasso. Elegiremos aleatoriamente un subconjunto de números entre <span class="math inline">\(1\)</span> y <span class="math inline">\(n\)</span>, que se usarán como índices para las observaciones de entrenamiento (véase <a href="ZA_Herram.html#sec-indices" class="quarto-xref"><span>Section A.4.3</span></a>). Primero establecemos una semilla aleatoria para la <em>reproducibilidad</em> de los resultados obtenidos.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(x), <span class="fu">nrow</span>(x) <span class="sc">/</span> <span class="dv">2</span>)</span>
@@ -984,13 +980,12 @@ Selection Algorithm: backward
 </div>
 <p>A continuación, ajustamos un modelo de regresión ridge en el conjunto de entrenamiento y evaluamos su MSE en el conjunto de test, usando <span class="math inline">\(\lambda=4\)</span> junto con el argumento <code>newx</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>ridge.mod <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x[train,],</span>
-<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>                    y[train],</span>
-<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">alpha =</span> <span class="dv">0</span>,</span>
-<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">lambda =</span> grid,</span>
-<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">thresh =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a>ridge.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(ridge.mod, <span class="at">s =</span> <span class="dv">4</span>, <span class="at">newx =</span> x[test,])</span>
-<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((ridge.pred <span class="sc">-</span> y.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>ridge.mod <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x[train,], y[train],</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">alpha =</span> <span class="dv">0</span>,</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">lambda =</span> grid,</span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">thresh =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>ridge.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(ridge.mod, <span class="at">s =</span> <span class="dv">4</span>, <span class="at">newx =</span> x[test,])</span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((ridge.pred <span class="sc">-</span> y.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 142199.2</code></pre>
 </div>
@@ -1015,15 +1010,12 @@ Selection Algorithm: backward
 <p>Ahora comprobamos si hay algún beneficio en realizar una regresión ridge con <span class="math inline">\(\lambda=4\)</span> en lugar de simplemente realizar una regresión de mínimos cuadrados. Recuerde que los mínimos cuadrados son simplemente una regresión ridge con <span class="math inline">\(\lambda=0\)</span>.</p>
 <p><strong>Detalle técnico</strong>: Para que <code>glmnet()</code> arroje los coeficientes de mínimos cuadrados exactos cuando <span class="math inline">\(\lambda=0\)</span>, usamos el argumento <code>exact = T</code> al llamar a la función <code>predict()</code>. De lo contrario, la función <code>predict()</code> interpolará sobre la malla de valores <span class="math inline">\(\lambda\)</span> utilizados en el ajuste del modelo <code>glmnet()</code>, arrojando resultados aproximados. Cuando usamos <code>exact = T</code>, queda una ligera discrepancia en el tercer lugar decimal entre la salida de <code>glmnet()</code> cuando <span class="math inline">\(\lambda = 0\)</span> y la salida de <code>lm()</code>; esto se debe a la aproximación numérica por parte de <code>glmnet()</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>ridge.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
-<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>  ridge.mod,</span>
-<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">s =</span> <span class="dv">0</span>,</span>
-<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">newx =</span> x[test,],</span>
-<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">exact =</span> T,</span>
-<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> x[train,],</span>
-<span id="cb80-7"><a href="#cb80-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> y[train]</span>
-<span id="cb80-8"><a href="#cb80-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb80-9"><a href="#cb80-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((ridge.pred <span class="sc">-</span> y.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>ridge.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(ridge.mod,</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">s =</span> <span class="dv">0</span>,</span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">newx =</span> x[test,],</span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">exact =</span> T,</span>
+<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">x =</span> x[train,], <span class="at">y =</span> y[train])</span>
+<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((ridge.pred <span class="sc">-</span> y.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 168588.6</code></pre>
 </div>
@@ -1043,14 +1035,11 @@ Coefficients:
     xErrors  xNewLeagueN  
     -4.7128     -71.0951  </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(</span>
-<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>  ridge.mod,</span>
-<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">s =</span> <span class="dv">0</span>,</span>
-<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">exact =</span> T,</span>
-<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"coefficients"</span>,</span>
-<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> x[train,],</span>
-<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> y[train]</span>
-<span id="cb84-8"><a href="#cb84-8" aria-hidden="true" tabindex="-1"></a>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(ridge.mod,</span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">s =</span> <span class="dv">0</span>,</span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">exact =</span> T,</span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">"coefficients"</span>,</span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> x[train,], <span class="at">y =</span> y[train])[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> (Intercept)        AtBat         Hits        HmRun         Runs          RBI 
  274.0200994   -0.3521900   -1.6371383    5.8146692    1.5423361    1.1241837 
@@ -1062,7 +1051,7 @@ Coefficients:
   -4.7127879  -71.0898914 </code></pre>
 </div>
 </div>
-<p>En general, si queremos ajustar un modelo de mínimos cuadrados, es decir, sin penalización, deberíamos usar la función <code>lm()</code>, ya que esa función proporciona resultados más útiles, como errores estándar y p-valores para los coeficientes.</p>
+<p>En general, si queremos ajustar un modelo de mínimos cuadrados, es decir, sin penalización, deberíamos usar la función <code>lm()</code>, ya que esa función proporciona resultados más útiles, como errores estándar y p-valores de los coeficientes.</p>
 <section id="elección-de-lambda-por-validación-cruzada" class="level4" data-number="6.2.1.1">
 <h4 data-number="6.2.1.1" class="anchored" data-anchor-id="elección-de-lambda-por-validación-cruzada"><span class="header-section-number">6.2.1.1</span> Elección de <span class="math inline">\(\lambda\)</span> por validación cruzada</h4>
 <p>Por otro lado, en lugar de elegir arbitrariamente <span class="math inline">\(\lambda=4\)</span>, sería mejor usar la <em>validación cruzada</em> para elegir el parámetro de ajuste <span class="math inline">\(\lambda\)</span>. Podemos hacer esto usando la función de validación cruzada incorporada, <code>cv.glmnet()</code>. De forma predeterminada, la función realiza una validación cruzada 10-<em>fold</em>, aunque esto se puede cambiar usando el argumento <code>nfolds</code>. Primero establecemos una semilla aleatoria para que nuestros resultados sean <em>reproducibles</em>, ya que la elección de los <em>folds</em> de validación cruzada es aleatoria.</p>
@@ -1078,27 +1067,26 @@ Coefficients:
 </div>
 </div>
 <div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>bestlam <span class="ot">&lt;-</span> cv.out<span class="sc">$</span>lambda.min</span>
-<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>bestlam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>bestlam; <span class="fu">log</span>(bestlam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 326.0828</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(bestlam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5.787151</code></pre>
 </div>
 </div>
 <p>Por lo tanto, vemos que el valor de <span class="math inline">\(\lambda\)</span> que da como resultado el error de validación cruzada más pequeño es <code>326</code>. ¿Cuál es el MSE de validación asociado con este valor de <span class="math inline">\(\lambda\)</span>?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>ridge.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(ridge.mod, <span class="at">s =</span> bestlam, <span class="at">newx =</span> x[test,])</span>
-<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((ridge.pred <span class="sc">-</span> y.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>ridge.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(ridge.mod, <span class="at">s =</span> bestlam, <span class="at">newx =</span> x[test,])</span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((ridge.pred <span class="sc">-</span> y.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 139856.6</code></pre>
 </div>
 </div>
-<p>Esto representa una mejora adicional sobre el MSE de validación que obtuvimos usando <span class="math inline">\(\lambda=4\)</span>. Finalmente, reajustamos nuestro modelo de regresión ridge en el conjunto de datos completo, usando el valor de <span class="math inline">\(\lambda\)</span> elegido por validación cruzada, y examinando las estimaciones de los coeficientes.</p>
+<p>Esto representa una mejora adicional sobre el MSE de validación que obtuvimos usando <span class="math inline">\(\lambda=4\)</span>. Finalmente, reajustamos nuestro modelo de regresión ridge en el conjunto de datos completo, usando el valor de <span class="math inline">\(\lambda\)</span> elegido por validación cruzada, y examinamos las estimaciones de los coeficientes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x, y, <span class="at">alpha =</span> <span class="dv">0</span>)</span>
-<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(out, <span class="at">type =</span> <span class="st">"coefficients"</span>, <span class="at">s =</span> bestlam)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x, y, <span class="at">alpha =</span> <span class="dv">0</span>)</span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(out, <span class="at">type =</span> <span class="st">"coefficients"</span>, <span class="at">s =</span> bestlam)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> (Intercept)        AtBat         Hits        HmRun         Runs          RBI 
  15.44383120   0.07715547   0.85911582   0.60103106   1.06369007   0.87936105 
@@ -1110,15 +1098,17 @@ Coefficients:
  -1.36092945   9.12487765 </code></pre>
 </div>
 </div>
-<p>Como era de esperar, ninguno de los coeficientes es cero, ¡la regresión ridge no realiza la selección de variables!</p>
+<p>Como era de esperar, ninguno de los coeficientes es cero, ¡la regresión ridge no realiza selección (efectiva) de variables!</p>
 </section>
 </section>
 <section id="regresión-lasso" class="level3" data-number="6.2.2">
 <h3 data-number="6.2.2" class="anchored" data-anchor-id="regresión-lasso"><span class="header-section-number">6.2.2</span> Regresión lasso</h3>
-<p>Se ha visto que la regresión ridge con una sabia elección de <span class="math inline">\(\lambda\)</span> puede superar a los mínimos cuadrados, así como al modelo nulo en el conjunto de datos <code>Hitters</code>. Ahora preguntamos si la regresión lasso puede producir un modelo más preciso o más interpretable que la regresión ridge. Para ajustar un modelo de regresión lasso, usamos una vez más la función <code>glmnet()</code>; sin embargo, esta vez usaremos el argumento <code>alpha=1</code>. Aparte de ese cambio, procedemos tal como lo hicimos al ajustar un modelo ridge.</p>
+<p>Se ha visto que la regresión ridge, con una sabia elección de <span class="math inline">\(\lambda\)</span>, puede superar (en error de predicción) a los mínimos cuadrados, así como al modelo nulo en el conjunto de datos <code>Hitters</code>. Ahora preguntamos si la regresión lasso puede producir un modelo más preciso o más interpretable que la regresión ridge. Para ajustar un modelo de regresión lasso, usamos una vez más la función <code>glmnet()</code>; sin embargo, esta vez usaremos el argumento <code>alpha=1</code>. Aparte de ese cambio, procedemos tal como lo hicimos al ajustar un modelo ridge.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>lasso.mod <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x[train,], y[train], <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">lambda =</span> grid)</span>
-<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lasso.mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>lasso.mod <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x[train,], y[train], </span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">alpha =</span> <span class="dv">1</span>, </span>
+<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">lambda =</span> grid)</span>
+<span id="cb94-4"><a href="#cb94-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lasso.mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1127,11 +1117,12 @@ Coefficients:
 </div>
 </div>
 </div>
-<p>Podemos ver en el diagrama de coeficientes que dependiendo de la elección del parámetro de ajuste (basado ahora en la norma <span class="math inline">\(\ell_1\)</span>), algunos de los coeficientes serán exactamente iguales a cero. Ahora realizamos una validación cruzada y calculamos el error de test asociado.</p>
+<p>Podemos ver en el diagrama de coeficientes que, dependiendo de la elección del parámetro de ajuste (basado ahora en la norma <span class="math inline">\(\ell_1\)</span>), algunos de los coeficientes serán exactamente iguales a cero. Ahora realizamos una validación cruzada y calculamos el error de validación asociado.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>cv.out <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(x[train,], y[train], <span class="at">alpha =</span> <span class="dv">1</span>)</span>
-<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cv.out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a>cv.out <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(x[train,], y[train], </span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">alpha =</span> <span class="dv">1</span>)</span>
+<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cv.out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1139,20 +1130,20 @@ Coefficients:
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>bestlam <span class="ot">&lt;-</span> cv.out<span class="sc">$</span>lambda.min</span>
-<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>lasso.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lasso.mod, <span class="at">s =</span> bestlam, <span class="at">newx =</span> x[test,])</span>
-<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((lasso.pred <span class="sc">-</span> y.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>bestlam <span class="ot">&lt;-</span> cv.out<span class="sc">$</span>lambda.min</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>lasso.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lasso.mod, <span class="at">s =</span> bestlam, <span class="at">newx =</span> x[test,])</span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((lasso.pred <span class="sc">-</span> y.test)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 143673.6</code></pre>
 </div>
 </div>
 <p>Esto es sustancialmente más bajo que el MSE del conjunto de test del modelo nulo y de mínimos cuadrados, y muy similar al MSE de validación de regresión ridge con <span class="math inline">\(\lambda\)</span> elegido por validación cruzada.</p>
-<p>Sin embargo, la regresión lasso tiene una ventaja <em>sustancial</em> sobre la regresión ridge: las estimaciones de los coeficientes resultantes son <em>sparse</em> (escasas). En la siguiente salida vemos que 8 de los 19 coeficientes estimados son <em>exactamente cero</em>; dicho de otro modo, el modelo de regresión lasso con <span class="math inline">\(\lambda\)</span> elegido por validación cruzada contiene sólo 11 variables.</p>
+<p>Sin embargo, la regresión lasso tiene una ventaja <em>sustancial</em> sobre la regresión ridge: las estimaciones de los coeficientes resultantes son <em>sparse</em> (escasas, con muchos coeficientes nulos) lo que facilita la interpretación. En la siguiente salida vemos que 8 de los 19 coeficientes estimados son <em>exactamente cero</em>; dicho de otro modo, el modelo de regresión lasso con <span class="math inline">\(\lambda\)</span> elegido por validación cruzada contiene sólo 11 variables.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x, y, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">lambda =</span> grid)</span>
-<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>lasso.coef <span class="ot">&lt;-</span></span>
-<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(out, <span class="at">type =</span> <span class="st">"coefficients"</span>, <span class="at">s =</span> bestlam)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,]</span>
-<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a>lasso.coef</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(x, y, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">lambda =</span> grid)</span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>lasso.coef <span class="ot">&lt;-</span></span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(out, <span class="at">type =</span> <span class="st">"coefficients"</span>, <span class="at">s =</span> bestlam)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,]</span>
+<span id="cb98-4"><a href="#cb98-4" aria-hidden="true" tabindex="-1"></a>lasso.coef</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  (Intercept)         AtBat          Hits         HmRun          Runs 
    1.27479059   -0.05497143    2.18034583    0.00000000    0.00000000 
@@ -1163,7 +1154,7 @@ Coefficients:
     DivisionW       PutOuts       Assists        Errors    NewLeagueN 
 -116.16755870    0.23752385    0.00000000   -0.85629148    0.00000000 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a>lasso.coef[lasso.coef <span class="sc">!=</span> <span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>lasso.coef[lasso.coef <span class="sc">!=</span> <span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  (Intercept)         AtBat          Hits         Walks         Years 
    1.27479059   -0.05497143    2.18034583    2.29192406   -0.33806109 
