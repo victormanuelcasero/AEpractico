@@ -340,7 +340,7 @@ body {text-align: justify}
 </tbody>
 </table>
 <p>Las funciones básicas para realizar regresión lineal (simple o múltiple) de mínimos cuadrados y otros análisis sencillos vienen de serie con la <em>distribución base</em>, pero las funciones más “exóticas” requieren paquetes adicionales.</p>
-<p><strong>Paquetes:</strong> En el material original comenta las nociones básicas sobre cargar (o instalar cuando sea necesario) <em>paquetes</em>, que he resumido y trasladado al Anexo <strong>Herramientas</strong>.</p>
+<p><strong>Paquetes:</strong> En el material original comenta las nociones básicas sobre cargar (o instalar cuando sea necesario) <em>paquetes</em>, que he resumido y trasladado al Anexo <strong>Herramientas</strong>: <a href="ZA_Herram.html#sec-paquetes" class="quarto-xref"><span>Section A.1</span></a>.</p>
 <p>Cargamos los paquetes <code>MASS</code> e <code>ISLR2</code>.</p>
 <ul>
 <li>El paquete <code>MASS</code> es una gran colección de conjuntos de datos y funciones. Está disponible con la instalación base.</li>
@@ -828,7 +828,7 @@ F-statistic: 214.2 on 5 and 500 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <p>Esto sugiere que la inclusión de términos polinómicos adicionales, hasta el quinto orden, ¡conduce a una mejora en el ajuste del modelo! Una investigación más profunda de los datos revela que ningún término polinomial más allá del quinto orden tiene p-valores significativos en un ajuste de regresión.</p>
-<p><strong>Nota técnica</strong>: en el Anexo <strong>Herramientas</strong> se menciona que la función <code>poly()</code> ortogonaliza los predictores por defecto. Sin embargo un modelo lineal aplicado a la salida de la función <code>poly()</code> tendrá los mismos valores ajustados que un modelo lineal aplicado a los polinomios sin procesar (al incluir en poly el argumento <code>raw = TRUE</code>), aunque las estimaciones de los coeficientes, los errores estándar y los p-valores serán diferentes.</p>
+<p><strong>Nota técnica</strong>: en <a href="ZA_Herram.html#sec-poly" class="quarto-xref"><span>Section A.6.4</span></a> se menciona que la función <code>poly()</code> ortogonaliza los predictores por defecto. Sin embargo un modelo lineal aplicado a la salida de la función <code>poly()</code> tendrá los mismos valores ajustados que un modelo lineal aplicado a los polinomios sin procesar (al incluir en poly el argumento <code>raw = TRUE</code>), aunque las estimaciones de los coeficientes, los errores estándar y los p-valores serán diferentes.</p>
 </section>
 <section id="transformación-logarítmica" class="level3" data-number="3.4.3">
 <h3 data-number="3.4.3" class="anchored" data-anchor-id="transformación-logarítmica"><span class="header-section-number">3.4.3</span> Transformación logarítmica</h3>
