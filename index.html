@@ -2,15 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Víctor Casero (victormanuel.casero@uclm.es)">
-<meta name="dcterms.date" content="2025-10-16">
+<meta name="author" content="Víctor M. Casero   (victormanuel.casero@uclm.es)">
+<meta name="dcterms.date" content="2026-10-16">
 
 <title>Aprendizaje Estadístico: un enfoque práctico con R</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -39,10 +42,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -215,14 +218,14 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Víctor Casero (victormanuel.casero@uclm.es) </p>
+             <p>Víctor M. Casero <br> (victormanuel.casero@uclm.es) </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 16, 2025</p>
+      <p class="date">October 16, 2026</p>
     </div>
   </div>
   
@@ -239,8 +242,8 @@ ul.task-list li input[type="checkbox"] {
 <style>
 body {text-align: justify}
 </style>
-<p>En este “<em>Quarto Book</em>” se ha integrado parte del material para la asignatura Aprendizaje Estadístico y Otras Técnicas Analíticas Avanzadas del Máster MUMADE. Concretamente la parte de Aprendizaje Estadístico.</p>
-<p>El material, con un enfoque totalmente práctico/aplicado, es una traducción/adaptación de los “<em>Labs</em>” del libro <em>An Introduction to Statistical Learning, with applications in R</em>, que está accesible libremente en formato PDF en <a href="https://www.statlearning.com" class="uri">https://www.statlearning.com</a>. También está accesible en <a href="https://www.statlearning.com/resources-second-edition" class="uri">https://www.statlearning.com/resources-second-edition</a> numeroso material asociado al libro: slides, los citados <em>Labs</em> originales (en formato .Rmd y .html), los scripts de R de los <em>Labs</em>, etc. Aquí aprovecho el material que los autores han puesto generosamente a nuestra disposición para fines educativos.</p>
+<p>En este “<em>Quarto Book</em>” se ha integrado parte del material para la asignatura Aprendizaje Estadístico y Otras Técnicas Analíticas Avanzadas del Máster MUMADE. Concretamente la parte dedicada al Aprendizaje Estadístico.</p>
+<p>El material, con un enfoque totalmente práctico/aplicado, es una traducción/adaptación de los “<em>Labs</em>” del libro <em>An Introduction to Statistical Learning, with applications in R</em>, que está accesible libremente en formato PDF en <a href="https://www.statlearning.com" class="uri">https://www.statlearning.com</a>. En <a href="https://www.statlearning.com/resources-second-edition" class="uri">https://www.statlearning.com/resources-second-edition</a> también está disponible numeroso material asociado al libro: slides, los citados <em>Labs</em> originales (en formato .Rmd y .html), los scripts de R de los <em>Labs</em>, etc. Aquí aprovecho el material que los autores han puesto generosamente a nuestra disposición para fines educativos.</p>
 <p>En el proceso de traducción/adaptación me he tomado la licencia de omitir algunas partes, recortar otras (principalmente por duplicidades), renombrar secciones y crear un anexo con elementos transversales que aparecían en el material original.</p>
 <ul>
 <li>Un comentario importante: en la adaptación de los <em>Labs</em> originales he omitido intencionadamente la función <code>attach()</code>, cuyo uso desaconsejo, como muchos expertos de R (puede verse una discusión sobre ello <a href="https://stackoverflow.com/questions/10067680/why-is-it-not-advisable-to-use-attach-in-r-and-what-should-i-use-instead">aquí</a>)</li>
@@ -306,13 +309,14 @@ body {text-align: justify}
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
